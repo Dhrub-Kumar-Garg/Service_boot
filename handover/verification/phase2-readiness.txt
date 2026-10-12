@@ -1,0 +1,124 @@
+TAP version 13
+# Subtest: isPortOpen detects an open port and a refused connection, releasing sockets
+ok 1 - isPortOpen detects an open port and a refused connection, releasing sockets
+  ---
+  duration_ms: 30.672
+  type: 'test'
+  ...
+# Subtest: isPortOpen destroys a stalled socket and clears its listeners on timeout
+ok 2 - isPortOpen destroys a stalled socket and clears its listeners on timeout
+  ---
+  duration_ms: 27.0922
+  type: 'test'
+  ...
+# Subtest: port readiness resolves after a port opens at 300 ms
+ok 3 - port readiness resolves after a port opens at 300 ms
+  ---
+  duration_ms: 316.9521
+  type: 'test'
+  ...
+# Subtest: a port that never opens rejects with a readiness timeout and last probe detail
+ok 4 - a port that never opens rejects with a readiness timeout and last probe detail
+  ---
+  duration_ms: 187.7719
+  type: 'test'
+  ...
+# Subtest: httpOk accepts only 2xx and destroys an unfinished response body
+ok 5 - httpOk accepts only 2xx and destroys an unfinished response body
+  ---
+  duration_ms: 95.6323
+  type: 'test'
+  ...
+# Subtest: httpOk describes a refused connection and a server that never sends headers
+ok 6 - httpOk describes a refused connection and a server that never sends headers
+  ---
+  duration_ms: 63.8276
+  type: 'test'
+  ...
+# Subtest: HTTP readiness retries 503 until a 200 response
+ok 7 - HTTP readiness retries 503 until a 200 response
+  ---
+  duration_ms: 82.7819
+  type: 'test'
+  ...
+# Subtest: HTTP always 500 times out with HTTP 500 in the diagnostic
+ok 8 - HTTP always 500 times out with HTTP 500 in the diagnostic
+  ---
+  duration_ms: 188.7443
+  type: 'test'
+  ...
+# Subtest: hanging HTTP probes cannot overrun the overall readiness deadline
+ok 9 - hanging HTTP probes cannot overrun the overall readiness deadline
+  ---
+  duration_ms: 140.4883
+  type: 'test'
+  ...
+# Subtest: an already exited handle rejects as crash with only its last five log lines
+ok 10 - an already exited handle rejects as crash with only its last five log lines
+  ---
+  duration_ms: 0.9423
+  type: 'test'
+  ...
+# Subtest: process exit interrupts the sleep between probes immediately
+ok 11 - process exit interrupts the sleep between probes immediately
+  ---
+  duration_ms: 61.8417
+  type: 'test'
+  ...
+# Subtest: abort interrupts the sleep between probes and removes the abort listener
+ok 12 - abort interrupts the sleep between probes and removes the abort listener
+  ---
+  duration_ms: 64.1109
+  type: 'test'
+  ...
+# Subtest: abort interrupts an in-flight HTTP probe and releases its socket
+ok 13 - abort interrupts an in-flight HTTP probe and releases its socket
+  ---
+  duration_ms: 15.6918
+  type: 'test'
+  ...
+# Subtest: exit interrupts an in-flight HTTP probe and releases its socket
+ok 14 - exit interrupts an in-flight HTTP probe and releases its socket
+  ---
+  duration_ms: 15.6607
+  type: 'test'
+  ...
+# Subtest: an already aborted signal prevents the first probe
+ok 15 - an already aborted signal prevents the first probe
+  ---
+  duration_ms: 0.5739
+  type: 'test'
+  ...
+# Subtest: none readiness resolves zero immediately without probes or subscriptions
+ok 16 - none readiness resolves zero immediately without probes or subscriptions
+  ---
+  duration_ms: 0.1375
+  type: 'test'
+  ...
+# Subtest: preflightPort rejects a busy port with the exact spawn diagnostic and accepts a free port
+ok 17 - preflightPort rejects a busy port with the exact spawn diagnostic and accepts a free port
+  ---
+  duration_ms: 15.3889
+  type: 'test'
+  ...
+# Subtest: HTTPS uses certificate validation and accepts 2xx with an explicitly trusted test certificate
+ok 18 - HTTPS uses certificate validation and accepts 2xx with an explicitly trusted test certificate
+  ---
+  duration_ms: 62.961
+  type: 'test'
+  ...
+# Subtest: readiness composes with a real spawned delayed mock and leaves no running service
+ok 19 - readiness composes with a real spawned delayed mock and leaves no running service
+  ---
+  duration_ms: 784.3587
+  type: 'test'
+  ...
+1..19
+# tests 19
+# suites 0
+# pass 19
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2234.9697

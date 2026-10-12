@@ -5,3 +5,4 @@ require('./cli.test');
 require('./mock.test');
 require('./engine-helpers.test');
 require('./engine-process.test');
+require('./engine-readiness.test');
