@@ -1,0 +1,2394 @@
+Phase 6 fresh-clone verification — 2026-10-12
+Implementation commit: 94d81cd4c568f985ab4faccb5f2f100239e5d764
+Commands executed in /tmp/sb-check unless noted. Output copied from tool results; exit status annotations are separate from command output.
+Socket tests initially failed inside the Codex sandbox (EPERM). The rerun below used approval to enable local sockets.
+
+$ git clone . /tmp/sb-check  [from /Users/arushipahuja/coding/os_project]
+Cloning into '/tmp/sb-check'...
+done.
+
+[exit 0]
+$ npm install
+
+added 2 packages in 305ms
+
+1 package is looking for funding
+  run `npm fund` for details
+
+[exit 0]
+$ node --version && npm --version && git rev-parse HEAD && git status --short && node -p 'process.platform + " " + process.arch + "; ENGINE_PATH=" + (process.env.ENGINE_PATH || "unset")'
+v20.19.4
+10.8.2
+94d81cd4c568f985ab4faccb5f2f100239e5d764
+darwin arm64; ENGINE_PATH=unset
+
+[exit 0]
+$ npm test  [initial sandbox attempt]
+
+> serviceboot@0.1.0 test
+> node --test test/unit/
+
+TAP version 13
+# Subtest: CLI plan small prints the correct levels and SEQUENTIAL decision
+ok 1 - CLI plan small prints the correct levels and SEQUENTIAL decision
+  ---
+  duration_ms: 63.886125
+  ...
+# Subtest: CLI plan linear prints the correct levels and SEQUENTIAL decision
+ok 2 - CLI plan linear prints the correct levels and SEQUENTIAL decision
+  ---
+  duration_ms: 56.225333
+  ...
+# Subtest: CLI plan wide prints the correct levels and PARALLEL decision
+ok 3 - CLI plan wide prints the correct levels and PARALLEL decision
+  ---
+  duration_ms: 36.400042
+  ...
+# Subtest: CLI cyclic sample exits 1 and prints the cycle path
+ok 4 - CLI cyclic sample exits 1 and prints the cycle path
+  ---
+  duration_ms: 34.213667
+  ...
+# Subtest: CLI invalid sample exits 1 and prints all three problems separately
+ok 5 - CLI invalid sample exits 1 and prints all three problems separately
+  ---
+  duration_ms: 35.389292
+  ...
+# Subtest: CLI missing file exits 1 for both plan and up
+ok 6 - CLI missing file exits 1 for both plan and up
+  ---
+  duration_ms: 63.572916
+  ...
+# Subtest: CLI --json prints only valid JSON matching loadPlan
+ok 7 - CLI --json prints only valid JSON matching loadPlan
+  ---
+  duration_ms: 36.000042
+  ...
+# Subtest: CLI default config is serviceboot.yml in the current working directory
+ok 8 - CLI default config is serviceboot.yml in the current working directory
+  ---
+  duration_ms: 34.360583
+  ...
+# Subtest: CLI unknown command, missing command, extra positionals, and unknown options exit 2
+ok 9 - CLI unknown command, missing command, extra positionals, and unknown options exit 2
+  ---
+  duration_ms: 122.127167
+  ...
+# Subtest: CLI --help and -h print usage and exit 0
+ok 10 - CLI --help and -h print usage and exit 0
+  ---
+  duration_ms: 122.7945
+  ...
+# Subtest: CLI up with the engine stub exits 3 with its exact message
+ok 11 - CLI up with the engine stub exits 3 with its exact message
+  ---
+  duration_ms: 36.510167
+  ...
+# Subtest: both engine stub functions reject with the contract handover message
+ok 12 - both engine stub functions reject with the contract handover message
+  ---
+  duration_ms: 0.471875
+  ...
+# Subtest: CLI rejects invalid algorithms before loading a config
+ok 13 - CLI rejects invalid algorithms before loading a config
+  ---
+  duration_ms: 94.821833
+  ...
+# Subtest: CLI accepts all three algorithms and positive max-parallel values
+ok 14 - CLI accepts all three algorithms and positive max-parallel values
+  ---
+  duration_ms: 96.79
+  ...
+# Subtest: CLI max-parallel must be a positive integer
+ok 15 - CLI max-parallel must be a positive integer
+  ---
+  duration_ms: 238.403958
+  ...
+# Subtest: CLI rejects options belonging to the other command and missing option values
+ok 16 - CLI rejects options belonging to the other command and missing option values
+  ---
+  duration_ms: 178.195834
+  ...
+# Subtest: CLI wires engine options, prints every contract event, and stops after ready
+ok 17 - CLI wires engine options, prints every contract event, and stops after ready
+  ---
+  duration_ms: 2.141458
+  ...
+# Subtest: CLI defaults to adaptive and unlimited parallelism
+ok 18 - CLI defaults to adaptive and unlimited parallelism
+  ---
+  duration_ms: 0.357334
+  ...
+# Subtest: CLI waits after readiness and stops on SIGINT with exit 130
+ok 19 - CLI waits after readiness and stops on SIGINT with exit 130
+  ---
+  duration_ms: 9.483208
+  ...
+# Subtest: CLI waits after readiness and stops on SIGTERM with exit 143
+ok 20 - CLI waits after readiness and stops on SIGTERM with exit 143
+  ---
+  duration_ms: 0.981958
+  ...
+# Subtest: CLI can stop during startup without waiting for unresolved readiness
+ok 21 - CLI can stop during startup without waiting for unresolved readiness
+  ---
+  duration_ms: 0.527292
+  ...
+# Subtest: CLI repeated signals call stopAll only once
+ok 22 - CLI repeated signals call stopAll only once
+  ---
+  duration_ms: 0.810333
+  ...
+# Subtest: CLI shutdown failure prints the engine error and exits 3
+ok 23 - CLI shutdown failure prints the engine error and exits 3
+  ---
+  duration_ms: 0.45475
+  ...
+# Subtest: ConfigError keeps all messages and joins them with newlines
+ok 24 - ConfigError keeps all messages and joins them with newlines
+  ---
+  duration_ms: 1.24875
+  ...
+# Subtest: minimal config produces exactly the contract fields and defaults
+ok 25 - minimal config produces exactly the contract fields and defaults
+  ---
+  duration_ms: 2.043334
+  ...
+# Subtest: full config normalizes every field and applies defaults to other services
+ok 26 - full config normalizes every field and applies defaults to other services
+  ---
+  duration_ms: 1.778916
+  ...
+# Subtest: top-level config must be an object
+ok 27 - top-level config must be an object
+  ---
+  duration_ms: 2.226125
+  ...
+# Subtest: version must be exactly the number 1
+ok 28 - version must be exactly the number 1
+  ---
+  duration_ms: 2.488625
+  ...
+# Subtest: services must be a non-empty object
+ok 29 - services must be a non-empty object
+  ---
+  duration_ms: 0.474583
+  ...
+# Subtest: service names must contain only letters, digits, underscores, and hyphens
+ok 30 - service names must contain only letters, digits, underscores, and hyphens
+  ---
+  duration_ms: 1.578917
+  ...
+# Subtest: each service definition must be an object
+ok 31 - each service definition must be an object
+  ---
+  duration_ms: 0.998
+  ...
+# Subtest: command must be a non-empty string
+ok 32 - command must be a non-empty string
+  ---
+  duration_ms: 1.336792
+  ...
+# Subtest: cwd must be a string when supplied
+ok 33 - cwd must be a string when supplied
+  ---
+  duration_ms: 0.450208
+  ...
+# Subtest: depends_on must be an array
+ok 34 - depends_on must be an array
+  ---
+  duration_ms: 0.272
+  ...
+# Subtest: depends_on entries must be strings
+ok 35 - depends_on entries must be strings
+  ---
+  duration_ms: 0.190917
+  ...
+# Subtest: self-dependencies are rejected
+ok 36 - self-dependencies are rejected
+  ---
+  duration_ms: 0.370709
+  ...
+# Subtest: duplicate dependencies are rejected
+ok 37 - duplicate dependencies are rejected
+  ---
+  duration_ms: 0.721666
+  ...
+# Subtest: unknown dependencies use the required error message
+ok 38 - unknown dependencies use the required error message
+  ---
+  duration_ms: 0.200875
+  ...
+# Subtest: inherited object properties do not count as existing dependencies
+ok 39 - inherited object properties do not count as existing dependencies
+  ---
+  duration_ms: 0.2785
+  ...
+# Subtest: ready_check must be a valid readiness expression
+ok 40 - ready_check must be a valid readiness expression
+  ---
+  duration_ms: 1.67525
+  ...
+# Subtest: ready_timeout_ms must be a positive integer
+ok 41 - ready_timeout_ms must be a positive integer
+  ---
+  duration_ms: 2.015208
+  ...
+# Subtest: ready_interval_ms must be a positive integer
+ok 42 - ready_interval_ms must be a positive integer
+  ---
+  duration_ms: 1.819041
+  ...
+# Subtest: readiness interval must be strictly less than timeout, including defaults
+ok 43 - readiness interval must be strictly less than timeout, including defaults
+  ---
+  duration_ms: 0.499917
+  ...
+# Subtest: restart must be never or on-failure
+ok 44 - restart must be never or on-failure
+  ---
+  duration_ms: 0.374708
+  ...
+# Subtest: max_retries must be an integer greater than or equal to zero
+ok 45 - max_retries must be an integer greater than or equal to zero
+  ---
+  duration_ms: 0.363916
+  ...
+# Subtest: env must be an object and cannot be an array
+ok 46 - env must be an object and cannot be an array
+  ---
+  duration_ms: 0.36275
+  ...
+# Subtest: duplicate readiness ports report both service names
+ok 47 - duplicate readiness ports report both service names
+  ---
+  duration_ms: 0.211041
+  ...
+# Subtest: all independent validation errors are returned together before normalization
+ok 48 - all independent validation errors are returned together before normalization
+  ---
+  duration_ms: 0.2985
+  ...
+# Subtest: YAML syntax errors include human-readable line and column information
+ok 49 - YAML syntax errors include human-readable line and column information
+  ---
+  duration_ms: 0.369083
+  ...
+# Subtest: duplicate YAML keys are rejected with line information
+ok 50 - duplicate YAML keys are rejected with line information
+  ---
+  duration_ms: 0.7735
+  ...
+# Subtest: missing file becomes ConfigError with the required path message
+ok 51 - missing file becomes ConfigError with the required path message
+  ---
+  duration_ms: 1.043041
+  ...
+# Subtest: unreadable file becomes ConfigError
+ok 52 - unreadable file becomes ConfigError
+  ---
+  duration_ms: 2.059959
+  ...
+# Subtest: parseReadyCheck accepts valid forms, whitespace, and case-insensitive keywords
+ok 53 - parseReadyCheck accepts valid forms, whitespace, and case-insensitive keywords
+  ---
+  duration_ms: 0.219167
+  ...
+# Subtest: parseReadyCheck rejects invalid forms with plain descriptive Errors
+ok 54 - parseReadyCheck rejects invalid forms with plain descriptive Errors
+  ---
+  duration_ms: 0.336417
+  ...
+# Subtest: relative cwd resolves against the config file folder
+ok 55 - relative cwd resolves against the config file folder
+  ---
+  duration_ms: 0.941584
+  ...
+# Subtest: default and empty cwd resolve to the config folder; absolute cwd remains absolute
+ok 56 - default and empty cwd resolve to the config folder; absolute cwd remains absolute
+  ---
+  duration_ms: 2.211083
+  ...
+# Subtest: env numbers become strings without altering the raw object
+ok 57 - env numbers become strings without altering the raw object
+  ---
+  duration_ms: 0.4855
+  ...
+# Subtest: declaration order is preserved rather than alphabetically sorted
+ok 58 - declaration order is preserved rather than alphabetically sorted
+  ---
+  duration_ms: 0.65575
+  ...
+# Subtest: numeric service names preserve YAML declaration order in block and flow mappings
+ok 59 - numeric service names preserve YAML declaration order in block and flow mappings
+  ---
+  duration_ms: 0.364666
+  ...
+# Subtest: YAML aliases and merges retain services and declaration order
+ok 60 - YAML aliases and merges retain services and declaration order
+  ---
+  duration_ms: 0.468208
+  ...
+# Subtest: special object property names are safe service and environment keys
+ok 61 - special object property names are safe service and environment keys
+  ---
+  duration_ms: 0.3075
+  ...
+# Subtest: multi-service cycles are left for Phase 3 graph validation
+ok 62 - multi-service cycles are left for Phase 3 graph validation
+  ---
+  duration_ms: 0.290541
+  ...
+# Subtest: freePort returns a port whose temporary listener has closed
+not ok 63 - freePort returns a port whose temporary listener has closed
+  ---
+  duration_ms: 5.781
+  location: '/private/tmp/sb-check/test/unit/engine-helpers.test.js:8:1'
+  failureType: 'testCodeFailure'
+  error: 'listen EPERM: operation not permitted 127.0.0.1'
+  code: 'EPERM'
+  stack: |-
+    Server.setupListenHandle [as _listen2] (node:net:1886:21)
+    listenInCluster (node:net:1965:12)
+    doListen (node:net:2139:7)
+    process.processTicksAndRejections (node:internal/process/task_queues:83:21)
+  ...
+# Subtest: makeServices creates complete real Service objects and real topo levels
+not ok 64 - makeServices creates complete real Service objects and real topo levels
+  ---
+  duration_ms: 2.319625
+  location: '/private/tmp/sb-check/test/unit/engine-helpers.test.js:19:1'
+  failureType: 'testCodeFailure'
+  error: 'listen EPERM: operation not permitted 127.0.0.1'
+  code: 'EPERM'
+  stack: |-
+    Server.setupListenHandle [as _listen2] (node:net:1886:21)
+    listenInCluster (node:net:1965:12)
+    doListen (node:net:2139:7)
+    process.processTicksAndRejections (node:internal/process/task_queues:83:21)
+  ...
+# Subtest: record preserves event arrival indices and supports find/filter by service
+ok 65 - record preserves event arrival indices and supports find/filter by service
+  ---
+  duration_ms: 1.797083
+  ...
+# Subtest: record maxInFlight removes both ready and failed services
+ok 66 - record maxInFlight removes both ready and failed services
+  ---
+  duration_ms: 0.449375
+  ...
+# Subtest: isAlive and waitDead distinguish live, absent, and invalid PIDs
+ok 67 - isAlive and waitDead distinguish live, absent, and invalid PIDs
+  ---
+  duration_ms: 0.627708
+  ...
+# Subtest: buildGraph creates both adjacency maps including empty lists
+ok 68 - buildGraph creates both adjacency maps including empty lists
+  ---
+  duration_ms: 0.977084
+  ...
+# Subtest: graph functions accept frozen inputs and do not mutate service dependencies
+ok 69 - graph functions accept frozen inputs and do not mutate service dependencies
+  ---
+  duration_ms: 0.52725
+  ...
+# Subtest: independent services produce one level in declaration order
+ok 70 - independent services produce one level in declaration order
+  ---
+  duration_ms: 0.083208
+  ...
+# Subtest: linear chain a to b to c to d produces four levels
+ok 71 - linear chain a to b to c to d produces four levels
+  ---
+  duration_ms: 0.139416
+  ...
+# Subtest: diamond graph groups b and c together before d
+ok 72 - diamond graph groups b and c together before d
+  ---
+  duration_ms: 0.132167
+  ...
+# Subtest: longest-path rule places x after its deepest dependency
+ok 73 - longest-path rule places x after its deepest dependency
+  ---
+  duration_ms: 0.11925
+  ...
+# Subtest: level declaration order wins over the order nodes become unblocked
+ok 74 - level declaration order wins over the order nodes become unblocked
+  ---
+  duration_ms: 0.122375
+  ...
+# Subtest: explicit declaration order is respected for numeric service names
+ok 75 - explicit declaration order is respected for numeric service names
+  ---
+  duration_ms: 0.063917
+  ...
+# Subtest: two-node cycle reports the closed dependency path
+ok 76 - two-node cycle reports the closed dependency path
+  ---
+  duration_ms: 0.411875
+  ...
+# Subtest: three-node cycle reports the closed dependency path
+ok 77 - three-node cycle reports the closed dependency path
+  ---
+  duration_ms: 0.172042
+  ...
+# Subtest: cycle hidden behind a valid branch excludes the non-cyclic entry path
+ok 78 - cycle hidden behind a valid branch excludes the non-cyclic entry path
+  ---
+  duration_ms: 0.165667
+  ...
+# Subtest: DFS chooses the first cycle in service declaration order
+ok 79 - DFS chooses the first cycle in service declaration order
+  ---
+  duration_ms: 0.1375
+  ...
+# Subtest: DFS visits dependency neighbours in service declaration order
+ok 80 - DFS visits dependency neighbours in service declaration order
+  ---
+  duration_ms: 0.081917
+  ...
+# Subtest: cycle diagnostics use explicit order for numeric service names
+ok 81 - cycle diagnostics use explicit order for numeric service names
+  ---
+  duration_ms: 1.405875
+  ...
+# Subtest: detectCycle returns null for acyclic graphs with shared dependencies
+ok 82 - detectCycle returns null for acyclic graphs with shared dependencies
+  ---
+  duration_ms: 0.556875
+  ...
+# Subtest: detectCycle handles a self-loop even when called without config validation
+ok 83 - detectCycle handles a self-loop even when called without config validation
+  ---
+  duration_ms: 0.1685
+  ...
+# Subtest: DFS and Kahn handle a deep graph without recursive call-stack overflow
+ok 84 - DFS and Kahn handle a deep graph without recursive call-stack overflow
+  ---
+  duration_ms: 67.44425
+  ...
+# Subtest: empty graphs produce empty maps, no cycle, and no levels
+ok 85 - empty graphs produce empty maps, no cycle, and no levels
+  ---
+  duration_ms: 1.13375
+  ...
+# Subtest: special object property names remain safe in both graph maps
+ok 86 - special object property names remain safe in both graph maps
+  ---
+  duration_ms: 0.3015
+  ...
+# Subtest: adaptive boundary width equal to twice depth selects sequential with exact reason
+ok 87 - adaptive boundary width equal to twice depth selects sequential with exact reason
+  ---
+  duration_ms: 0.511459
+  ...
+# Subtest: adaptive width one above twice depth selects parallel with exact reason
+ok 88 - adaptive width one above twice depth selects parallel with exact reason
+  ---
+  duration_ms: 0.152375
+  ...
+# Subtest: adaptive single service selects sequential
+ok 89 - adaptive single service selects sequential
+  ---
+  duration_ms: 0.121042
+  ...
+# Subtest: adaptive linear graph selects sequential
+ok 90 - adaptive linear graph selects sequential
+  ---
+  duration_ms: 0.145958
+  ...
+# Subtest: adaptive eight roots plus two dependents selects parallel
+ok 91 - adaptive eight roots plus two dependents selects parallel
+  ---
+  duration_ms: 0.228417
+  ...
+# Subtest: adaptive empty groups select sequential with zero dimensions
+ok 92 - adaptive empty groups select sequential with zero dimensions
+  ---
+  duration_ms: 0.106667
+  ...
+# Subtest: flatten concatenates levels in order and does not mutate them
+ok 93 - flatten concatenates levels in order and does not mutate them
+  ---
+  duration_ms: 0.156458
+  ...
+# Subtest: loadPlan returns the complete contract object from a temp YAML file
+ok 94 - loadPlan returns the complete contract object from a temp YAML file
+  ---
+  duration_ms: 20.401792
+  ...
+# Subtest: loadPlan preserves numeric YAML service declaration order through planning
+ok 95 - loadPlan preserves numeric YAML service declaration order through planning
+  ---
+  duration_ms: 1.5915
+  ...
+# Subtest: loadPlan propagates cycle diagnostics as ConfigError
+ok 96 - loadPlan propagates cycle diagnostics as ConfigError
+  ---
+  duration_ms: 1.09825
+  ...
+# Subtest: loadPlan propagates config validation and missing-file errors
+ok 97 - loadPlan propagates config validation and missing-file errors
+  ---
+  duration_ms: 0.932542
+  ...
+# Subtest: mock TCP port opens after its delay and not before
+not ok 98 - mock TCP port opens after its delay and not before
+  ---
+  duration_ms: 9.084833
+  location: '/private/tmp/sb-check/test/unit/mock.test.js:85:1'
+  failureType: 'testCodeFailure'
+  error: 'listen EPERM: operation not permitted 127.0.0.1'
+  code: 'EPERM'
+  stack: |-
+    Server.setupListenHandle [as _listen2] (node:net:1886:21)
+    listenInCluster (node:net:1965:12)
+    doListen (node:net:2139:7)
+    process.processTicksAndRejections (node:internal/process/task_queues:83:21)
+  ...
+# Subtest: mock HTTP health returns 200 ok and other paths return 404
+not ok 99 - mock HTTP health returns 200 ok and other paths return 404
+  ---
+  duration_ms: 2.611584
+  location: '/private/tmp/sb-check/test/unit/mock.test.js:98:1'
+  failureType: 'testCodeFailure'
+  error: 'listen EPERM: operation not permitted 127.0.0.1'
+  code: 'EPERM'
+  stack: |-
+    Server.setupListenHandle [as _listen2] (node:net:1886:21)
+    listenInCluster (node:net:1965:12)
+    doListen (node:net:2139:7)
+    process.processTicksAndRejections (node:internal/process/task_queues:83:21)
+  ...
+# Subtest: mock HTTP supports a custom health path
+not ok 100 - mock HTTP supports a custom health path
+  ---
+  duration_ms: 0.363541
+  location: '/private/tmp/sb-check/test/unit/mock.test.js:106:1'
+  failureType: 'testCodeFailure'
+  error: 'listen EPERM: operation not permitted 127.0.0.1'
+  code: 'EPERM'
+  stack: |-
+    Server.setupListenHandle [as _listen2] (node:net:1886:21)
+    listenInCluster (node:net:1965:12)
+    doListen (node:net:2139:7)
+    process.processTicksAndRejections (node:internal/process/task_queues:83:21)
+  ...
+# Subtest: mock exit-after uses the requested code and starts before readiness delay
+not ok 101 - mock exit-after uses the requested code and starts before readiness delay
+  ---
+  duration_ms: 0.258584
+  location: '/private/tmp/sb-check/test/unit/mock.test.js:114:1'
+  failureType: 'testCodeFailure'
+  error: 'listen EPERM: operation not permitted 127.0.0.1'
+  code: 'EPERM'
+  stack: |-
+    Server.setupListenHandle [as _listen2] (node:net:1886:21)
+    listenInCluster (node:net:1965:12)
+    doListen (node:net:2139:7)
+    process.processTicksAndRejections (node:internal/process/task_queues:83:21)
+  ...
+# Subtest: mock never-ready stays alive without opening a port
+not ok 102 - mock never-ready stays alive without opening a port
+  ---
+  duration_ms: 0.20625
+  location: '/private/tmp/sb-check/test/unit/mock.test.js:125:1'
+  failureType: 'testCodeFailure'
+  error: 'listen EPERM: operation not permitted 127.0.0.1'
+  code: 'EPERM'
+  stack: |-
+    Server.setupListenHandle [as _listen2] (node:net:1886:21)
+    listenInCluster (node:net:1965:12)
+    doListen (node:net:2139:7)
+    process.processTicksAndRejections (node:internal/process/task_queues:83:21)
+  ...
+# Subtest: mock SIGTERM closes active sockets, logs stopping, and exits cleanly
+not ok 103 - mock SIGTERM closes active sockets, logs stopping, and exits cleanly
+  ---
+  duration_ms: 0.231375
+  location: '/private/tmp/sb-check/test/unit/mock.test.js:135:1'
+  failureType: 'testCodeFailure'
+  error: 'listen EPERM: operation not permitted 127.0.0.1'
+  code: 'EPERM'
+  stack: |-
+    Server.setupListenHandle [as _listen2] (node:net:1886:21)
+    listenInCluster (node:net:1965:12)
+    doListen (node:net:2139:7)
+    process.processTicksAndRejections (node:internal/process/task_queues:83:21)
+  ...
+# Subtest: mock SIGTERM during delay cancels the pending listener
+not ok 104 - mock SIGTERM during delay cancels the pending listener
+  ---
+  duration_ms: 0.21275
+  location: '/private/tmp/sb-check/test/unit/mock.test.js:152:1'
+  failureType: 'testCodeFailure'
+  error: 'listen EPERM: operation not permitted 127.0.0.1'
+  code: 'EPERM'
+  stack: |-
+    Server.setupListenHandle [as _listen2] (node:net:1886:21)
+    listenInCluster (node:net:1965:12)
+    doListen (node:net:2139:7)
+    process.processTicksAndRejections (node:internal/process/task_queues:83:21)
+  ...
+# Subtest: mock ignore-sigterm logs and stays alive until SIGKILL
+not ok 105 - mock ignore-sigterm logs and stays alive until SIGKILL
+  ---
+  duration_ms: 0.212667
+  location: '/private/tmp/sb-check/test/unit/mock.test.js:166:1'
+  failureType: 'testCodeFailure'
+  error: 'listen EPERM: operation not permitted 127.0.0.1'
+  code: 'EPERM'
+  stack: |-
+    Server.setupListenHandle [as _listen2] (node:net:1886:21)
+    listenInCluster (node:net:1965:12)
+    doListen (node:net:2139:7)
+    process.processTicksAndRejections (node:internal/process/task_queues:83:21)
+  ...
+# Subtest: mock invalid arguments print an error and exit 2
+ok 106 - mock invalid arguments print an error and exit 2
+  ---
+  duration_ms: 389.631208
+  ...
+1..106
+# tests 106
+# suites 0
+# pass 96
+# fail 10
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1337.822916
+
+[exit 1: sandbox denied local listening]
+$ npm test  [rerun with local socket permission]
+
+> serviceboot@0.1.0 test
+> node --test test/unit/
+
+TAP version 13
+# Subtest: CLI plan small prints the correct levels and SEQUENTIAL decision
+ok 1 - CLI plan small prints the correct levels and SEQUENTIAL decision
+  ---
+  duration_ms: 51.24075
+  ...
+# Subtest: CLI plan linear prints the correct levels and SEQUENTIAL decision
+ok 2 - CLI plan linear prints the correct levels and SEQUENTIAL decision
+  ---
+  duration_ms: 39.497583
+  ...
+# Subtest: CLI plan wide prints the correct levels and PARALLEL decision
+ok 3 - CLI plan wide prints the correct levels and PARALLEL decision
+  ---
+  duration_ms: 36.200667
+  ...
+# Subtest: CLI cyclic sample exits 1 and prints the cycle path
+ok 4 - CLI cyclic sample exits 1 and prints the cycle path
+  ---
+  duration_ms: 34.089292
+  ...
+# Subtest: CLI invalid sample exits 1 and prints all three problems separately
+ok 5 - CLI invalid sample exits 1 and prints all three problems separately
+  ---
+  duration_ms: 32.623167
+  ...
+# Subtest: CLI missing file exits 1 for both plan and up
+ok 6 - CLI missing file exits 1 for both plan and up
+  ---
+  duration_ms: 59.978958
+  ...
+# Subtest: CLI --json prints only valid JSON matching loadPlan
+ok 7 - CLI --json prints only valid JSON matching loadPlan
+  ---
+  duration_ms: 34.973875
+  ...
+# Subtest: CLI default config is serviceboot.yml in the current working directory
+ok 8 - CLI default config is serviceboot.yml in the current working directory
+  ---
+  duration_ms: 34.241
+  ...
+# Subtest: CLI unknown command, missing command, extra positionals, and unknown options exit 2
+ok 9 - CLI unknown command, missing command, extra positionals, and unknown options exit 2
+  ---
+  duration_ms: 118.772542
+  ...
+# Subtest: CLI --help and -h print usage and exit 0
+ok 10 - CLI --help and -h print usage and exit 0
+  ---
+  duration_ms: 124.184417
+  ...
+# Subtest: CLI up with the engine stub exits 3 with its exact message
+ok 11 - CLI up with the engine stub exits 3 with its exact message
+  ---
+  duration_ms: 35.474375
+  ...
+# Subtest: both engine stub functions reject with the contract handover message
+ok 12 - both engine stub functions reject with the contract handover message
+  ---
+  duration_ms: 0.428834
+  ...
+# Subtest: CLI rejects invalid algorithms before loading a config
+ok 13 - CLI rejects invalid algorithms before loading a config
+  ---
+  duration_ms: 99.195916
+  ...
+# Subtest: CLI accepts all three algorithms and positive max-parallel values
+ok 14 - CLI accepts all three algorithms and positive max-parallel values
+  ---
+  duration_ms: 102.533583
+  ...
+# Subtest: CLI max-parallel must be a positive integer
+ok 15 - CLI max-parallel must be a positive integer
+  ---
+  duration_ms: 259.420041
+  ...
+# Subtest: CLI rejects options belonging to the other command and missing option values
+ok 16 - CLI rejects options belonging to the other command and missing option values
+  ---
+  duration_ms: 199.605709
+  ...
+# Subtest: CLI wires engine options, prints every contract event, and stops after ready
+ok 17 - CLI wires engine options, prints every contract event, and stops after ready
+  ---
+  duration_ms: 2.134958
+  ...
+# Subtest: CLI defaults to adaptive and unlimited parallelism
+ok 18 - CLI defaults to adaptive and unlimited parallelism
+  ---
+  duration_ms: 0.364167
+  ...
+# Subtest: CLI waits after readiness and stops on SIGINT with exit 130
+ok 19 - CLI waits after readiness and stops on SIGINT with exit 130
+  ---
+  duration_ms: 8.369916
+  ...
+# Subtest: CLI waits after readiness and stops on SIGTERM with exit 143
+ok 20 - CLI waits after readiness and stops on SIGTERM with exit 143
+  ---
+  duration_ms: 0.651959
+  ...
+# Subtest: CLI can stop during startup without waiting for unresolved readiness
+ok 21 - CLI can stop during startup without waiting for unresolved readiness
+  ---
+  duration_ms: 0.462375
+  ...
+# Subtest: CLI repeated signals call stopAll only once
+ok 22 - CLI repeated signals call stopAll only once
+  ---
+  duration_ms: 0.902041
+  ...
+# Subtest: CLI shutdown failure prints the engine error and exits 3
+ok 23 - CLI shutdown failure prints the engine error and exits 3
+  ---
+  duration_ms: 0.483292
+  ...
+# Subtest: ConfigError keeps all messages and joins them with newlines
+ok 24 - ConfigError keeps all messages and joins them with newlines
+  ---
+  duration_ms: 1.030625
+  ...
+# Subtest: minimal config produces exactly the contract fields and defaults
+ok 25 - minimal config produces exactly the contract fields and defaults
+  ---
+  duration_ms: 2.197125
+  ...
+# Subtest: full config normalizes every field and applies defaults to other services
+ok 26 - full config normalizes every field and applies defaults to other services
+  ---
+  duration_ms: 0.922958
+  ...
+# Subtest: top-level config must be an object
+ok 27 - top-level config must be an object
+  ---
+  duration_ms: 2.9125
+  ...
+# Subtest: version must be exactly the number 1
+ok 28 - version must be exactly the number 1
+  ---
+  duration_ms: 1.448
+  ...
+# Subtest: services must be a non-empty object
+ok 29 - services must be a non-empty object
+  ---
+  duration_ms: 0.350375
+  ...
+# Subtest: service names must contain only letters, digits, underscores, and hyphens
+ok 30 - service names must contain only letters, digits, underscores, and hyphens
+  ---
+  duration_ms: 2.040916
+  ...
+# Subtest: each service definition must be an object
+ok 31 - each service definition must be an object
+  ---
+  duration_ms: 0.918583
+  ...
+# Subtest: command must be a non-empty string
+ok 32 - command must be a non-empty string
+  ---
+  duration_ms: 0.553375
+  ...
+# Subtest: cwd must be a string when supplied
+ok 33 - cwd must be a string when supplied
+  ---
+  duration_ms: 0.869542
+  ...
+# Subtest: depends_on must be an array
+ok 34 - depends_on must be an array
+  ---
+  duration_ms: 0.335583
+  ...
+# Subtest: depends_on entries must be strings
+ok 35 - depends_on entries must be strings
+  ---
+  duration_ms: 0.220334
+  ...
+# Subtest: self-dependencies are rejected
+ok 36 - self-dependencies are rejected
+  ---
+  duration_ms: 0.149166
+  ...
+# Subtest: duplicate dependencies are rejected
+ok 37 - duplicate dependencies are rejected
+  ---
+  duration_ms: 0.21025
+  ...
+# Subtest: unknown dependencies use the required error message
+ok 38 - unknown dependencies use the required error message
+  ---
+  duration_ms: 0.173458
+  ...
+# Subtest: inherited object properties do not count as existing dependencies
+ok 39 - inherited object properties do not count as existing dependencies
+  ---
+  duration_ms: 0.186416
+  ...
+# Subtest: ready_check must be a valid readiness expression
+ok 40 - ready_check must be a valid readiness expression
+  ---
+  duration_ms: 0.554625
+  ...
+# Subtest: ready_timeout_ms must be a positive integer
+ok 41 - ready_timeout_ms must be a positive integer
+  ---
+  duration_ms: 0.643917
+  ...
+# Subtest: ready_interval_ms must be a positive integer
+ok 42 - ready_interval_ms must be a positive integer
+  ---
+  duration_ms: 0.952291
+  ...
+# Subtest: readiness interval must be strictly less than timeout, including defaults
+ok 43 - readiness interval must be strictly less than timeout, including defaults
+  ---
+  duration_ms: 0.411292
+  ...
+# Subtest: restart must be never or on-failure
+ok 44 - restart must be never or on-failure
+  ---
+  duration_ms: 0.599792
+  ...
+# Subtest: max_retries must be an integer greater than or equal to zero
+ok 45 - max_retries must be an integer greater than or equal to zero
+  ---
+  duration_ms: 0.407916
+  ...
+# Subtest: env must be an object and cannot be an array
+ok 46 - env must be an object and cannot be an array
+  ---
+  duration_ms: 0.760709
+  ...
+# Subtest: duplicate readiness ports report both service names
+ok 47 - duplicate readiness ports report both service names
+  ---
+  duration_ms: 0.397875
+  ...
+# Subtest: all independent validation errors are returned together before normalization
+ok 48 - all independent validation errors are returned together before normalization
+  ---
+  duration_ms: 0.316917
+  ...
+# Subtest: YAML syntax errors include human-readable line and column information
+ok 49 - YAML syntax errors include human-readable line and column information
+  ---
+  duration_ms: 0.538833
+  ...
+# Subtest: duplicate YAML keys are rejected with line information
+ok 50 - duplicate YAML keys are rejected with line information
+  ---
+  duration_ms: 0.494208
+  ...
+# Subtest: missing file becomes ConfigError with the required path message
+ok 51 - missing file becomes ConfigError with the required path message
+  ---
+  duration_ms: 1.984625
+  ...
+# Subtest: unreadable file becomes ConfigError
+ok 52 - unreadable file becomes ConfigError
+  ---
+  duration_ms: 2.244125
+  ...
+# Subtest: parseReadyCheck accepts valid forms, whitespace, and case-insensitive keywords
+ok 53 - parseReadyCheck accepts valid forms, whitespace, and case-insensitive keywords
+  ---
+  duration_ms: 0.557583
+  ...
+# Subtest: parseReadyCheck rejects invalid forms with plain descriptive Errors
+ok 54 - parseReadyCheck rejects invalid forms with plain descriptive Errors
+  ---
+  duration_ms: 0.420625
+  ...
+# Subtest: relative cwd resolves against the config file folder
+ok 55 - relative cwd resolves against the config file folder
+  ---
+  duration_ms: 2.140458
+  ...
+# Subtest: default and empty cwd resolve to the config folder; absolute cwd remains absolute
+ok 56 - default and empty cwd resolve to the config folder; absolute cwd remains absolute
+  ---
+  duration_ms: 1.268167
+  ...
+# Subtest: env numbers become strings without altering the raw object
+ok 57 - env numbers become strings without altering the raw object
+  ---
+  duration_ms: 0.161292
+  ...
+# Subtest: declaration order is preserved rather than alphabetically sorted
+ok 58 - declaration order is preserved rather than alphabetically sorted
+  ---
+  duration_ms: 0.114584
+  ...
+# Subtest: numeric service names preserve YAML declaration order in block and flow mappings
+ok 59 - numeric service names preserve YAML declaration order in block and flow mappings
+  ---
+  duration_ms: 0.131042
+  ...
+# Subtest: YAML aliases and merges retain services and declaration order
+ok 60 - YAML aliases and merges retain services and declaration order
+  ---
+  duration_ms: 0.189208
+  ...
+# Subtest: special object property names are safe service and environment keys
+ok 61 - special object property names are safe service and environment keys
+  ---
+  duration_ms: 0.124333
+  ...
+# Subtest: multi-service cycles are left for Phase 3 graph validation
+ok 62 - multi-service cycles are left for Phase 3 graph validation
+  ---
+  duration_ms: 0.122667
+  ...
+# Subtest: freePort returns a port whose temporary listener has closed
+ok 63 - freePort returns a port whose temporary listener has closed
+  ---
+  duration_ms: 8.106958
+  ...
+# Subtest: makeServices creates complete real Service objects and real topo levels
+ok 64 - makeServices creates complete real Service objects and real topo levels
+  ---
+  duration_ms: 2.221916
+  ...
+# Subtest: record preserves event arrival indices and supports find/filter by service
+ok 65 - record preserves event arrival indices and supports find/filter by service
+  ---
+  duration_ms: 0.361792
+  ...
+# Subtest: record maxInFlight removes both ready and failed services
+ok 66 - record maxInFlight removes both ready and failed services
+  ---
+  duration_ms: 0.297166
+  ...
+# Subtest: isAlive and waitDead distinguish live, absent, and invalid PIDs
+ok 67 - isAlive and waitDead distinguish live, absent, and invalid PIDs
+  ---
+  duration_ms: 0.842875
+  ...
+# Subtest: buildGraph creates both adjacency maps including empty lists
+ok 68 - buildGraph creates both adjacency maps including empty lists
+  ---
+  duration_ms: 1.352959
+  ...
+# Subtest: graph functions accept frozen inputs and do not mutate service dependencies
+ok 69 - graph functions accept frozen inputs and do not mutate service dependencies
+  ---
+  duration_ms: 0.590625
+  ...
+# Subtest: independent services produce one level in declaration order
+ok 70 - independent services produce one level in declaration order
+  ---
+  duration_ms: 0.08225
+  ...
+# Subtest: linear chain a to b to c to d produces four levels
+ok 71 - linear chain a to b to c to d produces four levels
+  ---
+  duration_ms: 0.134084
+  ...
+# Subtest: diamond graph groups b and c together before d
+ok 72 - diamond graph groups b and c together before d
+  ---
+  duration_ms: 0.187209
+  ...
+# Subtest: longest-path rule places x after its deepest dependency
+ok 73 - longest-path rule places x after its deepest dependency
+  ---
+  duration_ms: 0.182375
+  ...
+# Subtest: level declaration order wins over the order nodes become unblocked
+ok 74 - level declaration order wins over the order nodes become unblocked
+  ---
+  duration_ms: 0.147417
+  ...
+# Subtest: explicit declaration order is respected for numeric service names
+ok 75 - explicit declaration order is respected for numeric service names
+  ---
+  duration_ms: 0.073875
+  ...
+# Subtest: two-node cycle reports the closed dependency path
+ok 76 - two-node cycle reports the closed dependency path
+  ---
+  duration_ms: 0.566959
+  ...
+# Subtest: three-node cycle reports the closed dependency path
+ok 77 - three-node cycle reports the closed dependency path
+  ---
+  duration_ms: 0.189167
+  ...
+# Subtest: cycle hidden behind a valid branch excludes the non-cyclic entry path
+ok 78 - cycle hidden behind a valid branch excludes the non-cyclic entry path
+  ---
+  duration_ms: 0.171166
+  ...
+# Subtest: DFS chooses the first cycle in service declaration order
+ok 79 - DFS chooses the first cycle in service declaration order
+  ---
+  duration_ms: 0.145625
+  ...
+# Subtest: DFS visits dependency neighbours in service declaration order
+ok 80 - DFS visits dependency neighbours in service declaration order
+  ---
+  duration_ms: 0.097958
+  ...
+# Subtest: cycle diagnostics use explicit order for numeric service names
+ok 81 - cycle diagnostics use explicit order for numeric service names
+  ---
+  duration_ms: 0.152625
+  ...
+# Subtest: detectCycle returns null for acyclic graphs with shared dependencies
+ok 82 - detectCycle returns null for acyclic graphs with shared dependencies
+  ---
+  duration_ms: 0.073875
+  ...
+# Subtest: detectCycle handles a self-loop even when called without config validation
+ok 83 - detectCycle handles a self-loop even when called without config validation
+  ---
+  duration_ms: 0.150292
+  ...
+# Subtest: DFS and Kahn handle a deep graph without recursive call-stack overflow
+ok 84 - DFS and Kahn handle a deep graph without recursive call-stack overflow
+  ---
+  duration_ms: 49.457084
+  ...
+# Subtest: empty graphs produce empty maps, no cycle, and no levels
+ok 85 - empty graphs produce empty maps, no cycle, and no levels
+  ---
+  duration_ms: 0.394584
+  ...
+# Subtest: special object property names remain safe in both graph maps
+ok 86 - special object property names remain safe in both graph maps
+  ---
+  duration_ms: 0.174042
+  ...
+# Subtest: adaptive boundary width equal to twice depth selects sequential with exact reason
+ok 87 - adaptive boundary width equal to twice depth selects sequential with exact reason
+  ---
+  duration_ms: 0.334541
+  ...
+# Subtest: adaptive width one above twice depth selects parallel with exact reason
+ok 88 - adaptive width one above twice depth selects parallel with exact reason
+  ---
+  duration_ms: 0.096292
+  ...
+# Subtest: adaptive single service selects sequential
+ok 89 - adaptive single service selects sequential
+  ---
+  duration_ms: 0.052584
+  ...
+# Subtest: adaptive linear graph selects sequential
+ok 90 - adaptive linear graph selects sequential
+  ---
+  duration_ms: 0.057042
+  ...
+# Subtest: adaptive eight roots plus two dependents selects parallel
+ok 91 - adaptive eight roots plus two dependents selects parallel
+  ---
+  duration_ms: 0.094208
+  ...
+# Subtest: adaptive empty groups select sequential with zero dimensions
+ok 92 - adaptive empty groups select sequential with zero dimensions
+  ---
+  duration_ms: 0.039709
+  ...
+# Subtest: flatten concatenates levels in order and does not mutate them
+ok 93 - flatten concatenates levels in order and does not mutate them
+  ---
+  duration_ms: 0.060959
+  ...
+# Subtest: loadPlan returns the complete contract object from a temp YAML file
+ok 94 - loadPlan returns the complete contract object from a temp YAML file
+  ---
+  duration_ms: 4.362625
+  ...
+# Subtest: loadPlan preserves numeric YAML service declaration order through planning
+ok 95 - loadPlan preserves numeric YAML service declaration order through planning
+  ---
+  duration_ms: 1.02875
+  ...
+# Subtest: loadPlan propagates cycle diagnostics as ConfigError
+ok 96 - loadPlan propagates cycle diagnostics as ConfigError
+  ---
+  duration_ms: 1.373708
+  ...
+# Subtest: loadPlan propagates config validation and missing-file errors
+ok 97 - loadPlan propagates config validation and missing-file errors
+  ---
+  duration_ms: 0.841916
+  ...
+# Subtest: mock TCP port opens after its delay and not before
+ok 98 - mock TCP port opens after its delay and not before
+  ---
+  duration_ms: 660.721084
+  ...
+# Subtest: mock HTTP health returns 200 ok and other paths return 404
+ok 99 - mock HTTP health returns 200 ok and other paths return 404
+  ---
+  duration_ms: 49.6055
+  ...
+# Subtest: mock HTTP supports a custom health path
+ok 100 - mock HTTP supports a custom health path
+  ---
+  duration_ms: 49.202208
+  ...
+# Subtest: mock exit-after uses the requested code and starts before readiness delay
+ok 101 - mock exit-after uses the requested code and starts before readiness delay
+  ---
+  duration_ms: 108.974417
+  ...
+# Subtest: mock never-ready stays alive without opening a port
+ok 102 - mock never-ready stays alive without opening a port
+  ---
+  duration_ms: 126.047208
+  ...
+# Subtest: mock SIGTERM closes active sockets, logs stopping, and exits cleanly
+ok 103 - mock SIGTERM closes active sockets, logs stopping, and exits cleanly
+  ---
+  duration_ms: 45.000917
+  ...
+# Subtest: mock SIGTERM during delay cancels the pending listener
+ok 104 - mock SIGTERM during delay cancels the pending listener
+  ---
+  duration_ms: 45.38075
+  ...
+# Subtest: mock ignore-sigterm logs and stays alive until SIGKILL
+ok 105 - mock ignore-sigterm logs and stays alive until SIGKILL
+  ---
+  duration_ms: 56.682833
+  ...
+# Subtest: mock invalid arguments print an error and exit 2
+ok 106 - mock invalid arguments print an error and exit 2
+  ---
+  duration_ms: 354.519458
+  ...
+1..106
+# tests 106
+# suites 0
+# pass 106
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1552.77875
+
+[exit 0]
+$ npm run test:engine  [local socket permission enabled]
+
+> serviceboot@0.1.0 test:engine
+> node --test test/engine/
+
+TAP version 13
+# Subtest: ORDERING: sequential on diamond waits for every dependency
+not ok 1 - ORDERING: sequential on diamond waits for every dependency
+  ---
+  duration_ms: 13.245666
+  location: '/private/tmp/sb-check/test/engine/engine.contract.test.js:132:5'
+  failureType: 'testCodeFailure'
+  error: 'NOT IMPLEMENTED: Person 2 implements this (see CONTRACT.md section 5)'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    runEngine (/private/tmp/sb-check/src/engine/index.js:4:9)
+    TestContext.<anonymous> (/private/tmp/sb-check/test/engine/engine.contract.test.js:135:28)
+    process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: ORDERING: sequential on wide waits for every dependency
+not ok 2 - ORDERING: sequential on wide waits for every dependency
+  ---
+  duration_ms: 1.534
+  location: '/private/tmp/sb-check/test/engine/engine.contract.test.js:132:5'
+  failureType: 'testCodeFailure'
+  error: 'NOT IMPLEMENTED: Person 2 implements this (see CONTRACT.md section 5)'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    runEngine (/private/tmp/sb-check/src/engine/index.js:4:9)
+    TestContext.<anonymous> (/private/tmp/sb-check/test/engine/engine.contract.test.js:135:28)
+    process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: ORDERING: parallel on diamond waits for every dependency
+not ok 3 - ORDERING: parallel on diamond waits for every dependency
+  ---
+  duration_ms: 1.252708
+  location: '/private/tmp/sb-check/test/engine/engine.contract.test.js:132:5'
+  failureType: 'testCodeFailure'
+  error: 'NOT IMPLEMENTED: Person 2 implements this (see CONTRACT.md section 5)'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    runEngine (/private/tmp/sb-check/src/engine/index.js:4:9)
+    TestContext.<anonymous> (/private/tmp/sb-check/test/engine/engine.contract.test.js:135:28)
+    process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: ORDERING: parallel on wide waits for every dependency
+not ok 4 - ORDERING: parallel on wide waits for every dependency
+  ---
+  duration_ms: 1.788334
+  location: '/private/tmp/sb-check/test/engine/engine.contract.test.js:132:5'
+  failureType: 'testCodeFailure'
+  error: 'NOT IMPLEMENTED: Person 2 implements this (see CONTRACT.md section 5)'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    runEngine (/private/tmp/sb-check/src/engine/index.js:4:9)
+    TestContext.<anonymous> (/private/tmp/sb-check/test/engine/engine.contract.test.js:135:28)
+    process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: ORDERING: adaptive on diamond waits for every dependency
+not ok 5 - ORDERING: adaptive on diamond waits for every dependency
+  ---
+  duration_ms: 1.364375
+  location: '/private/tmp/sb-check/test/engine/engine.contract.test.js:132:5'
+  failureType: 'testCodeFailure'
+  error: 'NOT IMPLEMENTED: Person 2 implements this (see CONTRACT.md section 5)'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    runEngine (/private/tmp/sb-check/src/engine/index.js:4:9)
+    TestContext.<anonymous> (/private/tmp/sb-check/test/engine/engine.contract.test.js:135:28)
+    process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: ORDERING: adaptive on wide waits for every dependency
+not ok 6 - ORDERING: adaptive on wide waits for every dependency
+  ---
+  duration_ms: 1.222625
+  location: '/private/tmp/sb-check/test/engine/engine.contract.test.js:132:5'
+  failureType: 'testCodeFailure'
+  error: 'NOT IMPLEMENTED: Person 2 implements this (see CONTRACT.md section 5)'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    runEngine (/private/tmp/sb-check/src/engine/index.js:4:9)
+    TestContext.<anonymous> (/private/tmp/sb-check/test/engine/engine.contract.test.js:135:28)
+    process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: SEQUENTIAL NO OVERLAP: five independent services have at most one in flight
+not ok 7 - SEQUENTIAL NO OVERLAP: five independent services have at most one in flight
+  ---
+  duration_ms: 0.971834
+  location: '/private/tmp/sb-check/test/engine/engine.contract.test.js:157:1'
+  failureType: 'testCodeFailure'
+  error: 'NOT IMPLEMENTED: Person 2 implements this (see CONTRACT.md section 5)'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    runEngine (/private/tmp/sb-check/src/engine/index.js:4:9)
+    TestContext.<anonymous> (/private/tmp/sb-check/test/engine/engine.contract.test.js:160:24)
+    process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: PARALLEL IS CONCURRENT AND FASTER: six delayed roots beat sequential
+not ok 8 - PARALLEL IS CONCURRENT AND FASTER: six delayed roots beat sequential
+  ---
+  duration_ms: 0.974208
+  location: '/private/tmp/sb-check/test/engine/engine.contract.test.js:165:1'
+  failureType: 'testCodeFailure'
+  error: 'NOT IMPLEMENTED: Person 2 implements this (see CONTRACT.md section 5)'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    runEngine (/private/tmp/sb-check/src/engine/index.js:4:9)
+    TestContext.<anonymous> (/private/tmp/sb-check/test/engine/engine.contract.test.js:168:28)
+    process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: MAX-PARALLEL: cap two allows all six services to become ready
+not ok 9 - MAX-PARALLEL: cap two allows all six services to become ready
+  ---
+  duration_ms: 0.901875
+  location: '/private/tmp/sb-check/test/engine/engine.contract.test.js:180:1'
+  failureType: 'testCodeFailure'
+  error: 'NOT IMPLEMENTED: Person 2 implements this (see CONTRACT.md section 5)'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    runEngine (/private/tmp/sb-check/src/engine/index.js:4:9)
+    TestContext.<anonymous> (/private/tmp/sb-check/test/engine/engine.contract.test.js:183:24)
+    process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: ADAPTIVE: wide selects parallel and emits the exact reason
+not ok 10 - ADAPTIVE: wide selects parallel and emits the exact reason
+  ---
+  duration_ms: 0.918125
+  location: '/private/tmp/sb-check/test/engine/engine.contract.test.js:189:3'
+  failureType: 'testCodeFailure'
+  error: 'NOT IMPLEMENTED: Person 2 implements this (see CONTRACT.md section 5)'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    runEngine (/private/tmp/sb-check/src/engine/index.js:4:9)
+    TestContext.<anonymous> (/private/tmp/sb-check/test/engine/engine.contract.test.js:192:26)
+    process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: ADAPTIVE: linear selects sequential and emits the exact reason
+not ok 11 - ADAPTIVE: linear selects sequential and emits the exact reason
+  ---
+  duration_ms: 0.731041
+  location: '/private/tmp/sb-check/test/engine/engine.contract.test.js:189:3'
+  failureType: 'testCodeFailure'
+  error: 'NOT IMPLEMENTED: Person 2 implements this (see CONTRACT.md section 5)'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    runEngine (/private/tmp/sb-check/src/engine/index.js:4:9)
+    TestContext.<anonymous> (/private/tmp/sb-check/test/engine/engine.contract.test.js:192:26)
+    process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: CRASH DURING STARTUP: bad service emits crash and all started PIDs die
+not ok 12 - CRASH DURING STARTUP: bad service emits crash and all started PIDs die
+  ---
+  duration_ms: 1.228792
+  location: '/private/tmp/sb-check/test/engine/engine.contract.test.js:206:1'
+  failureType: 'testCodeFailure'
+  error: 'NOT IMPLEMENTED: Person 2 implements this (see CONTRACT.md section 5)'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    assertFailure (/private/tmp/sb-check/test/engine/engine.contract.test.js:117:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    async TestContext.<anonymous> (/private/tmp/sb-check/test/engine/engine.contract.test.js:212:3)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: READY TIMEOUT: never-ready rejects within four seconds and cleans up
+not ok 13 - READY TIMEOUT: never-ready rejects within four seconds and cleans up
+  ---
+  duration_ms: 0.291709
+  location: '/private/tmp/sb-check/test/engine/engine.contract.test.js:216:1'
+  failureType: 'testCodeFailure'
+  error: 'NOT IMPLEMENTED: Person 2 implements this (see CONTRACT.md section 5)'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    assertFailure (/private/tmp/sb-check/test/engine/engine.contract.test.js:117:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    async TestContext.<anonymous> (/private/tmp/sb-check/test/engine/engine.contract.test.js:221:3)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: DEPENDENT NOT STARTED: failing X prevents Y from spawning
+not ok 14 - DEPENDENT NOT STARTED: failing X prevents Y from spawning
+  ---
+  duration_ms: 0.340709
+  location: '/private/tmp/sb-check/test/engine/engine.contract.test.js:225:1'
+  failureType: 'testCodeFailure'
+  error: 'NOT IMPLEMENTED: Person 2 implements this (see CONTRACT.md section 5)'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    assertFailure (/private/tmp/sb-check/test/engine/engine.contract.test.js:117:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    async TestContext.<anonymous> (/private/tmp/sb-check/test/engine/engine.contract.test.js:231:3)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: STOPALL: wide graph exits once per service with dependents before dependencies
+not ok 15 - STOPALL: wide graph exits once per service with dependents before dependencies
+  ---
+  duration_ms: 0.94875
+  location: '/private/tmp/sb-check/test/engine/engine.contract.test.js:235:1'
+  failureType: 'testCodeFailure'
+  error: 'NOT IMPLEMENTED: Person 2 implements this (see CONTRACT.md section 5)'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    runEngine (/private/tmp/sb-check/src/engine/index.js:4:9)
+    TestContext.<anonymous> (/private/tmp/sb-check/test/engine/engine.contract.test.js:238:24)
+    process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: SIGKILL ESCALATION: ignore-sigterm is dead within two seconds
+not ok 16 - SIGKILL ESCALATION: ignore-sigterm is dead within two seconds
+  ---
+  duration_ms: 0.45525
+  location: '/private/tmp/sb-check/test/engine/engine.contract.test.js:255:1'
+  failureType: 'testCodeFailure'
+  error: 'NOT IMPLEMENTED: Person 2 implements this (see CONTRACT.md section 5)'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    runEngine (/private/tmp/sb-check/src/engine/index.js:4:9)
+    TestContext.<anonymous> (/private/tmp/sb-check/test/engine/engine.contract.test.js:258:24)
+    process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: CLI SIGINT: real CLI stops all children and exits within five seconds
+not ok 17 - CLI SIGINT: real CLI stops all children and exits within five seconds
+  ---
+  duration_ms: 67.985458
+  location: '/private/tmp/sb-check/test/engine/engine.contract.test.js:274:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    CLI exited before readiness:
+    error: NOT IMPLEMENTED: Person 2 implements this (see CONTRACT.md section 5)
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (/private/tmp/sb-check/test/engine/engine.contract.test.js:324:10)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: NO DOUBLE-SPAWN: each service starts exactly once in a normal run
+not ok 18 - NO DOUBLE-SPAWN: each service starts exactly once in a normal run
+  ---
+  duration_ms: 1.028042
+  location: '/private/tmp/sb-check/test/engine/engine.contract.test.js:335:1'
+  failureType: 'testCodeFailure'
+  error: 'NOT IMPLEMENTED: Person 2 implements this (see CONTRACT.md section 5)'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    runEngine (/private/tmp/sb-check/src/engine/index.js:4:9)
+    TestContext.<anonymous> (/private/tmp/sb-check/test/engine/engine.contract.test.js:338:24)
+    process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+1..18
+# tests 18
+# suites 0
+# pass 0
+# fail 18
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 148.955875
+
+[exit 1: intended NOT IMPLEMENTED stub]
+$ node bin/serviceboot.js plan --config samples/small.yml
+Config: samples/small.yml  (3 services)
+Start order (levels):
+  Level 0: postgres, redis
+  Level 1: api
+Graph analysis: depth=2 width=2
+Adaptive decision: SEQUENTIAL
+Width (W) <= Depth (D) x 2. Graph is small or mostly linear. Auto-selecting SEQUENTIAL execution to save concurrency overhead.
+
+[exit 0]
+$ node bin/serviceboot.js plan --config samples/linear.yml
+Config: samples/linear.yml  (5 services)
+Start order (levels):
+  Level 0: a
+  Level 1: b
+  Level 2: c
+  Level 3: d
+  Level 4: e
+Graph analysis: depth=5 width=1
+Adaptive decision: SEQUENTIAL
+Width (W) <= Depth (D) x 2. Graph is small or mostly linear. Auto-selecting SEQUENTIAL execution to save concurrency overhead.
+
+[exit 0]
+$ node bin/serviceboot.js plan --config samples/wide.yml
+Config: samples/wide.yml  (10 services)
+Start order (levels):
+  Level 0: w1, w2, w3, w4, w5, w6, w7, w8
+  Level 1: api1, api2
+Graph analysis: depth=2 width=8
+Adaptive decision: PARALLEL
+Width (W) > Depth (D) x 2. High independent concurrency detected. Auto-selecting PARALLEL execution.
+
+[exit 0]
+$ node bin/serviceboot.js plan --config samples/cyclic.yml
+error: Circular dependency detected: a -> b -> c -> a
+
+[exit 1]
+$ node bin/serviceboot.js plan --config samples/invalid.yml
+error: Service "api" depends on unknown service "missing"
+error: Service "worker" and Service "api" use the same readiness port 4141
+error: Service "broken" ready_check: ready_check must be "none", "port N", or "http URL"
+
+[exit 1]
+$ node bin/serviceboot.js up --config samples/wide.yml --algorithm parallel
+error: NOT IMPLEMENTED: Person 2 implements this (see CONTRACT.md section 5)
+
+[exit 3: intended NOT IMPLEMENTED stub]
+$ node --test --test-name-pattern="ORDERING" test/engine/  [local socket permission enabled]
+TAP version 13
+# Subtest: ORDERING: sequential on diamond waits for every dependency
+not ok 1 - ORDERING: sequential on diamond waits for every dependency
+  ---
+  duration_ms: 15.097292
+  location: '/private/tmp/sb-check/test/engine/engine.contract.test.js:132:5'
+  failureType: 'testCodeFailure'
+  error: 'NOT IMPLEMENTED: Person 2 implements this (see CONTRACT.md section 5)'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    runEngine (/private/tmp/sb-check/src/engine/index.js:4:9)
+    TestContext.<anonymous> (/private/tmp/sb-check/test/engine/engine.contract.test.js:135:28)
+    process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: ORDERING: sequential on wide waits for every dependency
+not ok 2 - ORDERING: sequential on wide waits for every dependency
+  ---
+  duration_ms: 1.659708
+  location: '/private/tmp/sb-check/test/engine/engine.contract.test.js:132:5'
+  failureType: 'testCodeFailure'
+  error: 'NOT IMPLEMENTED: Person 2 implements this (see CONTRACT.md section 5)'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    runEngine (/private/tmp/sb-check/src/engine/index.js:4:9)
+    TestContext.<anonymous> (/private/tmp/sb-check/test/engine/engine.contract.test.js:135:28)
+    process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: ORDERING: parallel on diamond waits for every dependency
+not ok 3 - ORDERING: parallel on diamond waits for every dependency
+  ---
+  duration_ms: 1.127333
+  location: '/private/tmp/sb-check/test/engine/engine.contract.test.js:132:5'
+  failureType: 'testCodeFailure'
+  error: 'NOT IMPLEMENTED: Person 2 implements this (see CONTRACT.md section 5)'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    runEngine (/private/tmp/sb-check/src/engine/index.js:4:9)
+    TestContext.<anonymous> (/private/tmp/sb-check/test/engine/engine.contract.test.js:135:28)
+    process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: ORDERING: parallel on wide waits for every dependency
+not ok 4 - ORDERING: parallel on wide waits for every dependency
+  ---
+  duration_ms: 1.780625
+  location: '/private/tmp/sb-check/test/engine/engine.contract.test.js:132:5'
+  failureType: 'testCodeFailure'
+  error: 'NOT IMPLEMENTED: Person 2 implements this (see CONTRACT.md section 5)'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    runEngine (/private/tmp/sb-check/src/engine/index.js:4:9)
+    TestContext.<anonymous> (/private/tmp/sb-check/test/engine/engine.contract.test.js:135:28)
+    process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: ORDERING: adaptive on diamond waits for every dependency
+not ok 5 - ORDERING: adaptive on diamond waits for every dependency
+  ---
+  duration_ms: 0.673208
+  location: '/private/tmp/sb-check/test/engine/engine.contract.test.js:132:5'
+  failureType: 'testCodeFailure'
+  error: 'NOT IMPLEMENTED: Person 2 implements this (see CONTRACT.md section 5)'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    runEngine (/private/tmp/sb-check/src/engine/index.js:4:9)
+    TestContext.<anonymous> (/private/tmp/sb-check/test/engine/engine.contract.test.js:135:28)
+    process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: ORDERING: adaptive on wide waits for every dependency
+not ok 6 - ORDERING: adaptive on wide waits for every dependency
+  ---
+  duration_ms: 1.726333
+  location: '/private/tmp/sb-check/test/engine/engine.contract.test.js:132:5'
+  failureType: 'testCodeFailure'
+  error: 'NOT IMPLEMENTED: Person 2 implements this (see CONTRACT.md section 5)'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    runEngine (/private/tmp/sb-check/src/engine/index.js:4:9)
+    TestContext.<anonymous> (/private/tmp/sb-check/test/engine/engine.contract.test.js:135:28)
+    process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: SEQUENTIAL NO OVERLAP: five independent services have at most one in flight
+ok 7 - SEQUENTIAL NO OVERLAP: five independent services have at most one in flight # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.228209
+  ...
+# Subtest: PARALLEL IS CONCURRENT AND FASTER: six delayed roots beat sequential
+ok 8 - PARALLEL IS CONCURRENT AND FASTER: six delayed roots beat sequential # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.108333
+  ...
+# Subtest: MAX-PARALLEL: cap two allows all six services to become ready
+ok 9 - MAX-PARALLEL: cap two allows all six services to become ready # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.1715
+  ...
+# Subtest: ADAPTIVE: wide selects parallel and emits the exact reason
+ok 10 - ADAPTIVE: wide selects parallel and emits the exact reason # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.147792
+  ...
+# Subtest: ADAPTIVE: linear selects sequential and emits the exact reason
+ok 11 - ADAPTIVE: linear selects sequential and emits the exact reason # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.175709
+  ...
+# Subtest: CRASH DURING STARTUP: bad service emits crash and all started PIDs die
+ok 12 - CRASH DURING STARTUP: bad service emits crash and all started PIDs die # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.063875
+  ...
+# Subtest: READY TIMEOUT: never-ready rejects within four seconds and cleans up
+ok 13 - READY TIMEOUT: never-ready rejects within four seconds and cleans up # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.045042
+  ...
+# Subtest: DEPENDENT NOT STARTED: failing X prevents Y from spawning
+ok 14 - DEPENDENT NOT STARTED: failing X prevents Y from spawning # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.077958
+  ...
+# Subtest: STOPALL: wide graph exits once per service with dependents before dependencies
+ok 15 - STOPALL: wide graph exits once per service with dependents before dependencies # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.262916
+  ...
+# Subtest: SIGKILL ESCALATION: ignore-sigterm is dead within two seconds
+ok 16 - SIGKILL ESCALATION: ignore-sigterm is dead within two seconds # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.039791
+  ...
+# Subtest: CLI SIGINT: real CLI stops all children and exits within five seconds
+ok 17 - CLI SIGINT: real CLI stops all children and exits within five seconds # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.03275
+  ...
+# Subtest: NO DOUBLE-SPAWN: each service starts exactly once in a normal run
+ok 18 - NO DOUBLE-SPAWN: each service starts exactly once in a normal run # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.032083
+  ...
+1..18
+# tests 18
+# suites 0
+# pass 0
+# fail 6
+# cancelled 0
+# skipped 12
+# todo 0
+# duration_ms 125.509083
+
+[exit 1: six selected tests fail with the stub, twelve skipped]
+$ node mock/mock-service.js --port 4101 --name handover --delay 300 --http --exit-after 1000 --exit-code 0
+[handover] starting
+[handover] listening on 127.0.0.1:4101
+
+[exit 0]
+
+Final workspace unit rerun after writing the documents:
+$ npm test  [cwd /Users/arushipahuja/coding/os_project; local socket permission enabled]
+
+> serviceboot@0.1.0 test
+> node --test test/unit/
+
+TAP version 13
+# Subtest: ConfigError keeps all messages and joins them with newlines
+ok 1 - ConfigError keeps all messages and joins them with newlines
+  ---
+  duration_ms: 1.402667
+  type: 'test'
+  ...
+# Subtest: minimal config produces exactly the contract fields and defaults
+ok 2 - minimal config produces exactly the contract fields and defaults
+  ---
+  duration_ms: 1.741916
+  type: 'test'
+  ...
+# Subtest: full config normalizes every field and applies defaults to other services
+ok 3 - full config normalizes every field and applies defaults to other services
+  ---
+  duration_ms: 0.84075
+  type: 'test'
+  ...
+# Subtest: top-level config must be an object
+ok 4 - top-level config must be an object
+  ---
+  duration_ms: 1.604625
+  type: 'test'
+  ...
+# Subtest: version must be exactly the number 1
+ok 5 - version must be exactly the number 1
+  ---
+  duration_ms: 1.266042
+  type: 'test'
+  ...
+# Subtest: services must be a non-empty object
+ok 6 - services must be a non-empty object
+  ---
+  duration_ms: 0.225208
+  type: 'test'
+  ...
+# Subtest: service names must contain only letters, digits, underscores, and hyphens
+ok 7 - service names must contain only letters, digits, underscores, and hyphens
+  ---
+  duration_ms: 0.425167
+  type: 'test'
+  ...
+# Subtest: each service definition must be an object
+ok 8 - each service definition must be an object
+  ---
+  duration_ms: 0.305209
+  type: 'test'
+  ...
+# Subtest: command must be a non-empty string
+ok 9 - command must be a non-empty string
+  ---
+  duration_ms: 0.554708
+  type: 'test'
+  ...
+# Subtest: cwd must be a string when supplied
+ok 10 - cwd must be a string when supplied
+  ---
+  duration_ms: 0.5355
+  type: 'test'
+  ...
+# Subtest: depends_on must be an array
+ok 11 - depends_on must be an array
+  ---
+  duration_ms: 0.307208
+  type: 'test'
+  ...
+# Subtest: depends_on entries must be strings
+ok 12 - depends_on entries must be strings
+  ---
+  duration_ms: 0.154792
+  type: 'test'
+  ...
+# Subtest: self-dependencies are rejected
+ok 13 - self-dependencies are rejected
+  ---
+  duration_ms: 0.098875
+  type: 'test'
+  ...
+# Subtest: duplicate dependencies are rejected
+ok 14 - duplicate dependencies are rejected
+  ---
+  duration_ms: 0.123417
+  type: 'test'
+  ...
+# Subtest: unknown dependencies use the required error message
+ok 15 - unknown dependencies use the required error message
+  ---
+  duration_ms: 0.139167
+  type: 'test'
+  ...
+# Subtest: inherited object properties do not count as existing dependencies
+ok 16 - inherited object properties do not count as existing dependencies
+  ---
+  duration_ms: 0.110792
+  type: 'test'
+  ...
+# Subtest: ready_check must be a valid readiness expression
+ok 17 - ready_check must be a valid readiness expression
+  ---
+  duration_ms: 0.866791
+  type: 'test'
+  ...
+# Subtest: ready_timeout_ms must be a positive integer
+ok 18 - ready_timeout_ms must be a positive integer
+  ---
+  duration_ms: 0.581541
+  type: 'test'
+  ...
+# Subtest: ready_interval_ms must be a positive integer
+ok 19 - ready_interval_ms must be a positive integer
+  ---
+  duration_ms: 0.367417
+  type: 'test'
+  ...
+# Subtest: readiness interval must be strictly less than timeout, including defaults
+ok 20 - readiness interval must be strictly less than timeout, including defaults
+  ---
+  duration_ms: 0.273625
+  type: 'test'
+  ...
+# Subtest: restart must be never or on-failure
+ok 21 - restart must be never or on-failure
+  ---
+  duration_ms: 0.309625
+  type: 'test'
+  ...
+# Subtest: max_retries must be an integer greater than or equal to zero
+ok 22 - max_retries must be an integer greater than or equal to zero
+  ---
+  duration_ms: 0.305375
+  type: 'test'
+  ...
+# Subtest: env must be an object and cannot be an array
+ok 23 - env must be an object and cannot be an array
+  ---
+  duration_ms: 0.307958
+  type: 'test'
+  ...
+# Subtest: duplicate readiness ports report both service names
+ok 24 - duplicate readiness ports report both service names
+  ---
+  duration_ms: 0.182542
+  type: 'test'
+  ...
+# Subtest: all independent validation errors are returned together before normalization
+ok 25 - all independent validation errors are returned together before normalization
+  ---
+  duration_ms: 0.240333
+  type: 'test'
+  ...
+# Subtest: YAML syntax errors include human-readable line and column information
+ok 26 - YAML syntax errors include human-readable line and column information
+  ---
+  duration_ms: 0.308417
+  type: 'test'
+  ...
+# Subtest: duplicate YAML keys are rejected with line information
+ok 27 - duplicate YAML keys are rejected with line information
+  ---
+  duration_ms: 0.303917
+  type: 'test'
+  ...
+# Subtest: missing file becomes ConfigError with the required path message
+ok 28 - missing file becomes ConfigError with the required path message
+  ---
+  duration_ms: 0.810459
+  type: 'test'
+  ...
+# Subtest: unreadable file becomes ConfigError
+ok 29 - unreadable file becomes ConfigError
+  ---
+  duration_ms: 1.192208
+  type: 'test'
+  ...
+# Subtest: parseReadyCheck accepts valid forms, whitespace, and case-insensitive keywords
+ok 30 - parseReadyCheck accepts valid forms, whitespace, and case-insensitive keywords
+  ---
+  duration_ms: 0.20925
+  type: 'test'
+  ...
+# Subtest: parseReadyCheck rejects invalid forms with plain descriptive Errors
+ok 31 - parseReadyCheck rejects invalid forms with plain descriptive Errors
+  ---
+  duration_ms: 0.182083
+  type: 'test'
+  ...
+# Subtest: relative cwd resolves against the config file folder
+ok 32 - relative cwd resolves against the config file folder
+  ---
+  duration_ms: 0.653167
+  type: 'test'
+  ...
+# Subtest: default and empty cwd resolve to the config folder; absolute cwd remains absolute
+ok 33 - default and empty cwd resolve to the config folder; absolute cwd remains absolute
+  ---
+  duration_ms: 0.771167
+  type: 'test'
+  ...
+# Subtest: env numbers become strings without altering the raw object
+ok 34 - env numbers become strings without altering the raw object
+  ---
+  duration_ms: 0.121125
+  type: 'test'
+  ...
+# Subtest: declaration order is preserved rather than alphabetically sorted
+ok 35 - declaration order is preserved rather than alphabetically sorted
+  ---
+  duration_ms: 0.093125
+  type: 'test'
+  ...
+# Subtest: numeric service names preserve YAML declaration order in block and flow mappings
+ok 36 - numeric service names preserve YAML declaration order in block and flow mappings
+  ---
+  duration_ms: 0.225459
+  type: 'test'
+  ...
+# Subtest: YAML aliases and merges retain services and declaration order
+ok 37 - YAML aliases and merges retain services and declaration order
+  ---
+  duration_ms: 0.166417
+  type: 'test'
+  ...
+# Subtest: special object property names are safe service and environment keys
+ok 38 - special object property names are safe service and environment keys
+  ---
+  duration_ms: 0.105417
+  type: 'test'
+  ...
+# Subtest: multi-service cycles are left for Phase 3 graph validation
+ok 39 - multi-service cycles are left for Phase 3 graph validation
+  ---
+  duration_ms: 0.103667
+  type: 'test'
+  ...
+# Subtest: buildGraph creates both adjacency maps including empty lists
+ok 40 - buildGraph creates both adjacency maps including empty lists
+  ---
+  duration_ms: 0.101209
+  type: 'test'
+  ...
+# Subtest: graph functions accept frozen inputs and do not mutate service dependencies
+ok 41 - graph functions accept frozen inputs and do not mutate service dependencies
+  ---
+  duration_ms: 0.400417
+  type: 'test'
+  ...
+# Subtest: independent services produce one level in declaration order
+ok 42 - independent services produce one level in declaration order
+  ---
+  duration_ms: 0.087083
+  type: 'test'
+  ...
+# Subtest: linear chain a to b to c to d produces four levels
+ok 43 - linear chain a to b to c to d produces four levels
+  ---
+  duration_ms: 0.396
+  type: 'test'
+  ...
+# Subtest: diamond graph groups b and c together before d
+ok 44 - diamond graph groups b and c together before d
+  ---
+  duration_ms: 0.070167
+  type: 'test'
+  ...
+# Subtest: longest-path rule places x after its deepest dependency
+ok 45 - longest-path rule places x after its deepest dependency
+  ---
+  duration_ms: 0.043792
+  type: 'test'
+  ...
+# Subtest: level declaration order wins over the order nodes become unblocked
+ok 46 - level declaration order wins over the order nodes become unblocked
+  ---
+  duration_ms: 0.04025
+  type: 'test'
+  ...
+# Subtest: explicit declaration order is respected for numeric service names
+ok 47 - explicit declaration order is respected for numeric service names
+  ---
+  duration_ms: 0.034584
+  type: 'test'
+  ...
+# Subtest: two-node cycle reports the closed dependency path
+ok 48 - two-node cycle reports the closed dependency path
+  ---
+  duration_ms: 0.153792
+  type: 'test'
+  ...
+# Subtest: three-node cycle reports the closed dependency path
+ok 49 - three-node cycle reports the closed dependency path
+  ---
+  duration_ms: 0.063708
+  type: 'test'
+  ...
+# Subtest: cycle hidden behind a valid branch excludes the non-cyclic entry path
+ok 50 - cycle hidden behind a valid branch excludes the non-cyclic entry path
+  ---
+  duration_ms: 0.055625
+  type: 'test'
+  ...
+# Subtest: DFS chooses the first cycle in service declaration order
+ok 51 - DFS chooses the first cycle in service declaration order
+  ---
+  duration_ms: 0.057166
+  type: 'test'
+  ...
+# Subtest: DFS visits dependency neighbours in service declaration order
+ok 52 - DFS visits dependency neighbours in service declaration order
+  ---
+  duration_ms: 0.04925
+  type: 'test'
+  ...
+# Subtest: cycle diagnostics use explicit order for numeric service names
+ok 53 - cycle diagnostics use explicit order for numeric service names
+  ---
+  duration_ms: 0.051833
+  type: 'test'
+  ...
+# Subtest: detectCycle returns null for acyclic graphs with shared dependencies
+ok 54 - detectCycle returns null for acyclic graphs with shared dependencies
+  ---
+  duration_ms: 0.034208
+  type: 'test'
+  ...
+# Subtest: detectCycle handles a self-loop even when called without config validation
+ok 55 - detectCycle handles a self-loop even when called without config validation
+  ---
+  duration_ms: 0.038542
+  type: 'test'
+  ...
+# Subtest: DFS and Kahn handle a deep graph without recursive call-stack overflow
+ok 56 - DFS and Kahn handle a deep graph without recursive call-stack overflow
+  ---
+  duration_ms: 39.710584
+  type: 'test'
+  ...
+# Subtest: empty graphs produce empty maps, no cycle, and no levels
+ok 57 - empty graphs produce empty maps, no cycle, and no levels
+  ---
+  duration_ms: 0.107
+  type: 'test'
+  ...
+# Subtest: special object property names remain safe in both graph maps
+ok 58 - special object property names remain safe in both graph maps
+  ---
+  duration_ms: 0.08125
+  type: 'test'
+  ...
+# Subtest: adaptive boundary width equal to twice depth selects sequential with exact reason
+ok 59 - adaptive boundary width equal to twice depth selects sequential with exact reason
+  ---
+  duration_ms: 0.075875
+  type: 'test'
+  ...
+# Subtest: adaptive width one above twice depth selects parallel with exact reason
+ok 60 - adaptive width one above twice depth selects parallel with exact reason
+  ---
+  duration_ms: 0.034792
+  type: 'test'
+  ...
+# Subtest: adaptive single service selects sequential
+ok 61 - adaptive single service selects sequential
+  ---
+  duration_ms: 0.030875
+  type: 'test'
+  ...
+# Subtest: adaptive linear graph selects sequential
+ok 62 - adaptive linear graph selects sequential
+  ---
+  duration_ms: 0.043041
+  type: 'test'
+  ...
+# Subtest: adaptive eight roots plus two dependents selects parallel
+ok 63 - adaptive eight roots plus two dependents selects parallel
+  ---
+  duration_ms: 0.0865
+  type: 'test'
+  ...
+# Subtest: adaptive empty groups select sequential with zero dimensions
+ok 64 - adaptive empty groups select sequential with zero dimensions
+  ---
+  duration_ms: 0.033084
+  type: 'test'
+  ...
+# Subtest: flatten concatenates levels in order and does not mutate them
+ok 65 - flatten concatenates levels in order and does not mutate them
+  ---
+  duration_ms: 0.049292
+  type: 'test'
+  ...
+# Subtest: loadPlan returns the complete contract object from a temp YAML file
+ok 66 - loadPlan returns the complete contract object from a temp YAML file
+  ---
+  duration_ms: 1.345292
+  type: 'test'
+  ...
+# Subtest: loadPlan preserves numeric YAML service declaration order through planning
+ok 67 - loadPlan preserves numeric YAML service declaration order through planning
+  ---
+  duration_ms: 0.86775
+  type: 'test'
+  ...
+# Subtest: loadPlan propagates cycle diagnostics as ConfigError
+ok 68 - loadPlan propagates cycle diagnostics as ConfigError
+  ---
+  duration_ms: 1.121375
+  type: 'test'
+  ...
+# Subtest: loadPlan propagates config validation and missing-file errors
+ok 69 - loadPlan propagates config validation and missing-file errors
+  ---
+  duration_ms: 0.6145
+  type: 'test'
+  ...
+# Subtest: CLI plan small prints the correct levels and SEQUENTIAL decision
+ok 70 - CLI plan small prints the correct levels and SEQUENTIAL decision
+  ---
+  duration_ms: 40.395458
+  type: 'test'
+  ...
+# Subtest: CLI plan linear prints the correct levels and SEQUENTIAL decision
+ok 71 - CLI plan linear prints the correct levels and SEQUENTIAL decision
+  ---
+  duration_ms: 33.584625
+  type: 'test'
+  ...
+# Subtest: CLI plan wide prints the correct levels and PARALLEL decision
+ok 72 - CLI plan wide prints the correct levels and PARALLEL decision
+  ---
+  duration_ms: 34.065292
+  type: 'test'
+  ...
+# Subtest: CLI cyclic sample exits 1 and prints the cycle path
+ok 73 - CLI cyclic sample exits 1 and prints the cycle path
+  ---
+  duration_ms: 32.6995
+  type: 'test'
+  ...
+# Subtest: CLI invalid sample exits 1 and prints all three problems separately
+ok 74 - CLI invalid sample exits 1 and prints all three problems separately
+  ---
+  duration_ms: 32.033458
+  type: 'test'
+  ...
+# Subtest: CLI missing file exits 1 for both plan and up
+ok 75 - CLI missing file exits 1 for both plan and up
+  ---
+  duration_ms: 62.352167
+  type: 'test'
+  ...
+# Subtest: CLI --json prints only valid JSON matching loadPlan
+ok 76 - CLI --json prints only valid JSON matching loadPlan
+  ---
+  duration_ms: 33.004292
+  type: 'test'
+  ...
+# Subtest: CLI default config is serviceboot.yml in the current working directory
+ok 77 - CLI default config is serviceboot.yml in the current working directory
+  ---
+  duration_ms: 33.581833
+  type: 'test'
+  ...
+# Subtest: CLI unknown command, missing command, extra positionals, and unknown options exit 2
+ok 78 - CLI unknown command, missing command, extra positionals, and unknown options exit 2
+  ---
+  duration_ms: 129.186042
+  type: 'test'
+  ...
+# Subtest: CLI --help and -h print usage and exit 0
+ok 79 - CLI --help and -h print usage and exit 0
+  ---
+  duration_ms: 127.681666
+  type: 'test'
+  ...
+# Subtest: CLI up with the engine stub exits 3 with its exact message
+ok 80 - CLI up with the engine stub exits 3 with its exact message
+  ---
+  duration_ms: 46.304917
+  type: 'test'
+  ...
+# Subtest: both engine stub functions reject with the contract handover message
+ok 81 - both engine stub functions reject with the contract handover message
+  ---
+  duration_ms: 0.205791
+  type: 'test'
+  ...
+# Subtest: CLI rejects invalid algorithms before loading a config
+ok 82 - CLI rejects invalid algorithms before loading a config
+  ---
+  duration_ms: 97.784916
+  type: 'test'
+  ...
+# Subtest: CLI accepts all three algorithms and positive max-parallel values
+ok 83 - CLI accepts all three algorithms and positive max-parallel values
+  ---
+  duration_ms: 167.302209
+  type: 'test'
+  ...
+# Subtest: CLI max-parallel must be a positive integer
+ok 84 - CLI max-parallel must be a positive integer
+  ---
+  duration_ms: 264.116333
+  type: 'test'
+  ...
+# Subtest: CLI rejects options belonging to the other command and missing option values
+ok 85 - CLI rejects options belonging to the other command and missing option values
+  ---
+  duration_ms: 393.30525
+  type: 'test'
+  ...
+# Subtest: CLI wires engine options, prints every contract event, and stops after ready
+ok 86 - CLI wires engine options, prints every contract event, and stops after ready
+  ---
+  duration_ms: 1.718917
+  type: 'test'
+  ...
+# Subtest: CLI defaults to adaptive and unlimited parallelism
+ok 87 - CLI defaults to adaptive and unlimited parallelism
+  ---
+  duration_ms: 0.442917
+  type: 'test'
+  ...
+# Subtest: CLI waits after readiness and stops on SIGINT with exit 130
+ok 88 - CLI waits after readiness and stops on SIGINT with exit 130
+  ---
+  duration_ms: 24.445958
+  type: 'test'
+  ...
+# Subtest: CLI waits after readiness and stops on SIGTERM with exit 143
+ok 89 - CLI waits after readiness and stops on SIGTERM with exit 143
+  ---
+  duration_ms: 1.809334
+  type: 'test'
+  ...
+# Subtest: CLI can stop during startup without waiting for unresolved readiness
+ok 90 - CLI can stop during startup without waiting for unresolved readiness
+  ---
+  duration_ms: 1.421709
+  type: 'test'
+  ...
+# Subtest: CLI repeated signals call stopAll only once
+ok 91 - CLI repeated signals call stopAll only once
+  ---
+  duration_ms: 0.926375
+  type: 'test'
+  ...
+# Subtest: CLI shutdown failure prints the engine error and exits 3
+ok 92 - CLI shutdown failure prints the engine error and exits 3
+  ---
+  duration_ms: 1.690166
+  type: 'test'
+  ...
+# Subtest: mock TCP port opens after its delay and not before
+ok 93 - mock TCP port opens after its delay and not before
+  ---
+  duration_ms: 664.637
+  type: 'test'
+  ...
+# Subtest: mock HTTP health returns 200 ok and other paths return 404
+ok 94 - mock HTTP health returns 200 ok and other paths return 404
+  ---
+  duration_ms: 77.385041
+  type: 'test'
+  ...
+# Subtest: mock HTTP supports a custom health path
+ok 95 - mock HTTP supports a custom health path
+  ---
+  duration_ms: 60.648875
+  type: 'test'
+  ...
+# Subtest: mock exit-after uses the requested code and starts before readiness delay
+ok 96 - mock exit-after uses the requested code and starts before readiness delay
+  ---
+  duration_ms: 121.614875
+  type: 'test'
+  ...
+# Subtest: mock never-ready stays alive without opening a port
+ok 97 - mock never-ready stays alive without opening a port
+  ---
+  duration_ms: 124.513083
+  type: 'test'
+  ...
+# Subtest: mock SIGTERM closes active sockets, logs stopping, and exits cleanly
+ok 98 - mock SIGTERM closes active sockets, logs stopping, and exits cleanly
+  ---
+  duration_ms: 56.430208
+  type: 'test'
+  ...
+# Subtest: mock SIGTERM during delay cancels the pending listener
+ok 99 - mock SIGTERM during delay cancels the pending listener
+  ---
+  duration_ms: 43.165291
+  type: 'test'
+  ...
+# Subtest: mock ignore-sigterm logs and stays alive until SIGKILL
+ok 100 - mock ignore-sigterm logs and stays alive until SIGKILL
+  ---
+  duration_ms: 55.844417
+  type: 'test'
+  ...
+# Subtest: mock invalid arguments print an error and exit 2
+ok 101 - mock invalid arguments print an error and exit 2
+  ---
+  duration_ms: 337.628083
+  type: 'test'
+  ...
+# Subtest: freePort returns a port whose temporary listener has closed
+ok 102 - freePort returns a port whose temporary listener has closed
+  ---
+  duration_ms: 0.655125
+  type: 'test'
+  ...
+# Subtest: makeServices creates complete real Service objects and real topo levels
+ok 103 - makeServices creates complete real Service objects and real topo levels
+  ---
+  duration_ms: 0.816792
+  type: 'test'
+  ...
+# Subtest: record preserves event arrival indices and supports find/filter by service
+ok 104 - record preserves event arrival indices and supports find/filter by service
+  ---
+  duration_ms: 0.18225
+  type: 'test'
+  ...
+# Subtest: record maxInFlight removes both ready and failed services
+ok 105 - record maxInFlight removes both ready and failed services
+  ---
+  duration_ms: 0.073459
+  type: 'test'
+  ...
+# Subtest: isAlive and waitDead distinguish live, absent, and invalid PIDs
+ok 106 - isAlive and waitDead distinguish live, absent, and invalid PIDs
+  ---
+  duration_ms: 0.167541
+  type: 'test'
+  ...
+1..106
+# tests 106
+# suites 0
+# pass 106
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3245.079792
+
+[exit 0]
+
+Document verification:
+README.md: local links and whitespace checked
+handover/01-person1-to-person2.md: local links and whitespace checked
+Handover: all ten required numbered sections present
+Transcript: full unit/engine results and all five sample commands present
+CLI stub-dependent tests:
+- CLI up with the engine stub exits 3 with its exact message
+- both engine stub functions reject with the contract handover message
+- CLI accepts all three algorithms and positive max-parallel values
+[exit 0]
+$ git diff --exit-code 94d81cd -- CONTRACT.md src test mock samples bin package.json package-lock.json && git diff --check
+[no output; exit 0]
+
