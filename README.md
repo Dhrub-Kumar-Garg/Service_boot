@@ -12,7 +12,7 @@ npm test
 npm run test:engine
 ```
 
-Phase 4 verification on Windows with Node 22.16.0: `npm test` has 158 tests, 154 passing and four platform skips. The full engine suite has 17 passing cases and one Windows SIGINT skip. All 11 targeted ordering/adaptive/failure cases passed three times. Every run used `NODE_OPTIONS=--unhandled-rejections=strict`, with no warnings or leftover mock processes. Real process tests ran with permitted socket and Windows `taskkill` access. See the [Phase 4 handover and actual output](handover/02-person2-phase4.md).
+Phase 5 verification on Windows with Node 22.16.0: `npm test` has 167 tests, 163 passing and four platform skips. The full engine suite has 19 passing cases and one Windows SIGINT skip, including two new real-engine signal callback cases. One and two console Ctrl+C presses both left zero mock services. Completed automated checks used `NODE_OPTIONS=--unhandled-rejections=strict`, with no warnings or unhandled rejections. Real process tests ran with permitted socket and Windows `taskkill` access. See the [Phase 5 handover and actual output](handover/02-person2-phase5.md).
 
 ## Commands
 
@@ -22,6 +22,8 @@ node bin/serviceboot.js up --config samples/wide.yml --algorithm parallel
 ```
 
 `plan` works now; add `--json` for the complete plan. `up` boots services and leaves them running; use `--exit-after-ready` to stop and exit after successful startup. `--max-parallel N` limits simultaneous startups until readiness. Defaults are `./serviceboot.yml` and algorithm `adaptive`, which chooses parallel when graph width exceeds twice its depth and otherwise chooses sequential. Use `--help` for usage.
+
+During `up`, the first Ctrl+C requests shutdown and exits 130 after cleanup. POSIX SIGTERM requests shutdown and exit 143; Windows does not deliver SIGTERM as a console signal. A second interrupt forces synchronous process-tree cleanup and immediate CLI exit. An uncaught exception or unhandled rejection prints an error, attempts cleanup, and exits 3.
 
 ## Folder map
 
@@ -61,3 +63,9 @@ Successful runs emit run:done and return `{algorithm, effectiveAlgorithm, totalM
 Adaptive calls the existing graph analysis and emits `adaptive:decision {width, depth, chosen, reason}` immediately after run:start, before service events. It runs the chosen runner with the supplied startup cap. The returned algorithm remains `adaptive`; effectiveAlgorithm reports `sequential` or `parallel`.
 
 The first spawn, timeout or crash failure owns the failure events. It aborts peer readiness waits, blocks queued services and dependents, and emits service:failed once for the root cause. All parallel workers settle before `stopAll({graceMs:1000})` stops the started process trees. After cleanup, run:failed carries the root error message as a string, and runEngine rejects the original EngineError with its reason and serviceName. Later peer failures are silent. Crashes after readiness, restart policies and down/PID persistence remain for subsequent phases.
+
+## Engine Phase 5
+
+`stopAll({graceMs = 3000})` returns one shared promise to concurrent callers. It publishes that promise before aborting startup, so a reentrant abort listener joins the same shutdown. It waits for startup workers to finish, snapshots all owned handles including not-ready services, groups them by descending level, and terminates peers concurrently with a barrier between levels. If an OS termination fails, it still drains peers and attempts remaining levels before rejecting. Normal shutdown emits exactly one service:exited event per spawned service.
+
+CLI signal handlers remain installed during shutdown so a second signal can call killAllSync and exit with the first signal's code. Expected signal cancellation prints no failure diagnostic. Graceful completion removes signal/fatal-event listeners and the CLI keep-alive timer. Fatal events are deduplicated when strict rejection mode reports the same error twice, and exit after best-effort cleanup even if unrelated handles remain alive.

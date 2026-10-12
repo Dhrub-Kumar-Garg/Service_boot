@@ -1,0 +1,40 @@
+TAP version 13
+# Subtest: STOPALL: wide graph exits once per service with dependents before dependencies
+ok 1 - STOPALL: wide graph exits once per service with dependents before dependencies
+  ---
+  duration_ms: 1375.7787
+  type: 'test'
+  ...
+# Subtest: SIGKILL ESCALATION: ignore-sigterm is dead within two seconds
+ok 2 - SIGKILL ESCALATION: ignore-sigterm is dead within two seconds
+  ---
+  duration_ms: 375.304
+  type: 'test'
+  ...
+# Subtest: CLI SIGINT: real CLI stops all children and exits within five seconds
+ok 3 - CLI SIGINT: real CLI stops all children and exits within five seconds # SKIP
+  ---
+  duration_ms: 0.1213
+  type: 'test'
+  ...
+# Subtest: CLI SIGINT callbacks: real graceful cleanup exits 130 and kills the wide service tree
+ok 4 - CLI SIGINT callbacks: real graceful cleanup exits 130 and kills the wide service tree
+  ---
+  duration_ms: 2443.963
+  type: 'test'
+  ...
+# Subtest: CLI SIGINT callbacks: real forced cleanup exits 130 and kills the wide service tree
+ok 5 - CLI SIGINT callbacks: real forced cleanup exits 130 and kills the wide service tree
+  ---
+  duration_ms: 4497.1276
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 4
+# fail 0
+# cancelled 0
+# skipped 1
+# todo 0
+# duration_ms 8798.2358

@@ -1,4 +1,5 @@
-const { terminate, getRunning, getManagedHandles } = require('./process-manager');
+const processes = require('./process-manager');
+const { getRunning } = processes;
 const { EventEmitter, setMaxListeners } = require('node:events');
 const { performance } = require('node:perf_hooks');
 const { createEmit } = require('./events');
@@ -108,32 +109,43 @@ async function runEngine({ services, groups, algorithm, maxParallel = Infinity,
   }
 }
 
-async function stopAll({ graceMs = 3000 } = {}) {
+function stopAll({ graceMs = 3000 } = {}) {
   if (!Number.isFinite(graceMs) || graceMs < 0 || graceMs > 2147483647) {
-    throw new TypeError('graceMs must be a finite non-negative timer duration');
+    return Promise.reject(new TypeError('graceMs must be a finite non-negative timer duration'));
   }
-  const ctx = activeContext;
-  if (ctx) ctx.abort(new EngineError('startup aborted', { reason: 'aborted' }));
   if (shutdownOperation) return shutdownOperation;
+  const ctx = activeContext;
 
-  shutdownOperation = (async () => {
+  // Publish the shared promise before abort listeners can call stopAll again.
+  // An async function wrapper would return a different promise to each caller.
+  shutdownOperation = Promise.resolve().then(async () => {
     if (ctx) await ctx.startingDone;
-    const handles = getManagedHandles();
-    const levels = [...new Set(handles.map(handle => handle.level))].sort((a, b) => b - a);
+    // Include spawned services still checking readiness and owned groups whose
+    // shell already exited. The startup barrier prevents a late spawn escaping.
+    const byLevel = new Map();
+    for (const handle of processes.getManagedHandles()) {
+      if (!byLevel.has(handle.level)) byLevel.set(handle.level, []);
+      byLevel.get(handle.level).push(handle);
+    }
+    const levels = [...byLevel.keys()].sort((a, b) => b - a);
     let failure;
     for (const level of levels) {
       // Dependents stop before dependencies. Peers on a level can stop together,
       // but all their OS exits must complete before the next shallower level.
-      const results = await Promise.allSettled(
-        handles.filter(handle => handle.level === level)
-          .map(handle => terminate(handle, { graceMs }))
-      );
-      const rejected = results.find(result => result.status === 'rejected');
-      if (!failure && rejected) failure = rejected.reason;
+      await Promise.all(byLevel.get(level).map(async handle => {
+        try {
+          await processes.terminate(handle, { graceMs });
+        } catch (error) {
+          // Still drain this level and attempt the other levels if one OS kill
+          // fails. Reject only after every owned process has been attempted.
+          if (!failure) failure = error;
+        }
+      }));
     }
     if (activeContext === ctx) activeContext = null;
     if (failure) throw failure;
-  })().finally(() => { shutdownOperation = null; });
+  }).finally(() => { shutdownOperation = null; });
+  if (ctx) ctx.abort(new EngineError('startup aborted', { reason: 'aborted' }));
   return shutdownOperation;
 }
 

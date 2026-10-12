@@ -1,0 +1,45 @@
+{
+  "command": "node bin/serviceboot.js up --config samples/wide.yml --algorithm parallel",
+  "singleCtrlC": {
+    "start": {
+      "chunk_id": "4ae37c",
+      "wall_time_seconds": 10.0136974,
+      "session_id": 23149,
+      "original_token_count": 734,
+      "output": "\u001b[?9001h\u001b[?1004h\u001b[?25l\u001b[2J\u001b[m\u001b[Hrun:start algorithm=parallel total=10 ts=67.2134\r\n\u001b]0;C:\\Users\\Dhruv\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell\\pwsh.exe\u0007\u001b[?25hservice:starting w1 pid=36860 level=0 ts=88.6223\r\nservice:starting w2 pid=25252 level=0 ts=103.6029\r\nservice:starting w3 pid=36948 level=0 ts=117.224\r\nservice:starting w4 pid=24144 level=0 ts=131.5655\r\nservice:starting w5 pid=34120 level=0 ts=145.9661\r\nservice:starting w6 pid=35616 level=0 ts=164.1307\r\nservice:starting w7 pid=11976 level=0 ts=180.7678\r\nservice:starting w8 pid=19576 level=0 ts=195.4827\r\nservice:log w1 stream=stdout line=[w1] starting ts=217.7851\r\nservice:log w2 stream=stdout line=[w2] starting ts=221.9311\r\nservice:log w3 stream=stdout line=[w3] starting ts=245.7157\r\nservice:log w4 stream=stdout line=[w4] starting ts=263.8517\r\nservice:log w5 stream=stdout line=[w5] starting ts=279.0495\r\nservice:log w6 stream=stdout line=[w6] starting ts=294.3264\r\nservice:log w7 stream=stdout line=[w7] starting ts=298.1345\r\nservice:log w8 stream=stdout line=[w8] starting ts=302.0018\r\nservice:log w1 stream=stdout line=[w1] listening on 127.0.0.1:4111 ts=736.305\r\nservice:log w2 stream=stdout line=[w2] listening on 127.0.0.1:4112 ts=754.422\r\nservice:log w3 stream=stdout line=[w3] listening on 127.0.0.1:4113 ts=767.6328\r\nservice:log w4 stream=stdout line=[w4] listening on 127.0.0.1:4114 ts=780.1863\r\nservice:log w5 stream=stdout line=[w5] listening on 127.0.0.1:4115 ts=797.364\r\nservice:log w6 stream=stdout line=[w6] listening on 127.0.0.1:4116 ts=811.6026\r\nservice:log w8 stream=stdout line=[w8] listening on 127.0.0.1:4118 ts=829.8815\r\nservice:log w7 stream=stdout line=[w7] listening on 127.0.0.1:4117 ts=830.4191\r\nservice:ready w1 pid=36860 ms=1131.6247 ts=1221.1559\r\nservice:ready w2 pid=25252 ms=1117.5446000000002 ts=1221.5473\r\nservice:ready w3 pid=36948 ms=1104.0851 ts=1221.9093\r\nservice:ready w4 pid=24144 ms=1090.0524 ts=1222.1164\r\nservice:ready w5 pid=34120 ms=1075.8926999999999 ts=1222.43\r\nservice:ready w6 pid=35616 ms=1058.5211000000002 ts=1223.1214\r\nservice:ready w7 pid=11976 ms=1042.9747000000002 ts=1224.1013\r\nservice:ready w8 pid=19576 ms=1027.5636 ts=1224.7126\r\nservice:starting api1 pid=28568 level=1 ts=1261.3797\r\nservice:starting api2 pid=6208 level=1 ts=1261.8992\r\nservice:log api2 stream=stdout line=[api2] starting ts=1348.2418\r\nservice:log api1 stream=stdout line=[api1] starting ts=1348.5216\r\nservice:log api2 stream=stdout line=[api2] listening on 127.0.0.1:4122 ts=1379.9\r\n\u001b[23;80H9424\r\nservice:log api1 stream=stdout line=[api1] listening on 127.0.0.1:4121 ts=1380.2\r\n\u001b[23;80H2358\r\nservice:ready api1 pid=28568 ms=515.4232000000002 ts=1778.2665\r\nservice:ready api2 pid=6208 ms=516.7654 ts=1779.5516\r\nrun:done algorithm=parallel effectiveAlgorithm=parallel totalMs=1710.3959 ts=177\r\n\u001b[23;80H79.8498\r\nReady: 10 services (algorithm=parallel, effectiveAlgorithm=parallel, totalMs=171\r\n\u001b[23;80H10.3959)\r\n"
+    },
+    "interrupt": {
+      "chunk_id": "496e7d",
+      "wall_time_seconds": 0.6670017,
+      "exit_code": 1,
+      "original_token_count": 135,
+      "output": "service:exited api1 code=1 signal=null ts=29368.3337\r\nservice:exited api2 code=1 signal=null ts=29368.7854\r\nservice:exited w1 code=1 signal=null ts=29677.8976\r\nservice:exited w2 code=1 signal=null ts=29685.5407\r\nservice:exited w3 code=1 signal=null ts=29690.8562\r\nservice:exited w5 code=1 signal=null ts=29705.0481\r\nservice:exited w6 code=1 signal=null ts=29720.5846\r\nservice:exited w4 code=1 signal=null ts=29724.3119\r\nservice:exited w7 code=1 signal=null ts=29738.4519\r\nservice:exited w8 code=1 signal=null ts=29741.8781\r\n\u001b[?9001l\u001b[?1004l"
+    },
+    "processInspection": "After one Ctrl+C: leftover mock-service processes = 0"
+  },
+  "doubleCtrlC": {
+    "start": {
+      "chunk_id": "5eb718",
+      "wall_time_seconds": 10.0140986,
+      "session_id": 29781,
+      "original_token_count": 722,
+      "output": "\u001b[?9001h\u001b[?1004h\u001b[?25l\u001b[2J\u001b[m\u001b[Hrun:start algorithm=parallel total=10 ts=54.258\r\n\u001b]0;C:\\Users\\Dhruv\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell\\pwsh.exe\u0007\u001b[?25hservice:starting w1 pid=13612 level=0 ts=81.9541\r\nservice:starting w2 pid=17756 level=0 ts=96.0897\r\nservice:starting w3 pid=24888 level=0 ts=114.9064\r\nservice:starting w4 pid=31856 level=0 ts=136.5351\r\nservice:starting w5 pid=10076 level=0 ts=151.4026\r\nservice:starting w6 pid=20972 level=0 ts=166.1608\r\nservice:starting w7 pid=6616 level=0 ts=180.8889\r\nservice:starting w8 pid=35480 level=0 ts=197.2197\r\nservice:log w1 stream=stdout line=[w1] starting ts=200.6935\r\nservice:log w2 stream=stdout line=[w2] starting ts=201.2034\r\nservice:log w3 stream=stdout line=[w3] starting ts=201.6568\r\nservice:log w4 stream=stdout line=[w4] starting ts=219.7164\r\nservice:log w5 stream=stdout line=[w5] starting ts=230.2751\r\nservice:log w6 stream=stdout line=[w6] starting ts=242.5589\r\nservice:log w7 stream=stdout line=[w7] starting ts=249.6979\r\nservice:log w8 stream=stdout line=[w8] starting ts=263.395\r\nservice:log w2 stream=stdout line=[w2] listening on 127.0.0.1:4112 ts=689.6339\r\nservice:log w1 stream=stdout line=[w1] listening on 127.0.0.1:4111 ts=690.0865\r\nservice:ready w1 pid=13612 ms=627.9553 ts=710.799\r\nservice:ready w2 pid=17756 ms=614.6191 ts=711.2379\r\nservice:log w3 stream=stdout line=[w3] listening on 127.0.0.1:4113 ts=722.873\r\nservice:log w4 stream=stdout line=[w4] listening on 127.0.0.1:4114 ts=735.8321\r\nservice:log w5 stream=stdout line=[w5] listening on 127.0.0.1:4115 ts=752.0225\r\nservice:log w6 stream=stdout line=[w6] listening on 127.0.0.1:4116 ts=767.2502\r\nservice:log w7 stream=stdout line=[w7] listening on 127.0.0.1:4117 ts=767.4596  \r\nservice:log w8 stream=stdout line=[w8] listening on 127.0.0.1:4118 ts=783.4329\r\nservice:ready w3 pid=24888 ms=1105.7817 ts=1221.0233\r\nservice:ready w4 pid=31856 ms=1084.3759 ts=1221.3881\r\nservice:ready w5 pid=10076 ms=1069.8343 ts=1221.6398\r\nservice:ready w6 pid=20972 ms=1055.5056 ts=1221.9447\r\nservice:ready w7 pid=6616 ms=1040.9785 ts=1222.1826\r\nservice:ready w8 pid=35480 ms=1024.8715 ts=1222.8171\r\nservice:starting api1 pid=10216 level=1 ts=1258.7746\r\nservice:starting api2 pid=31924 level=1 ts=1259.1259\r\nservice:log api1 stream=stdout line=[api1] starting ts=1314.4561\r\nservice:log api2 stream=stdout line=[api2] starting ts=1321.7834\r\nservice:log api2 stream=stdout line=[api2] listening on 127.0.0.1:4122 ts=1341.3\r\n\u001b[23;80H3053\r\nservice:log api1 stream=stdout line=[api1] listening on 127.0.0.1:4121 ts=1341.6\r\n\u001b[23;80H6205\r\nservice:ready api1 pid=10216 ms=525.4302 ts=1784.812\r\nservice:ready api2 pid=31924 ms=526.233 ts=1785.6212\r\nrun:done algorithm=parallel effectiveAlgorithm=parallel totalMs=1728.5328 ts=178\r\n\u001b[23;80H85.8096\r\nReady: 10 services (algorithm=parallel, effectiveAlgorithm=parallel, totalMs=172\r\n\u001b[23;80H28.5328)\r\n"
+    },
+    "firstInterrupt": {
+      "chunk_id": "19eac4",
+      "wall_time_seconds": 0.2641931,
+      "session_id": 29781,
+      "original_token_count": 27,
+      "output": "service:exited api2 code=1 signal=null ts=24320.8642\r\nservice:exited api1 code=1 signal=null ts=24322.852\r"
+    },
+    "secondInterrupt": {
+      "chunk_id": "5adc92",
+      "wall_time_seconds": 0.000098,
+      "exit_code": 1,
+      "original_token_count": 108,
+      "output": "\nservice:exited w4 code=1 signal=null ts=24620.2602\r\nservice:exited w1 code=1 signal=null ts=24627.695\r\nservice:exited w2 code=1 signal=null ts=24630.4296\r\nservice:exited w3 code=1 signal=null ts=24639.8701\r\nservice:exited w5 code=1 signal=null ts=24652.2148\r\nservice:exited w7 code=1 signal=null ts=24657.4641\r\nservice:exited w6 code=1 signal=null ts=24660.9239\r\nservice:exited w8 code=1 signal=null ts=24675.5153\r\n\u001b[?9001l\u001b[?1004l"
+    },
+    "processInspection": "After two Ctrl+C presses: leftover mock-service processes = 0"
+  },
+  "note": "Output is the raw Windows console transcript, including VT control sequences. Exit code 1 belongs to the interrupted PowerShell wrapper. The separate real-engine signal callback tests assert Node exit 130."
+}

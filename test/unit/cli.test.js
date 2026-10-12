@@ -8,6 +8,7 @@ const path = require('node:path');
 const { loadPlan } = require('../../src/plan');
 const { main } = require('../../src/cli');
 const engine = require('../../src/engine');
+const processes = require('../../src/engine/process-manager');
 
 const root = path.resolve(__dirname, '../..');
 const cli = path.join(root, 'bin', 'serviceboot.js');
@@ -263,19 +264,25 @@ test('CLI can stop during startup without waiting for unresolved readiness', asy
   assert.ok(!lines.some(line => line.startsWith('Ready:')));
 });
 
-test('CLI repeated signals call stopAll only once', async t => {
+test('CLI second signal kills synchronously and exits before graceful cleanup completes', async t => {
   captureConsole(t);
   let stops = 0;
+  const calls = [];
+  let release;
+  const cleanup = new Promise(resolve => { release = resolve; });
+  t.mock.method(processes, 'killAllSync', () => calls.push('kill'));
+  t.mock.method(process, 'exit', code => { calls.push(`exit:${code}`); release(); });
   t.mock.method(engine, 'runEngine', async () => {
     setImmediate(() => { process.emit('SIGINT'); process.emit('SIGTERM'); });
     return readyResult();
   });
   t.mock.method(engine, 'stopAll', async () => {
     stops++;
-    await new Promise(resolve => setImmediate(resolve));
+    await cleanup;
   });
   assert.equal(await main(['up', '--config', path.join(root, 'samples', 'small.yml')]), 130);
   assert.equal(stops, 1);
+  assert.deepEqual(calls, ['kill', 'exit:130']);
 });
 
 test('CLI shutdown failure prints the engine error and exits 3', async t => {

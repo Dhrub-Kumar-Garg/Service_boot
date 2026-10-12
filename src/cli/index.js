@@ -3,6 +3,7 @@ const { EventEmitter } = require('node:events');
 const { ConfigError } = require('../config/errors');
 const { loadPlan } = require('../plan');
 const engine = require('../engine');
+const processes = require('../engine/process-manager');
 
 const USAGE = `Usage:
   serviceboot plan [--config FILE] [--json]
@@ -32,9 +33,15 @@ function formatEvent(event, payload = {}) {
 
 async function runUp(plan, options) {
   const emitter = new EventEmitter();
-  for (const event of EVENTS) emitter.on(event, payload => console.log(formatEvent(event, payload)));
 
   let stopping = false;
+  let signalCode;
+  let fatal = false;
+  for (const event of EVENTS) emitter.on(event, payload => {
+    // Cancellation during a signal shutdown is expected, not a startup failure.
+    if (event === 'run:failed' && signalCode !== undefined) return;
+    console.log(formatEvent(event, payload));
+  });
   let finishShutdown;
   const shutdown = new Promise(resolve => { finishShutdown = resolve; });
   async function stop(code) {
@@ -42,23 +49,50 @@ async function runUp(plan, options) {
     stopping = true;
     try {
       await engine.stopAll({});
-      finishShutdown(code);
+      finishShutdown(fatal ? 3 : signalCode ?? code);
     } catch (error) {
       console.error(`error: ${error.message}`);
+      processes.killAllSync();
       finishShutdown(3);
     }
+    // An uncaught error can leave unrelated handles alive. After best-effort
+    // service cleanup, exit rather than resuming a damaged process.
+    if (fatal) process.exit(3);
   }
 
-  const onInterrupt = () => { void stop(130); };
-  const onTerminate = () => { void stop(143); };
+  function onSignal(code) {
+    if (signalCode !== undefined) {
+      // A second interrupt skips asynchronous grace periods. Kill every owned
+      // process tree synchronously before exiting with the first signal's code.
+      processes.killAllSync();
+      process.exit(signalCode);
+      return;
+    }
+    signalCode = code;
+    void stop(code);
+  }
+  function onFatal(error) {
+    // In strict rejection mode Node may report the same rejected promise via
+    // both fatal events. One shutdown and one diagnostic are enough.
+    if (fatal) return;
+    console.error(`error: ${error instanceof Error ? error.message : String(error)}`);
+    fatal = true;
+    void stop(3);
+  }
+  const onInterrupt = () => onSignal(130);
+  const onTerminate = () => onSignal(143);
   process.on('SIGINT', onInterrupt);
+  // Windows does not deliver SIGTERM as a console signal; Ctrl+C delivers
+  // SIGINT. Register SIGTERM too for POSIX and programmatic signal tests.
   process.on('SIGTERM', onTerminate);
+  process.on('uncaughtException', onFatal);
+  process.on('unhandledRejection', onFatal);
   // EventEmitters alone do not keep Node alive after services become ready.
   const keepAlive = setInterval(() => {}, 1000);
   try {
     // Shutdown may happen during readiness checks. Race it with startup, and
     // handle later engine rejection too so cancellation is never unhandled.
-    const startup = Promise.resolve().then(() => engine.runEngine({
+    const startup = Promise.resolve().then(() => stopping ? undefined : engine.runEngine({
       services: plan.services, groups: plan.groups,
       algorithm: options.algorithm, maxParallel: options.maxParallel, emitter
     })).then(result => ({ result }), error => ({ error }));
@@ -78,6 +112,8 @@ async function runUp(plan, options) {
     clearInterval(keepAlive);
     process.removeListener('SIGINT', onInterrupt);
     process.removeListener('SIGTERM', onTerminate);
+    process.removeListener('uncaughtException', onFatal);
+    process.removeListener('unhandledRejection', onFatal);
     emitter.removeAllListeners();
   }
 }

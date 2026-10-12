@@ -1,0 +1,58 @@
+TAP version 13
+# Subtest: signal cancellation during startup prints no failure and removes all CLI handlers
+ok 1 - signal cancellation during startup prints no failure and removes all CLI handlers
+  ---
+  duration_ms: 6.9727
+  type: 'test'
+  ...
+# Subtest: CLI second signal exits immediately even when stopAll cannot finish
+ok 2 - CLI second signal exits immediately even when stopAll cannot finish
+  ---
+  duration_ms: 83.1231
+  type: 'test'
+  ...
+# Subtest: CLI uncaughtException prints once, waits for best-effort cleanup and exits 3
+ok 3 - CLI uncaughtException prints once, waits for best-effort cleanup and exits 3
+  ---
+  duration_ms: 81.6434
+  type: 'test'
+  ...
+# Subtest: CLI unhandledRejection prints once, waits for best-effort cleanup and exits 3
+ok 4 - CLI unhandledRejection prints once, waits for best-effort cleanup and exits 3
+  ---
+  duration_ms: 77.852
+  type: 'test'
+  ...
+# Subtest: CLI non-Error rejection prints once, waits for best-effort cleanup and exits 3
+ok 5 - CLI non-Error rejection prints once, waits for best-effort cleanup and exits 3
+  ---
+  duration_ms: 78.316
+  type: 'test'
+  ...
+# Subtest: CLI fatal cleanup failure forces owned trees down and still exits 3
+ok 6 - CLI fatal cleanup failure forces owned trees down and still exits 3
+  ---
+  duration_ms: 82.1581
+  type: 'test'
+  ...
+# Subtest: real CLI graceful SIGINT exits 130 and kills the wide service tree
+ok 7 - real CLI graceful SIGINT exits 130 and kills the wide service tree
+  ---
+  duration_ms: 2486.2014
+  type: 'test'
+  ...
+# Subtest: real CLI forced SIGINT exits 130 and kills the wide service tree
+ok 8 - real CLI forced SIGINT exits 130 and kills the wide service tree
+  ---
+  duration_ms: 4553.7018
+  type: 'test'
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 7547.4713
