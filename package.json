@@ -1,0 +1,19 @@
+{
+  "name": "serviceboot",
+  "version": "0.1.0",
+  "description": "Start local services in dependency order.",
+  "type": "commonjs",
+  "bin": {
+    "serviceboot": "bin/serviceboot.js"
+  },
+  "scripts": {
+    "test": "node --test test/unit/",
+    "test:engine": "node --test test/engine/"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0"
+  }
+}
