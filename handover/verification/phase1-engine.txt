@@ -1,0 +1,301 @@
+
+> serviceboot@0.1.0 test:engine
+> node --test test/engine/
+
+TAP version 13
+# Subtest: ORDERING: sequential on diamond waits for every dependency
+not ok 1 - ORDERING: sequential on diamond waits for every dependency
+  ---
+  duration_ms: 17.2286
+  type: 'test'
+  location: 'C:\\Users\\Dhruv\\Desktop\\projects\\OS project\\Service_boot\\test\\engine\\engine.contract.test.js:132:5'
+  failureType: 'testCodeFailure'
+  error: 'NOT IMPLEMENTED: Person 2 implements this (see CONTRACT.md section 5)'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    runEngine (C:\Users\Dhruv\Desktop\projects\OS project\Service_boot\src\engine\index.js:6:9)
+    TestContext.<anonymous> (C:\Users\Dhruv\Desktop\projects\OS project\Service_boot\test\engine\engine.contract.test.js:135:28)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: ORDERING: sequential on wide waits for every dependency
+not ok 2 - ORDERING: sequential on wide waits for every dependency
+  ---
+  duration_ms: 7.1204
+  type: 'test'
+  location: 'C:\\Users\\Dhruv\\Desktop\\projects\\OS project\\Service_boot\\test\\engine\\engine.contract.test.js:132:5'
+  failureType: 'testCodeFailure'
+  error: 'NOT IMPLEMENTED: Person 2 implements this (see CONTRACT.md section 5)'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    runEngine (C:\Users\Dhruv\Desktop\projects\OS project\Service_boot\src\engine\index.js:6:9)
+    TestContext.<anonymous> (C:\Users\Dhruv\Desktop\projects\OS project\Service_boot\test\engine\engine.contract.test.js:135:28)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: ORDERING: parallel on diamond waits for every dependency
+not ok 3 - ORDERING: parallel on diamond waits for every dependency
+  ---
+  duration_ms: 2.5881
+  type: 'test'
+  location: 'C:\\Users\\Dhruv\\Desktop\\projects\\OS project\\Service_boot\\test\\engine\\engine.contract.test.js:132:5'
+  failureType: 'testCodeFailure'
+  error: 'NOT IMPLEMENTED: Person 2 implements this (see CONTRACT.md section 5)'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    runEngine (C:\Users\Dhruv\Desktop\projects\OS project\Service_boot\src\engine\index.js:6:9)
+    TestContext.<anonymous> (C:\Users\Dhruv\Desktop\projects\OS project\Service_boot\test\engine\engine.contract.test.js:135:28)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: ORDERING: parallel on wide waits for every dependency
+not ok 4 - ORDERING: parallel on wide waits for every dependency
+  ---
+  duration_ms: 10.1502
+  type: 'test'
+  location: 'C:\\Users\\Dhruv\\Desktop\\projects\\OS project\\Service_boot\\test\\engine\\engine.contract.test.js:132:5'
+  failureType: 'testCodeFailure'
+  error: 'NOT IMPLEMENTED: Person 2 implements this (see CONTRACT.md section 5)'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    runEngine (C:\Users\Dhruv\Desktop\projects\OS project\Service_boot\src\engine\index.js:6:9)
+    TestContext.<anonymous> (C:\Users\Dhruv\Desktop\projects\OS project\Service_boot\test\engine\engine.contract.test.js:135:28)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: ORDERING: adaptive on diamond waits for every dependency
+not ok 5 - ORDERING: adaptive on diamond waits for every dependency
+  ---
+  duration_ms: 4.6362
+  type: 'test'
+  location: 'C:\\Users\\Dhruv\\Desktop\\projects\\OS project\\Service_boot\\test\\engine\\engine.contract.test.js:132:5'
+  failureType: 'testCodeFailure'
+  error: 'NOT IMPLEMENTED: Person 2 implements this (see CONTRACT.md section 5)'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    runEngine (C:\Users\Dhruv\Desktop\projects\OS project\Service_boot\src\engine\index.js:6:9)
+    TestContext.<anonymous> (C:\Users\Dhruv\Desktop\projects\OS project\Service_boot\test\engine\engine.contract.test.js:135:28)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: ORDERING: adaptive on wide waits for every dependency
+not ok 6 - ORDERING: adaptive on wide waits for every dependency
+  ---
+  duration_ms: 8.8369
+  type: 'test'
+  location: 'C:\\Users\\Dhruv\\Desktop\\projects\\OS project\\Service_boot\\test\\engine\\engine.contract.test.js:132:5'
+  failureType: 'testCodeFailure'
+  error: 'NOT IMPLEMENTED: Person 2 implements this (see CONTRACT.md section 5)'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    runEngine (C:\Users\Dhruv\Desktop\projects\OS project\Service_boot\src\engine\index.js:6:9)
+    TestContext.<anonymous> (C:\Users\Dhruv\Desktop\projects\OS project\Service_boot\test\engine\engine.contract.test.js:135:28)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: SEQUENTIAL NO OVERLAP: five independent services have at most one in flight
+not ok 7 - SEQUENTIAL NO OVERLAP: five independent services have at most one in flight
+  ---
+  duration_ms: 5.7399
+  type: 'test'
+  location: 'C:\\Users\\Dhruv\\Desktop\\projects\\OS project\\Service_boot\\test\\engine\\engine.contract.test.js:157:1'
+  failureType: 'testCodeFailure'
+  error: 'NOT IMPLEMENTED: Person 2 implements this (see CONTRACT.md section 5)'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    runEngine (C:\Users\Dhruv\Desktop\projects\OS project\Service_boot\src\engine\index.js:6:9)
+    TestContext.<anonymous> (C:\Users\Dhruv\Desktop\projects\OS project\Service_boot\test\engine\engine.contract.test.js:160:24)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: PARALLEL IS CONCURRENT AND FASTER: six delayed roots beat sequential
+not ok 8 - PARALLEL IS CONCURRENT AND FASTER: six delayed roots beat sequential
+  ---
+  duration_ms: 7.873
+  type: 'test'
+  location: 'C:\\Users\\Dhruv\\Desktop\\projects\\OS project\\Service_boot\\test\\engine\\engine.contract.test.js:165:1'
+  failureType: 'testCodeFailure'
+  error: 'NOT IMPLEMENTED: Person 2 implements this (see CONTRACT.md section 5)'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    runEngine (C:\Users\Dhruv\Desktop\projects\OS project\Service_boot\src\engine\index.js:6:9)
+    TestContext.<anonymous> (C:\Users\Dhruv\Desktop\projects\OS project\Service_boot\test\engine\engine.contract.test.js:168:28)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: MAX-PARALLEL: cap two allows all six services to become ready
+not ok 9 - MAX-PARALLEL: cap two allows all six services to become ready
+  ---
+  duration_ms: 5.8486
+  type: 'test'
+  location: 'C:\\Users\\Dhruv\\Desktop\\projects\\OS project\\Service_boot\\test\\engine\\engine.contract.test.js:180:1'
+  failureType: 'testCodeFailure'
+  error: 'NOT IMPLEMENTED: Person 2 implements this (see CONTRACT.md section 5)'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    runEngine (C:\Users\Dhruv\Desktop\projects\OS project\Service_boot\src\engine\index.js:6:9)
+    TestContext.<anonymous> (C:\Users\Dhruv\Desktop\projects\OS project\Service_boot\test\engine\engine.contract.test.js:183:24)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: ADAPTIVE: wide selects parallel and emits the exact reason
+not ok 10 - ADAPTIVE: wide selects parallel and emits the exact reason
+  ---
+  duration_ms: 8.8373
+  type: 'test'
+  location: 'C:\\Users\\Dhruv\\Desktop\\projects\\OS project\\Service_boot\\test\\engine\\engine.contract.test.js:189:3'
+  failureType: 'testCodeFailure'
+  error: 'NOT IMPLEMENTED: Person 2 implements this (see CONTRACT.md section 5)'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    runEngine (C:\Users\Dhruv\Desktop\projects\OS project\Service_boot\src\engine\index.js:6:9)
+    TestContext.<anonymous> (C:\Users\Dhruv\Desktop\projects\OS project\Service_boot\test\engine\engine.contract.test.js:192:26)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: ADAPTIVE: linear selects sequential and emits the exact reason
+not ok 11 - ADAPTIVE: linear selects sequential and emits the exact reason
+  ---
+  duration_ms: 3.5953
+  type: 'test'
+  location: 'C:\\Users\\Dhruv\\Desktop\\projects\\OS project\\Service_boot\\test\\engine\\engine.contract.test.js:189:3'
+  failureType: 'testCodeFailure'
+  error: 'NOT IMPLEMENTED: Person 2 implements this (see CONTRACT.md section 5)'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    runEngine (C:\Users\Dhruv\Desktop\projects\OS project\Service_boot\src\engine\index.js:6:9)
+    TestContext.<anonymous> (C:\Users\Dhruv\Desktop\projects\OS project\Service_boot\test\engine\engine.contract.test.js:192:26)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: CRASH DURING STARTUP: bad service emits crash and all started PIDs die
+not ok 12 - CRASH DURING STARTUP: bad service emits crash and all started PIDs die
+  ---
+  duration_ms: 2.464
+  type: 'test'
+  location: 'C:\\Users\\Dhruv\\Desktop\\projects\\OS project\\Service_boot\\test\\engine\\engine.contract.test.js:206:1'
+  failureType: 'testCodeFailure'
+  error: 'NOT IMPLEMENTED: Person 2 implements this (see CONTRACT.md section 5)'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    assertFailure (C:\Users\Dhruv\Desktop\projects\OS project\Service_boot\test\engine\engine.contract.test.js:117:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async TestContext.<anonymous> (C:\Users\Dhruv\Desktop\projects\OS project\Service_boot\test\engine\engine.contract.test.js:212:3)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: READY TIMEOUT: never-ready rejects within four seconds and cleans up
+not ok 13 - READY TIMEOUT: never-ready rejects within four seconds and cleans up
+  ---
+  duration_ms: 1.0341
+  type: 'test'
+  location: 'C:\\Users\\Dhruv\\Desktop\\projects\\OS project\\Service_boot\\test\\engine\\engine.contract.test.js:216:1'
+  failureType: 'testCodeFailure'
+  error: 'NOT IMPLEMENTED: Person 2 implements this (see CONTRACT.md section 5)'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    assertFailure (C:\Users\Dhruv\Desktop\projects\OS project\Service_boot\test\engine\engine.contract.test.js:117:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async TestContext.<anonymous> (C:\Users\Dhruv\Desktop\projects\OS project\Service_boot\test\engine\engine.contract.test.js:221:3)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: DEPENDENT NOT STARTED: failing X prevents Y from spawning
+not ok 14 - DEPENDENT NOT STARTED: failing X prevents Y from spawning
+  ---
+  duration_ms: 2.0826
+  type: 'test'
+  location: 'C:\\Users\\Dhruv\\Desktop\\projects\\OS project\\Service_boot\\test\\engine\\engine.contract.test.js:225:1'
+  failureType: 'testCodeFailure'
+  error: 'NOT IMPLEMENTED: Person 2 implements this (see CONTRACT.md section 5)'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    assertFailure (C:\Users\Dhruv\Desktop\projects\OS project\Service_boot\test\engine\engine.contract.test.js:117:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async TestContext.<anonymous> (C:\Users\Dhruv\Desktop\projects\OS project\Service_boot\test\engine\engine.contract.test.js:231:3)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: STOPALL: wide graph exits once per service with dependents before dependencies
+not ok 15 - STOPALL: wide graph exits once per service with dependents before dependencies
+  ---
+  duration_ms: 8.9992
+  type: 'test'
+  location: 'C:\\Users\\Dhruv\\Desktop\\projects\\OS project\\Service_boot\\test\\engine\\engine.contract.test.js:235:1'
+  failureType: 'testCodeFailure'
+  error: 'NOT IMPLEMENTED: Person 2 implements this (see CONTRACT.md section 5)'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    runEngine (C:\Users\Dhruv\Desktop\projects\OS project\Service_boot\src\engine\index.js:6:9)
+    TestContext.<anonymous> (C:\Users\Dhruv\Desktop\projects\OS project\Service_boot\test\engine\engine.contract.test.js:238:24)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: SIGKILL ESCALATION: ignore-sigterm is dead within two seconds
+not ok 16 - SIGKILL ESCALATION: ignore-sigterm is dead within two seconds
+  ---
+  duration_ms: 1.522
+  type: 'test'
+  location: 'C:\\Users\\Dhruv\\Desktop\\projects\\OS project\\Service_boot\\test\\engine\\engine.contract.test.js:255:1'
+  failureType: 'testCodeFailure'
+  error: 'NOT IMPLEMENTED: Person 2 implements this (see CONTRACT.md section 5)'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    runEngine (C:\Users\Dhruv\Desktop\projects\OS project\Service_boot\src\engine\index.js:6:9)
+    TestContext.<anonymous> (C:\Users\Dhruv\Desktop\projects\OS project\Service_boot\test\engine\engine.contract.test.js:258:24)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: CLI SIGINT: real CLI stops all children and exits within five seconds
+ok 17 - CLI SIGINT: real CLI stops all children and exits within five seconds # SKIP
+  ---
+  duration_ms: 0.0682
+  type: 'test'
+  ...
+# Subtest: NO DOUBLE-SPAWN: each service starts exactly once in a normal run
+not ok 18 - NO DOUBLE-SPAWN: each service starts exactly once in a normal run
+  ---
+  duration_ms: 9.5597
+  type: 'test'
+  location: 'C:\\Users\\Dhruv\\Desktop\\projects\\OS project\\Service_boot\\test\\engine\\engine.contract.test.js:335:1'
+  failureType: 'testCodeFailure'
+  error: 'NOT IMPLEMENTED: Person 2 implements this (see CONTRACT.md section 5)'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    runEngine (C:\Users\Dhruv\Desktop\projects\OS project\Service_boot\src\engine\index.js:6:9)
+    TestContext.<anonymous> (C:\Users\Dhruv\Desktop\projects\OS project\Service_boot\test\engine\engine.contract.test.js:338:24)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..18
+# tests 18
+# suites 0
+# pass 0
+# fail 17
+# cancelled 0
+# skipped 1
+# todo 0
+# duration_ms 193.5282

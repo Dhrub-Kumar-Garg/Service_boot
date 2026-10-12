@@ -112,9 +112,10 @@ test('CLI up with the engine stub exits 3 with its exact message', () => {
   assert.equal(result.stdout, '');
 });
 
-test('both engine stub functions reject with the contract handover message', async () => {
+test('runEngine remains a stub and stopAll safely handles an empty registry', async () => {
   await assert.rejects(engine.runEngine(), { message: stubMessage });
-  await assert.rejects(engine.stopAll(), { message: stubMessage });
+  await engine.stopAll();
+  assert.deepEqual(engine.getRunning(), []);
 });
 
 test('CLI rejects invalid algorithms before loading a config', () => {

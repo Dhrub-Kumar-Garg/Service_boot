@@ -1,0 +1,752 @@
+
+> serviceboot@0.1.0 test
+> node --test test/unit/
+
+TAP version 13
+# Subtest: ConfigError keeps all messages and joins them with newlines
+ok 1 - ConfigError keeps all messages and joins them with newlines
+  ---
+  duration_ms: 1.5005
+  type: 'test'
+  ...
+# Subtest: minimal config produces exactly the contract fields and defaults
+ok 2 - minimal config produces exactly the contract fields and defaults
+  ---
+  duration_ms: 2.2576
+  type: 'test'
+  ...
+# Subtest: full config normalizes every field and applies defaults to other services
+ok 3 - full config normalizes every field and applies defaults to other services
+  ---
+  duration_ms: 0.8965
+  type: 'test'
+  ...
+# Subtest: top-level config must be an object
+ok 4 - top-level config must be an object
+  ---
+  duration_ms: 2.5117
+  type: 'test'
+  ...
+# Subtest: version must be exactly the number 1
+ok 5 - version must be exactly the number 1
+  ---
+  duration_ms: 1.4212
+  type: 'test'
+  ...
+# Subtest: services must be a non-empty object
+ok 6 - services must be a non-empty object
+  ---
+  duration_ms: 1.1111
+  type: 'test'
+  ...
+# Subtest: service names must contain only letters, digits, underscores, and hyphens
+ok 7 - service names must contain only letters, digits, underscores, and hyphens
+  ---
+  duration_ms: 0.5989
+  type: 'test'
+  ...
+# Subtest: each service definition must be an object
+ok 8 - each service definition must be an object
+  ---
+  duration_ms: 0.5127
+  type: 'test'
+  ...
+# Subtest: command must be a non-empty string
+ok 9 - command must be a non-empty string
+  ---
+  duration_ms: 0.8878
+  type: 'test'
+  ...
+# Subtest: cwd must be a string when supplied
+ok 10 - cwd must be a string when supplied
+  ---
+  duration_ms: 0.7536
+  type: 'test'
+  ...
+# Subtest: depends_on must be an array
+ok 11 - depends_on must be an array
+  ---
+  duration_ms: 0.574
+  type: 'test'
+  ...
+# Subtest: depends_on entries must be strings
+ok 12 - depends_on entries must be strings
+  ---
+  duration_ms: 0.3004
+  type: 'test'
+  ...
+# Subtest: self-dependencies are rejected
+ok 13 - self-dependencies are rejected
+  ---
+  duration_ms: 0.2158
+  type: 'test'
+  ...
+# Subtest: duplicate dependencies are rejected
+ok 14 - duplicate dependencies are rejected
+  ---
+  duration_ms: 0.2442
+  type: 'test'
+  ...
+# Subtest: unknown dependencies use the required error message
+ok 15 - unknown dependencies use the required error message
+  ---
+  duration_ms: 0.254
+  type: 'test'
+  ...
+# Subtest: inherited object properties do not count as existing dependencies
+ok 16 - inherited object properties do not count as existing dependencies
+  ---
+  duration_ms: 0.2707
+  type: 'test'
+  ...
+# Subtest: ready_check must be a valid readiness expression
+ok 17 - ready_check must be a valid readiness expression
+  ---
+  duration_ms: 0.9524
+  type: 'test'
+  ...
+# Subtest: ready_timeout_ms must be a positive integer
+ok 18 - ready_timeout_ms must be a positive integer
+  ---
+  duration_ms: 1.025
+  type: 'test'
+  ...
+# Subtest: ready_interval_ms must be a positive integer
+ok 19 - ready_interval_ms must be a positive integer
+  ---
+  duration_ms: 0.7964
+  type: 'test'
+  ...
+# Subtest: readiness interval must be strictly less than timeout, including defaults
+ok 20 - readiness interval must be strictly less than timeout, including defaults
+  ---
+  duration_ms: 0.5943
+  type: 'test'
+  ...
+# Subtest: restart must be never or on-failure
+ok 21 - restart must be never or on-failure
+  ---
+  duration_ms: 0.6907
+  type: 'test'
+  ...
+# Subtest: max_retries must be an integer greater than or equal to zero
+ok 22 - max_retries must be an integer greater than or equal to zero
+  ---
+  duration_ms: 0.5817
+  type: 'test'
+  ...
+# Subtest: env must be an object and cannot be an array
+ok 23 - env must be an object and cannot be an array
+  ---
+  duration_ms: 1.2085
+  type: 'test'
+  ...
+# Subtest: duplicate readiness ports report both service names
+ok 24 - duplicate readiness ports report both service names
+  ---
+  duration_ms: 0.6056
+  type: 'test'
+  ...
+# Subtest: all independent validation errors are returned together before normalization
+ok 25 - all independent validation errors are returned together before normalization
+  ---
+  duration_ms: 0.5685
+  type: 'test'
+  ...
+# Subtest: YAML syntax errors include human-readable line and column information
+ok 26 - YAML syntax errors include human-readable line and column information
+  ---
+  duration_ms: 0.6188
+  type: 'test'
+  ...
+# Subtest: duplicate YAML keys are rejected with line information
+ok 27 - duplicate YAML keys are rejected with line information
+  ---
+  duration_ms: 0.4229
+  type: 'test'
+  ...
+# Subtest: missing file becomes ConfigError with the required path message
+ok 28 - missing file becomes ConfigError with the required path message
+  ---
+  duration_ms: 1.3396
+  type: 'test'
+  ...
+# Subtest: unreadable file becomes ConfigError
+ok 29 - unreadable file becomes ConfigError
+  ---
+  duration_ms: 1.7407
+  type: 'test'
+  ...
+# Subtest: parseReadyCheck accepts valid forms, whitespace, and case-insensitive keywords
+ok 30 - parseReadyCheck accepts valid forms, whitespace, and case-insensitive keywords
+  ---
+  duration_ms: 0.2708
+  type: 'test'
+  ...
+# Subtest: parseReadyCheck rejects invalid forms with plain descriptive Errors
+ok 31 - parseReadyCheck rejects invalid forms with plain descriptive Errors
+  ---
+  duration_ms: 0.3667
+  type: 'test'
+  ...
+# Subtest: relative cwd resolves against the config file folder
+ok 32 - relative cwd resolves against the config file folder
+  ---
+  duration_ms: 1.8863
+  type: 'test'
+  ...
+# Subtest: default and empty cwd resolve to the config folder; absolute cwd remains absolute
+ok 33 - default and empty cwd resolve to the config folder; absolute cwd remains absolute
+  ---
+  duration_ms: 2.0984
+  type: 'test'
+  ...
+# Subtest: env numbers become strings without altering the raw object
+ok 34 - env numbers become strings without altering the raw object
+  ---
+  duration_ms: 0.3357
+  type: 'test'
+  ...
+# Subtest: declaration order is preserved rather than alphabetically sorted
+ok 35 - declaration order is preserved rather than alphabetically sorted
+  ---
+  duration_ms: 0.2205
+  type: 'test'
+  ...
+# Subtest: numeric service names preserve YAML declaration order in block and flow mappings
+ok 36 - numeric service names preserve YAML declaration order in block and flow mappings
+  ---
+  duration_ms: 0.3701
+  type: 'test'
+  ...
+# Subtest: YAML aliases and merges retain services and declaration order
+ok 37 - YAML aliases and merges retain services and declaration order
+  ---
+  duration_ms: 0.334
+  type: 'test'
+  ...
+# Subtest: special object property names are safe service and environment keys
+ok 38 - special object property names are safe service and environment keys
+  ---
+  duration_ms: 0.2335
+  type: 'test'
+  ...
+# Subtest: multi-service cycles are left for Phase 3 graph validation
+ok 39 - multi-service cycles are left for Phase 3 graph validation
+  ---
+  duration_ms: 0.2278
+  type: 'test'
+  ...
+# Subtest: buildGraph creates both adjacency maps including empty lists
+ok 40 - buildGraph creates both adjacency maps including empty lists
+  ---
+  duration_ms: 0.1868
+  type: 'test'
+  ...
+# Subtest: graph functions accept frozen inputs and do not mutate service dependencies
+ok 41 - graph functions accept frozen inputs and do not mutate service dependencies
+  ---
+  duration_ms: 0.323
+  type: 'test'
+  ...
+# Subtest: independent services produce one level in declaration order
+ok 42 - independent services produce one level in declaration order
+  ---
+  duration_ms: 0.1222
+  type: 'test'
+  ...
+# Subtest: linear chain a to b to c to d produces four levels
+ok 43 - linear chain a to b to c to d produces four levels
+  ---
+  duration_ms: 0.109
+  type: 'test'
+  ...
+# Subtest: diamond graph groups b and c together before d
+ok 44 - diamond graph groups b and c together before d
+  ---
+  duration_ms: 0.07
+  type: 'test'
+  ...
+# Subtest: longest-path rule places x after its deepest dependency
+ok 45 - longest-path rule places x after its deepest dependency
+  ---
+  duration_ms: 0.0511
+  type: 'test'
+  ...
+# Subtest: level declaration order wins over the order nodes become unblocked
+ok 46 - level declaration order wins over the order nodes become unblocked
+  ---
+  duration_ms: 0.0465
+  type: 'test'
+  ...
+# Subtest: explicit declaration order is respected for numeric service names
+ok 47 - explicit declaration order is respected for numeric service names
+  ---
+  duration_ms: 0.0406
+  type: 'test'
+  ...
+# Subtest: two-node cycle reports the closed dependency path
+ok 48 - two-node cycle reports the closed dependency path
+  ---
+  duration_ms: 0.1992
+  type: 'test'
+  ...
+# Subtest: three-node cycle reports the closed dependency path
+ok 49 - three-node cycle reports the closed dependency path
+  ---
+  duration_ms: 0.0885
+  type: 'test'
+  ...
+# Subtest: cycle hidden behind a valid branch excludes the non-cyclic entry path
+ok 50 - cycle hidden behind a valid branch excludes the non-cyclic entry path
+  ---
+  duration_ms: 0.0778
+  type: 'test'
+  ...
+# Subtest: DFS chooses the first cycle in service declaration order
+ok 51 - DFS chooses the first cycle in service declaration order
+  ---
+  duration_ms: 0.0589
+  type: 'test'
+  ...
+# Subtest: DFS visits dependency neighbours in service declaration order
+ok 52 - DFS visits dependency neighbours in service declaration order
+  ---
+  duration_ms: 0.0605
+  type: 'test'
+  ...
+# Subtest: cycle diagnostics use explicit order for numeric service names
+ok 53 - cycle diagnostics use explicit order for numeric service names
+  ---
+  duration_ms: 0.0712
+  type: 'test'
+  ...
+# Subtest: detectCycle returns null for acyclic graphs with shared dependencies
+ok 54 - detectCycle returns null for acyclic graphs with shared dependencies
+  ---
+  duration_ms: 0.0479
+  type: 'test'
+  ...
+# Subtest: detectCycle handles a self-loop even when called without config validation
+ok 55 - detectCycle handles a self-loop even when called without config validation
+  ---
+  duration_ms: 0.0534
+  type: 'test'
+  ...
+# Subtest: DFS and Kahn handle a deep graph without recursive call-stack overflow
+ok 56 - DFS and Kahn handle a deep graph without recursive call-stack overflow
+  ---
+  duration_ms: 39.2147
+  type: 'test'
+  ...
+# Subtest: empty graphs produce empty maps, no cycle, and no levels
+ok 57 - empty graphs produce empty maps, no cycle, and no levels
+  ---
+  duration_ms: 0.234
+  type: 'test'
+  ...
+# Subtest: special object property names remain safe in both graph maps
+ok 58 - special object property names remain safe in both graph maps
+  ---
+  duration_ms: 0.1282
+  type: 'test'
+  ...
+# Subtest: adaptive boundary width equal to twice depth selects sequential with exact reason
+ok 59 - adaptive boundary width equal to twice depth selects sequential with exact reason
+  ---
+  duration_ms: 0.2982
+  type: 'test'
+  ...
+# Subtest: adaptive width one above twice depth selects parallel with exact reason
+ok 60 - adaptive width one above twice depth selects parallel with exact reason
+  ---
+  duration_ms: 0.0725
+  type: 'test'
+  ...
+# Subtest: adaptive single service selects sequential
+ok 61 - adaptive single service selects sequential
+  ---
+  duration_ms: 0.0586
+  type: 'test'
+  ...
+# Subtest: adaptive linear graph selects sequential
+ok 62 - adaptive linear graph selects sequential
+  ---
+  duration_ms: 0.0645
+  type: 'test'
+  ...
+# Subtest: adaptive eight roots plus two dependents selects parallel
+ok 63 - adaptive eight roots plus two dependents selects parallel
+  ---
+  duration_ms: 0.1391
+  type: 'test'
+  ...
+# Subtest: adaptive empty groups select sequential with zero dimensions
+ok 64 - adaptive empty groups select sequential with zero dimensions
+  ---
+  duration_ms: 0.056
+  type: 'test'
+  ...
+# Subtest: flatten concatenates levels in order and does not mutate them
+ok 65 - flatten concatenates levels in order and does not mutate them
+  ---
+  duration_ms: 0.0894
+  type: 'test'
+  ...
+# Subtest: loadPlan returns the complete contract object from a temp YAML file
+ok 66 - loadPlan returns the complete contract object from a temp YAML file
+  ---
+  duration_ms: 3.0893
+  type: 'test'
+  ...
+# Subtest: loadPlan preserves numeric YAML service declaration order through planning
+ok 67 - loadPlan preserves numeric YAML service declaration order through planning
+  ---
+  duration_ms: 3.8394
+  type: 'test'
+  ...
+# Subtest: loadPlan propagates cycle diagnostics as ConfigError
+ok 68 - loadPlan propagates cycle diagnostics as ConfigError
+  ---
+  duration_ms: 2.1596
+  type: 'test'
+  ...
+# Subtest: loadPlan propagates config validation and missing-file errors
+ok 69 - loadPlan propagates config validation and missing-file errors
+  ---
+  duration_ms: 1.9366
+  type: 'test'
+  ...
+# Subtest: CLI plan small prints the correct levels and SEQUENTIAL decision
+ok 70 - CLI plan small prints the correct levels and SEQUENTIAL decision
+  ---
+  duration_ms: 68.5608
+  type: 'test'
+  ...
+# Subtest: CLI plan linear prints the correct levels and SEQUENTIAL decision
+ok 71 - CLI plan linear prints the correct levels and SEQUENTIAL decision
+  ---
+  duration_ms: 66.1415
+  type: 'test'
+  ...
+# Subtest: CLI plan wide prints the correct levels and PARALLEL decision
+ok 72 - CLI plan wide prints the correct levels and PARALLEL decision
+  ---
+  duration_ms: 72.9007
+  type: 'test'
+  ...
+# Subtest: CLI cyclic sample exits 1 and prints the cycle path
+ok 73 - CLI cyclic sample exits 1 and prints the cycle path
+  ---
+  duration_ms: 64.7073
+  type: 'test'
+  ...
+# Subtest: CLI invalid sample exits 1 and prints all three problems separately
+ok 74 - CLI invalid sample exits 1 and prints all three problems separately
+  ---
+  duration_ms: 67.4185
+  type: 'test'
+  ...
+# Subtest: CLI missing file exits 1 for both plan and up
+ok 75 - CLI missing file exits 1 for both plan and up
+  ---
+  duration_ms: 128.6273
+  type: 'test'
+  ...
+# Subtest: CLI --json prints only valid JSON matching loadPlan
+ok 76 - CLI --json prints only valid JSON matching loadPlan
+  ---
+  duration_ms: 68.6612
+  type: 'test'
+  ...
+# Subtest: CLI default config is serviceboot.yml in the current working directory
+ok 77 - CLI default config is serviceboot.yml in the current working directory
+  ---
+  duration_ms: 66.787
+  type: 'test'
+  ...
+# Subtest: CLI unknown command, missing command, extra positionals, and unknown options exit 2
+ok 78 - CLI unknown command, missing command, extra positionals, and unknown options exit 2
+  ---
+  duration_ms: 241.5834
+  type: 'test'
+  ...
+# Subtest: CLI --help and -h print usage and exit 0
+ok 79 - CLI --help and -h print usage and exit 0
+  ---
+  duration_ms: 238.6689
+  type: 'test'
+  ...
+# Subtest: CLI up with the engine stub exits 3 with its exact message
+ok 80 - CLI up with the engine stub exits 3 with its exact message
+  ---
+  duration_ms: 63.9934
+  type: 'test'
+  ...
+# Subtest: runEngine remains a stub and stopAll safely handles an empty registry
+ok 81 - runEngine remains a stub and stopAll safely handles an empty registry
+  ---
+  duration_ms: 0.3589
+  type: 'test'
+  ...
+# Subtest: CLI rejects invalid algorithms before loading a config
+ok 82 - CLI rejects invalid algorithms before loading a config
+  ---
+  duration_ms: 183.761
+  type: 'test'
+  ...
+# Subtest: CLI accepts all three algorithms and positive max-parallel values
+ok 83 - CLI accepts all three algorithms and positive max-parallel values
+  ---
+  duration_ms: 200.7166
+  type: 'test'
+  ...
+# Subtest: CLI max-parallel must be a positive integer
+ok 84 - CLI max-parallel must be a positive integer
+  ---
+  duration_ms: 490.587
+  type: 'test'
+  ...
+# Subtest: CLI rejects options belonging to the other command and missing option values
+ok 85 - CLI rejects options belonging to the other command and missing option values
+  ---
+  duration_ms: 384.1273
+  type: 'test'
+  ...
+# Subtest: CLI wires engine options, prints every contract event, and stops after ready
+ok 86 - CLI wires engine options, prints every contract event, and stops after ready
+  ---
+  duration_ms: 3.5907
+  type: 'test'
+  ...
+# Subtest: CLI defaults to adaptive and unlimited parallelism
+ok 87 - CLI defaults to adaptive and unlimited parallelism
+  ---
+  duration_ms: 1.0512
+  type: 'test'
+  ...
+# Subtest: CLI waits after readiness and stops on SIGINT with exit 130
+ok 88 - CLI waits after readiness and stops on SIGINT with exit 130
+  ---
+  duration_ms: 17.9494
+  type: 'test'
+  ...
+# Subtest: CLI waits after readiness and stops on SIGTERM with exit 143
+ok 89 - CLI waits after readiness and stops on SIGTERM with exit 143
+  ---
+  duration_ms: 2.4264
+  type: 'test'
+  ...
+# Subtest: CLI can stop during startup without waiting for unresolved readiness
+ok 90 - CLI can stop during startup without waiting for unresolved readiness
+  ---
+  duration_ms: 2.1082
+  type: 'test'
+  ...
+# Subtest: CLI repeated signals call stopAll only once
+ok 91 - CLI repeated signals call stopAll only once
+  ---
+  duration_ms: 1.999
+  type: 'test'
+  ...
+# Subtest: CLI shutdown failure prints the engine error and exits 3
+ok 92 - CLI shutdown failure prints the engine error and exits 3
+  ---
+  duration_ms: 1.6214
+  type: 'test'
+  ...
+# Subtest: mock TCP port opens after its delay and not before
+ok 93 - mock TCP port opens after its delay and not before
+  ---
+  duration_ms: 703.3209
+  type: 'test'
+  ...
+# Subtest: mock HTTP health returns 200 ok and other paths return 404
+ok 94 - mock HTTP health returns 200 ok and other paths return 404
+  ---
+  duration_ms: 108.3243
+  type: 'test'
+  ...
+# Subtest: mock HTTP supports a custom health path
+ok 95 - mock HTTP supports a custom health path
+  ---
+  duration_ms: 93.4231
+  type: 'test'
+  ...
+# Subtest: mock exit-after uses the requested code and starts before readiness delay
+ok 96 - mock exit-after uses the requested code and starts before readiness delay
+  ---
+  duration_ms: 156.0716
+  type: 'test'
+  ...
+# Subtest: mock never-ready stays alive without opening a port
+ok 97 - mock never-ready stays alive without opening a port
+  ---
+  duration_ms: 156.1616
+  type: 'test'
+  ...
+# Subtest: mock SIGTERM closes active sockets, logs stopping, and exits cleanly
+ok 98 - mock SIGTERM closes active sockets, logs stopping, and exits cleanly # SKIP
+  ---
+  duration_ms: 0.118
+  type: 'test'
+  ...
+# Subtest: mock SIGTERM during delay cancels the pending listener
+ok 99 - mock SIGTERM during delay cancels the pending listener # SKIP
+  ---
+  duration_ms: 0.0517
+  type: 'test'
+  ...
+# Subtest: mock ignore-sigterm logs and stays alive until SIGKILL
+ok 100 - mock ignore-sigterm logs and stays alive until SIGKILL # SKIP
+  ---
+  duration_ms: 0.0278
+  type: 'test'
+  ...
+# Subtest: mock invalid arguments print an error and exit 2
+ok 101 - mock invalid arguments print an error and exit 2
+  ---
+  duration_ms: 645.4859
+  type: 'test'
+  ...
+# Subtest: freePort returns a port whose temporary listener has closed
+ok 102 - freePort returns a port whose temporary listener has closed
+  ---
+  duration_ms: 1.7225
+  type: 'test'
+  ...
+# Subtest: makeServices creates complete real Service objects and real topo levels
+ok 103 - makeServices creates complete real Service objects and real topo levels
+  ---
+  duration_ms: 3.4978
+  type: 'test'
+  ...
+# Subtest: record preserves event arrival indices and supports find/filter by service
+ok 104 - record preserves event arrival indices and supports find/filter by service
+  ---
+  duration_ms: 0.5855
+  type: 'test'
+  ...
+# Subtest: record maxInFlight removes both ready and failed services
+ok 105 - record maxInFlight removes both ready and failed services
+  ---
+  duration_ms: 0.3485
+  type: 'test'
+  ...
+# Subtest: isAlive and waitDead distinguish live, absent, and invalid PIDs
+ok 106 - isAlive and waitDead distinguish live, absent, and invalid PIDs
+  ---
+  duration_ms: 0.672
+  type: 'test'
+  ...
+# Subtest: EngineError carries every engine reason and service name
+ok 107 - EngineError carries every engine reason and service name
+  ---
+  duration_ms: 0.3892
+  type: 'test'
+  ...
+# Subtest: createEmit stamps a copied payload and contains a throwing UI listener
+ok 108 - createEmit stamps a copied payload and contains a throwing UI listener
+  ---
+  duration_ms: 0.6717
+  type: 'test'
+  ...
+# Subtest: createLineSplitter buffers chunks, split CRLF, empty lines and final partial lines
+ok 109 - createLineSplitter buffers chunks, split CRLF, empty lines and final partial lines
+  ---
+  duration_ms: 0.3431
+  type: 'test'
+  ...
+# Subtest: createLineSplitter avoids extra trailing lines and preserves lone carriage returns
+ok 110 - createLineSplitter avoids extra trailing lines and preserves lone carriage returns
+  ---
+  duration_ms: 0.2936
+  type: 'test'
+  ...
+# Subtest: spawned service is alive, registered, then dead after concurrent terminate calls
+ok 111 - spawned service is alive, registered, then dead after concurrent terminate calls
+  ---
+  duration_ms: 454.465
+  type: 'test'
+  ...
+# Subtest: stdout/stderr log lines stay ordered per stream and flush partial UTF-8 lines on close
+ok 112 - stdout/stderr log lines stay ordered per stream and flush partial UTF-8 lines on close
+  ---
+  duration_ms: 135.4255
+  type: 'test'
+  ...
+# Subtest: log tail keeps only the last twenty lines
+ok 113 - log tail keeps only the last twenty lines
+  ---
+  duration_ms: 54.4635
+  type: 'test'
+  ...
+# Subtest: spawn inherits environment and honors overrides and a cwd containing spaces
+ok 114 - spawn inherits environment and honors overrides and a cwd containing spaces
+  ---
+  duration_ms: 67.3416
+  type: 'test'
+  ...
+# Subtest: terminate kills an ordinary grandchild as part of the service tree
+ok 115 - terminate kills an ordinary grandchild as part of the service tree
+  ---
+  duration_ms: 499.4729
+  type: 'test'
+  ...
+# Subtest: POSIX termination escalates when the leader exits but a grandchild ignores SIGTERM
+ok 116 - POSIX termination escalates when the leader exits but a grandchild ignores SIGTERM # SKIP
+  ---
+  duration_ms: 0.0927
+  type: 'test'
+  ...
+# Subtest: mock ignoring SIGTERM dies within 1.5 seconds of terminate with a 300 ms grace
+ok 117 - mock ignoring SIGTERM dies within 1.5 seconds of terminate with a 300 ms grace
+  ---
+  duration_ms: 467.7784
+  type: 'test'
+  ...
+# Subtest: bad cwd rejects with EngineError reason spawn and emits no start
+ok 118 - bad cwd rejects with EngineError reason spawn and emits no start
+  ---
+  duration_ms: 1.2334
+  type: 'test'
+  ...
+# Subtest: a nonexistent shell command spawns successfully then exits nonzero quickly
+ok 119 - a nonexistent shell command spawns successfully then exits nonzero quickly
+  ---
+  duration_ms: 40.684
+  type: 'test'
+  ...
+# Subtest: terminatePid stops a service by raw PID
+ok 120 - terminatePid stops a service by raw PID
+  ---
+  duration_ms: 332.5028
+  type: 'test'
+  ...
+# Subtest: terminatePid stops an unregistered process group created by another engine process
+ok 121 - terminatePid stops an unregistered process group created by another engine process
+  ---
+  duration_ms: 461.3371
+  type: 'test'
+  ...
+# Subtest: stopAll stops peers concurrently and tolerates repeated shutdown
+ok 122 - stopAll stops peers concurrently and tolerates repeated shutdown
+  ---
+  duration_ms: 435.9601
+  type: 'test'
+  ...
+# Subtest: normal engine process exit synchronously kills its registered service tree
+ok 123 - normal engine process exit synchronously kills its registered service tree
+  ---
+  duration_ms: 490.9781
+  type: 'test'
+  ...
+1..123
+# tests 123
+# suites 0
+# pass 119
+# fail 0
+# cancelled 0
+# skipped 4
+# todo 0
+# duration_ms 7952.1878
