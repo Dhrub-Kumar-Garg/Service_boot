@@ -28,12 +28,18 @@ async function startOne(service, ctx) {
     ctx.readyMs[service.name] = ms;
     ctx.pids[service.name] = handle.pid;
   } catch (error) {
-    if (error.reason !== 'aborted') {
-      ctx.emit('service:failed', {
-        name: service.name, reason: error.reason || 'spawn', error: error.message
-      });
-    }
-    throw error;
+    if (error.reason === 'aborted') throw error;
+    // Several processes can fail in the same level. Claim the first failure
+    // before notifying listeners or canceling peers; later failures are silent.
+    checkAborted(ctx, service.name);
+    const failure = error instanceof EngineError ? error : new EngineError(error.message, {
+      reason: error.reason || 'spawn', serviceName: service.name
+    });
+    ctx.abort(failure);
+    ctx.emit('service:failed', {
+      name: service.name, reason: failure.reason, error: failure.message
+    });
+    throw failure;
   }
 }
 
@@ -56,12 +62,7 @@ async function runParallel(services, groups, maxParallel, ctx) {
       // Ready services keep running without occupying a worker slot.
       while (!ctx.aborted && next < group.length) {
         const name = group[next++];
-        try {
-          await startOne(services[name], ctx);
-        } catch (error) {
-          ctx.abort(error);
-          throw error;
-        }
+        await startOne(services[name], ctx);
       }
     }
     // This level barrier drains ALL workers on failure as well as success.

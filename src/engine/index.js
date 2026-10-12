@@ -4,8 +4,8 @@ const { performance } = require('node:perf_hooks');
 const { createEmit } = require('./events');
 const { EngineError } = require('./errors');
 const { runSequential, runParallel } = require('./runners');
+const { analyze } = require('../graph/adaptive');
 
-const MESSAGE = 'NOT IMPLEMENTED: Person 2 implements this (see CONTRACT.md section 5)';
 let activeContext = null;
 let shutdownOperation = null;
 
@@ -69,9 +69,14 @@ async function runEngine({ services, groups, algorithm, maxParallel = Infinity,
   try {
     ctx.emit('run:start', { algorithm, total: Object.keys(services).length });
     const started = performance.now();
+    let effectiveAlgorithm = algorithm;
     try {
-      if (algorithm === 'adaptive') throw new Error(MESSAGE);
-      if (algorithm === 'sequential') await runSequential(services, groups, ctx);
+      if (algorithm === 'adaptive') {
+        const { width, depth, chosen, reason } = analyze(groups);
+        effectiveAlgorithm = chosen;
+        ctx.emit('adaptive:decision', { width, depth, chosen, reason });
+      }
+      if (effectiveAlgorithm === 'sequential') await runSequential(services, groups, ctx);
       else await runParallel(services, groups, maxParallel, ctx);
       if (ctx.aborted) throw ctx.failure;
     } finally {
@@ -80,7 +85,7 @@ async function runEngine({ services, groups, algorithm, maxParallel = Infinity,
       finishStarting();
     }
     const result = {
-      algorithm, effectiveAlgorithm: algorithm,
+      algorithm, effectiveAlgorithm,
       totalMs: performance.now() - started, readyMs: ctx.readyMs, pids: ctx.pids
     };
     ctx.emit('run:done', {
@@ -89,14 +94,15 @@ async function runEngine({ services, groups, algorithm, maxParallel = Infinity,
     return result;
   } catch (error) {
     ctx.abort(error);
+    const failure = ctx.failure;
     try {
-      await stopAll();
+      await stopAll({ graceMs: 1000 });
     } catch (cleanupError) {
       // Preserve the original startup failure and expose a cleanup failure too.
-      error.cleanupError = cleanupError;
+      failure.cleanupError = cleanupError;
     }
-    ctx.emit('run:failed', { error });
-    throw error;
+    ctx.emit('run:failed', { error: failure.message });
+    throw failure;
   } finally {
     if (activeContext === ctx) activeContext = null;
   }

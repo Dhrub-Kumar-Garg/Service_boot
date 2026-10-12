@@ -1,0 +1,76 @@
+TAP version 13
+# Subtest: ORDERING: sequential on diamond waits for every dependency
+ok 1 - ORDERING: sequential on diamond waits for every dependency
+  ---
+  duration_ms: 1695.5082
+  type: 'test'
+  ...
+# Subtest: ORDERING: sequential on wide waits for every dependency
+ok 2 - ORDERING: sequential on wide waits for every dependency
+  ---
+  duration_ms: 2963.5703
+  type: 'test'
+  ...
+# Subtest: ORDERING: parallel on diamond waits for every dependency
+ok 3 - ORDERING: parallel on diamond waits for every dependency
+  ---
+  duration_ms: 1499.2357
+  type: 'test'
+  ...
+# Subtest: ORDERING: parallel on wide waits for every dependency
+ok 4 - ORDERING: parallel on wide waits for every dependency
+  ---
+  duration_ms: 1173.9805
+  type: 'test'
+  ...
+# Subtest: ORDERING: adaptive on diamond waits for every dependency
+ok 5 - ORDERING: adaptive on diamond waits for every dependency
+  ---
+  duration_ms: 1724.7144
+  type: 'test'
+  ...
+# Subtest: ORDERING: adaptive on wide waits for every dependency
+ok 6 - ORDERING: adaptive on wide waits for every dependency
+  ---
+  duration_ms: 1192.1884
+  type: 'test'
+  ...
+# Subtest: ADAPTIVE: wide selects parallel and emits the exact reason
+ok 7 - ADAPTIVE: wide selects parallel and emits the exact reason
+  ---
+  duration_ms: 1179.1183
+  type: 'test'
+  ...
+# Subtest: ADAPTIVE: linear selects sequential and emits the exact reason
+ok 8 - ADAPTIVE: linear selects sequential and emits the exact reason
+  ---
+  duration_ms: 2379.6223
+  type: 'test'
+  ...
+# Subtest: CRASH DURING STARTUP: bad service emits crash and all started PIDs die
+ok 9 - CRASH DURING STARTUP: bad service emits crash and all started PIDs die
+  ---
+  duration_ms: 437.3838
+  type: 'test'
+  ...
+# Subtest: READY TIMEOUT: never-ready rejects within four seconds and cleans up
+ok 10 - READY TIMEOUT: never-ready rejects within four seconds and cleans up
+  ---
+  duration_ms: 1260.1873
+  type: 'test'
+  ...
+# Subtest: DEPENDENT NOT STARTED: failing X prevents Y from spawning
+ok 11 - DEPENDENT NOT STARTED: failing X prevents Y from spawning
+  ---
+  duration_ms: 207.6445
+  type: 'test'
+  ...
+1..11
+# tests 11
+# suites 0
+# pass 11
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 15795.4514

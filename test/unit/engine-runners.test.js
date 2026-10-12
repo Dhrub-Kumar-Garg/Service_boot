@@ -7,6 +7,7 @@ const processes = require('../../src/engine/process-manager');
 const readiness = require('../../src/engine/readiness');
 const { startOne } = require('../../src/engine/runners');
 const { EngineError } = require('../../src/engine/errors');
+const { analyze } = require('../../src/graph/adaptive');
 const { makeServices, record, isAlive, waitDead } = require('../helpers');
 
 const options = { timeout: 10000 };
@@ -70,13 +71,17 @@ test('empty plans work with default emitter and supported cap values', options, 
   }
 });
 
-test('adaptive emits run:start and run:failed but remains NOT IMPLEMENTED for Phase 4', options, async () => {
+test('adaptive empty plan announces the exact decision before completing', options, async () => {
   const emitter = new EventEmitter();
   const history = record(emitter);
-  await assert.rejects(engine.runEngine({ services: {}, groups: [], algorithm: 'adaptive', emitter }), {
-    message: 'NOT IMPLEMENTED: Person 2 implements this (see CONTRACT.md section 5)'
+  const result = await engine.runEngine({ services: {}, groups: [], algorithm: 'adaptive', emitter });
+  assert.equal(result.algorithm, 'adaptive');
+  assert.equal(result.effectiveAlgorithm, 'sequential');
+  const { width, depth, chosen, reason } = analyze([]);
+  assert.deepEqual(history.find('adaptive:decision').payload, {
+    width, depth, chosen, reason, ts: history.find('adaptive:decision').payload.ts
   });
-  assert.deepEqual(history.events.map(event => event.name), ['run:start', 'run:failed']);
+  assert.deepEqual(history.events.map(event => event.name), ['run:start', 'adaptive:decision', 'run:done']);
   assert.ok(history.events.every(event => Number.isFinite(event.payload.ts)));
 });
 
@@ -142,8 +147,61 @@ test('parallel first failure aborts peers, skips queued starts and emits no abor
     name: 'bad', reason: 'timeout', error: 'bad readiness', ts: history.find('service:failed').payload.ts
   }]);
   assert.equal(history.filter('run:failed').length, 1);
+  assert.equal(history.find('run:failed').payload.error, failure.message);
   assert.equal(history.filter('run:done').length, 0);
   assert.equal(getEventListeners(peerSignal, 'abort').length, 0);
+});
+
+test('simultaneous real worker failures report only the first rejection, regardless of declaration order', options, async t => {
+  fakeSpawns(t);
+  const gates = new Map();
+  t.mock.method(readiness, 'waitForReady', service => {
+    const gate = deferred();
+    gates.set(service.name, gate);
+    return gate.promise;
+  });
+  t.after(async () => {
+    for (const gate of gates.values()) gate.resolve(0);
+    await engine.stopAll();
+  });
+  const emitter = new EventEmitter();
+  const history = record(emitter);
+  const services = Object.fromEntries(['peer', 'root', 'queued', 'dependent'].map(name => [name, { name }]));
+  const root = new EngineError('root crashed', { reason: 'crash', serviceName: 'root' });
+  const run = engine.runEngine({ services, groups: [['peer', 'root', 'queued'], ['dependent']],
+    algorithm: 'parallel', maxParallel: 2, emitter });
+  const rejected = assert.rejects(run, error => error === root);
+  await until(() => gates.size === 2);
+  gates.get('root').reject(root);
+  gates.get('peer').reject(new EngineError('peer timeout', { reason: 'timeout', serviceName: 'peer' }));
+  await rejected;
+  assert.deepEqual(history.filter('service:starting').map(event => event.payload.name), ['peer', 'root']);
+  assert.equal(history.filter('service:failed').length, 1);
+  assert.equal(history.find('service:failed').payload.name, 'root');
+  assert.equal(history.find('service:failed').payload.reason, 'crash');
+  assert.equal(history.filter('run:failed').length, 1);
+  assert.equal(history.find('run:failed').payload.error, 'root crashed');
+  assert.equal(history.filter('run:done').length, 0);
+});
+
+test('a first preflight failure cancels a peer still checking its port before spawn', options, async t => {
+  const peerPreflight = deferred();
+  const failure = new EngineError('busy port', { reason: 'spawn', serviceName: 'bad' });
+  t.mock.method(readiness, 'preflightPort', service => service.name === 'bad'
+    ? Promise.reject(failure) : peerPreflight.promise);
+  const spawn = t.mock.method(processes, 'spawnService', () => assert.fail('must not spawn after failure'));
+  t.after(() => { peerPreflight.resolve(); return engine.stopAll(); });
+  const emitter = new EventEmitter();
+  const history = record(emitter);
+  const services = { bad: { name: 'bad' }, peer: { name: 'peer' } };
+  const run = engine.runEngine({ services, groups: [['bad', 'peer']], algorithm: 'parallel', emitter });
+  const rejected = assert.rejects(run, error => error === failure);
+  await until(() => history.filter('service:failed').length === 1);
+  peerPreflight.resolve();
+  await rejected;
+  assert.equal(spawn.mock.callCount(), 0);
+  assert.deepEqual(history.events.map(event => event.name), ['run:start', 'service:failed', 'run:failed']);
+  assert.equal(history.find('run:failed').payload.error, 'busy port');
 });
 
 test('startOne skips preflight and spawn when already aborted', options, async t => {
@@ -226,6 +284,10 @@ test('a sequential spawn error cleans a ready predecessor and prevents later sta
   assert.equal(typeof history.find('service:failed', 'bad').payload.error, 'string');
   const pid = history.find('service:starting', 'healthy').payload.pid;
   assert.equal(isAlive(pid), false, 'cleanup completes before runEngine rejects');
+  const exitedIndex = history.events.findIndex(event => event.name === 'service:exited');
+  const failedIndex = history.events.findIndex(event => event.name === 'run:failed');
+  assert.ok(exitedIndex >= 0 && failedIndex > exitedIndex, 'run:failed follows process cleanup');
+  assert.equal(typeof history.find('run:failed').payload.error, 'string');
   assert.deepEqual(engine.getRunning(), []);
 });
 

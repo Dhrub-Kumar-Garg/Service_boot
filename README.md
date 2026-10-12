@@ -1,6 +1,6 @@
 # ServiceBoot
 
-A Node.js OS lab CLI that reads `serviceboot.yml`, validates services, and starts them in dependency levels. Sequential and Parallel execution now use real processes and readiness checks. Adaptive execution is pending Phase 4.
+A Node.js OS lab CLI that reads `serviceboot.yml`, validates services, and starts them in dependency levels. Sequential, Parallel and Adaptive execution use real processes and readiness checks, with cleanup on startup failure.
 
 Requires Node.js 18+. Plain JavaScript (CommonJS), no build step; `js-yaml` is the only direct runtime dependency.
 
@@ -12,7 +12,7 @@ npm test
 npm run test:engine
 ```
 
-Phase 3 verification on Windows with Node 22.16.0: `npm test` has 155 tests, 151 passing and four platform skips. All 13 selected sequential/parallel engine acceptance cases pass with `NODE_OPTIONS=--unhandled-rejections=strict`, with no warnings or leftover mock processes. Adaptive tests remain pending Phase 4. Process-tree tests require permission to run Windows `taskkill`; this workspace's sandbox denies it. See the [Phase 3 handover and actual output](handover/02-person2-phase3.md).
+Phase 4 verification on Windows with Node 22.16.0: `npm test` has 158 tests, 154 passing and four platform skips. The full engine suite has 17 passing cases and one Windows SIGINT skip. All 11 targeted ordering/adaptive/failure cases passed three times. Every run used `NODE_OPTIONS=--unhandled-rejections=strict`, with no warnings or leftover mock processes. Real process tests ran with permitted socket and Windows `taskkill` access. See the [Phase 4 handover and actual output](handover/02-person2-phase4.md).
 
 ## Commands
 
@@ -21,7 +21,7 @@ node bin/serviceboot.js plan --config samples/wide.yml
 node bin/serviceboot.js up --config samples/wide.yml --algorithm parallel
 ```
 
-`plan` works now; add `--json` for the complete plan. `up --algorithm sequential` and `up --algorithm parallel` boot services and leave them running; use `--exit-after-ready` to stop and exit after successful startup. `--max-parallel N` limits simultaneous startups until readiness. Defaults are `./serviceboot.yml` and algorithm `adaptive`, which currently exits 3 with `NOT IMPLEMENTED` until Phase 4. Use `--help` for usage.
+`plan` works now; add `--json` for the complete plan. `up` boots services and leaves them running; use `--exit-after-ready` to stop and exit after successful startup. `--max-parallel N` limits simultaneous startups until readiness. Defaults are `./serviceboot.yml` and algorithm `adaptive`, which chooses parallel when graph width exceeds twice its depth and otherwise chooses sequential. Use `--help` for usage.
 
 ## Folder map
 
@@ -30,7 +30,7 @@ node bin/serviceboot.js up --config samples/wide.yml --algorithm parallel
 | `bin/`, `src/cli/` | CLI entry point, argument parsing, plain output, signal wiring |
 | `src/config/` | YAML parsing, validation, normalized Service objects |
 | `src/graph/`, `src/plan.js` | DAG, cycles, deterministic levels, adaptive analysis |
-| `src/engine/` | Sequential/parallel runners, process spawning, logs, tree termination, safe events, TCP/HTTP/HTTPS readiness |
+| `src/engine/` | Sequential/parallel/adaptive execution, startup failure cleanup, process spawning, logs, tree termination, safe events, TCP/HTTP/HTTPS readiness |
 | `mock/`, `samples/` | Real TCP/HTTP mock and five example configurations |
 | `test/unit/` | Foundation, CLI, mock, and helper tests |
 | `test/engine/`, `test/helpers/` | Engine acceptance tests and process helpers |
@@ -54,4 +54,10 @@ The runners call preflightPort before the initial spawn to reject an already bus
 
 `runEngine({services, groups, algorithm, maxParallel = Infinity, emitter})` validates its inputs before spawning and defaults emitter to a Node EventEmitter. Sequential starts services in flattened level order and waits for each to become ready. Parallel uses a worker pool within each level and waits for the entire level before advancing. Each worker holds its slot until readiness.
 
-Successful runs emit run:done and return `{algorithm, effectiveAlgorithm, totalMs, readyMs, pids}` while services continue running. Failed runs cancel pending startups, drain workers, stop started services, emit run:failed, and reject. stopAll also cancels ongoing startup and stops deepest levels first, with peers on each level stopped concurrently. A second run is rejected until the current services are stopped. Adaptive dispatch, restart policies and monitoring crashes after readiness remain for subsequent phases.
+Successful runs emit run:done and return `{algorithm, effectiveAlgorithm, totalMs, readyMs, pids}` while services continue running. Failed runs cancel pending startups, drain workers, stop started services, emit run:failed, and reject. stopAll also cancels ongoing startup and stops deepest levels first, with peers on each level stopped concurrently. A second run is rejected until the current services are stopped.
+
+## Engine Phase 4
+
+Adaptive calls the existing graph analysis and emits `adaptive:decision {width, depth, chosen, reason}` immediately after run:start, before service events. It runs the chosen runner with the supplied startup cap. The returned algorithm remains `adaptive`; effectiveAlgorithm reports `sequential` or `parallel`.
+
+The first spawn, timeout or crash failure owns the failure events. It aborts peer readiness waits, blocks queued services and dependents, and emits service:failed once for the root cause. All parallel workers settle before `stopAll({graceMs:1000})` stops the started process trees. After cleanup, run:failed carries the root error message as a string, and runEngine rejects the original EngineError with its reason and serviceName. Later peer failures are silent. Crashes after readiness, restart policies and down/PID persistence remain for subsequent phases.

@@ -1,0 +1,122 @@
+
+> serviceboot@0.1.0 test:engine
+> node --test test/engine/
+
+TAP version 13
+# Subtest: ORDERING: sequential on diamond waits for every dependency
+ok 1 - ORDERING: sequential on diamond waits for every dependency
+  ---
+  duration_ms: 1799.9769
+  type: 'test'
+  ...
+# Subtest: ORDERING: sequential on wide waits for every dependency
+ok 2 - ORDERING: sequential on wide waits for every dependency
+  ---
+  duration_ms: 3017.4495
+  type: 'test'
+  ...
+# Subtest: ORDERING: parallel on diamond waits for every dependency
+ok 3 - ORDERING: parallel on diamond waits for every dependency
+  ---
+  duration_ms: 1460.8483
+  type: 'test'
+  ...
+# Subtest: ORDERING: parallel on wide waits for every dependency
+ok 4 - ORDERING: parallel on wide waits for every dependency
+  ---
+  duration_ms: 1231.2671
+  type: 'test'
+  ...
+# Subtest: ORDERING: adaptive on diamond waits for every dependency
+ok 5 - ORDERING: adaptive on diamond waits for every dependency
+  ---
+  duration_ms: 1762.5155
+  type: 'test'
+  ...
+# Subtest: ORDERING: adaptive on wide waits for every dependency
+ok 6 - ORDERING: adaptive on wide waits for every dependency
+  ---
+  duration_ms: 1370.5477
+  type: 'test'
+  ...
+# Subtest: SEQUENTIAL NO OVERLAP: five independent services have at most one in flight
+ok 7 - SEQUENTIAL NO OVERLAP: five independent services have at most one in flight
+  ---
+  duration_ms: 1618.6921
+  type: 'test'
+  ...
+# Subtest: PARALLEL IS CONCURRENT AND FASTER: six delayed roots beat sequential
+ok 8 - PARALLEL IS CONCURRENT AND FASTER: six delayed roots beat sequential
+  ---
+  duration_ms: 4893.4922
+  type: 'test'
+  ...
+# Subtest: MAX-PARALLEL: cap two allows all six services to become ready
+ok 9 - MAX-PARALLEL: cap two allows all six services to become ready
+  ---
+  duration_ms: 1227.0638
+  type: 'test'
+  ...
+# Subtest: ADAPTIVE: wide selects parallel and emits the exact reason
+ok 10 - ADAPTIVE: wide selects parallel and emits the exact reason
+  ---
+  duration_ms: 1446.0208
+  type: 'test'
+  ...
+# Subtest: ADAPTIVE: linear selects sequential and emits the exact reason
+ok 11 - ADAPTIVE: linear selects sequential and emits the exact reason
+  ---
+  duration_ms: 2487.739
+  type: 'test'
+  ...
+# Subtest: CRASH DURING STARTUP: bad service emits crash and all started PIDs die
+ok 12 - CRASH DURING STARTUP: bad service emits crash and all started PIDs die
+  ---
+  duration_ms: 419.4654
+  type: 'test'
+  ...
+# Subtest: READY TIMEOUT: never-ready rejects within four seconds and cleans up
+ok 13 - READY TIMEOUT: never-ready rejects within four seconds and cleans up
+  ---
+  duration_ms: 1259.3369
+  type: 'test'
+  ...
+# Subtest: DEPENDENT NOT STARTED: failing X prevents Y from spawning
+ok 14 - DEPENDENT NOT STARTED: failing X prevents Y from spawning
+  ---
+  duration_ms: 189.6941
+  type: 'test'
+  ...
+# Subtest: STOPALL: wide graph exits once per service with dependents before dependencies
+ok 15 - STOPALL: wide graph exits once per service with dependents before dependencies
+  ---
+  duration_ms: 1422.3406
+  type: 'test'
+  ...
+# Subtest: SIGKILL ESCALATION: ignore-sigterm is dead within two seconds
+ok 16 - SIGKILL ESCALATION: ignore-sigterm is dead within two seconds
+  ---
+  duration_ms: 366.2017
+  type: 'test'
+  ...
+# Subtest: CLI SIGINT: real CLI stops all children and exits within five seconds
+ok 17 - CLI SIGINT: real CLI stops all children and exits within five seconds # SKIP
+  ---
+  duration_ms: 0.1348
+  type: 'test'
+  ...
+# Subtest: NO DOUBLE-SPAWN: each service starts exactly once in a normal run
+ok 18 - NO DOUBLE-SPAWN: each service starts exactly once in a normal run
+  ---
+  duration_ms: 1217.1525
+  type: 'test'
+  ...
+1..18
+# tests 18
+# suites 0
+# pass 17
+# fail 0
+# cancelled 0
+# skipped 1
+# todo 0
+# duration_ms 27273.7398

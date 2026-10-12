@@ -11,7 +11,6 @@ const engine = require('../../src/engine');
 
 const root = path.resolve(__dirname, '../..');
 const cli = path.join(root, 'bin', 'serviceboot.js');
-const stubMessage = 'NOT IMPLEMENTED: Person 2 implements this (see CONTRACT.md section 5)';
 
 function runCli(args, cwd = root) {
   const result = spawnSync(process.execPath, [cli, ...args], {
@@ -105,12 +104,27 @@ test('CLI --help and -h print usage and exit 0', () => {
   }
 });
 
-test('CLI default adaptive up remains pending Phase 4 and exits 3 with its exact message', () => {
-  const result = runCli(['up', '--config', 'samples/small.yml']);
-  assert.equal(result.status, 3);
-  assert.equal(result.stderr.trim(), `error: ${stubMessage}`);
+test('CLI default adaptive up selects sequential, becomes ready and exits cleanly', () => {
+  const result = runCli(['up', '--config', 'samples/small.yml', '--exit-after-ready']);
+  assert.equal(result.status, 0, result.stderr);
+  assert.equal(result.stderr, '');
   assert.match(result.stdout, /^run:start algorithm=adaptive total=3 ts=/);
-  assert.match(result.stdout, /run:failed error=NOT IMPLEMENTED:/);
+  assert.match(result.stdout, /adaptive:decision .*chosen=sequential/);
+  assert.match(result.stdout, /Ready: 3 services .*algorithm=adaptive, effectiveAlgorithm=sequential/);
+  assert.equal((result.stdout.match(/^service:exited /gm) || []).length, 3);
+});
+
+test('CLI startup failure reports the root error and exits 3', t => {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'serviceboot-cli-'));
+  t.after(() => fs.rmSync(directory, { recursive: true, force: true }));
+  const config = path.join(directory, 'broken.yml');
+  fs.writeFileSync(config, 'version: 1\nservices:\n  bad:\n    command: node missing.js\n    cwd: ./missing-directory\n');
+  const result = runCli(['up', '--config', config]);
+  assert.equal(result.status, 3);
+  assert.match(result.stderr, /^error: /);
+  assert.match(result.stdout, /service:failed bad reason=spawn/);
+  assert.match(result.stdout, /run:failed error=/);
+  assert.ok(!result.stdout.includes('Ready:'));
 });
 
 test('runEngine validates missing options and stopAll safely handles an empty registry', async () => {
@@ -133,17 +147,12 @@ test('CLI accepts all three algorithms and positive max-parallel values', () => 
   for (const algorithm of ['sequential', 'parallel', 'adaptive']) {
     const result = runCli(['up', '--config', 'samples/small.yml', '--algorithm', algorithm,
       '--max-parallel', '2', '--exit-after-ready']);
-    if (algorithm === 'adaptive') {
-      assert.equal(result.status, 3);
-      assert.equal(result.stderr.trim(), `error: ${stubMessage}`);
-    } else {
-      assert.equal(result.status, 0, result.stderr);
-      assert.equal(result.stderr, '');
-      assert.match(result.stdout, new RegExp(`Ready: 3 services .*algorithm=${algorithm}`));
-      assert.equal((result.stdout.match(/^service:starting /gm) || []).length, 3);
-      assert.equal((result.stdout.match(/^service:ready /gm) || []).length, 3);
-      assert.equal((result.stdout.match(/^service:exited /gm) || []).length, 3);
-    }
+    assert.equal(result.status, 0, result.stderr);
+    assert.equal(result.stderr, '');
+    assert.match(result.stdout, new RegExp(`Ready: 3 services .*algorithm=${algorithm}`));
+    assert.equal((result.stdout.match(/^service:starting /gm) || []).length, 3);
+    assert.equal((result.stdout.match(/^service:ready /gm) || []).length, 3);
+    assert.equal((result.stdout.match(/^service:exited /gm) || []).length, 3);
   }
 });
 
