@@ -4,18 +4,22 @@ const { ConfigError } = require('../config/errors');
 const { loadPlan } = require('../plan');
 const engine = require('../engine');
 const processes = require('../engine/process-manager');
+const pidfile = require('../engine/pidfile');
+const { down } = require('../engine/down');
+const path = require('node:path');
 
 const USAGE = `Usage:
   serviceboot plan [--config FILE] [--json]
   serviceboot up [--config FILE] [--algorithm sequential|parallel|adaptive]
                  [--max-parallel N] [--exit-after-ready]
+  serviceboot down
   serviceboot --help
 
 Default config: ./serviceboot.yml. Default algorithm: adaptive.`;
 
 const EVENTS = [
   'run:start', 'adaptive:decision', 'service:starting', 'service:log',
-  'service:ready', 'service:failed', 'service:exited', 'run:done', 'run:failed'
+  'service:ready', 'service:failed', 'service:exited', 'service:restarting', 'run:done', 'run:failed'
 ];
 
 function formatEvent(event, payload = {}) {
@@ -32,11 +36,23 @@ function formatEvent(event, payload = {}) {
 }
 
 async function runUp(plan, options) {
+  const previous = pidfile.read();
+  if (previous && processes.isPidAlive(previous.cliPid)) {
+    throw new Error(`ServiceBoot is already running (pid ${previous.cliPid}). Run "serviceboot down" first.`);
+  }
+  if (previous) {
+    console.error(`warning: stale ServiceBoot pid file (pid ${previous.cliPid}); cleaning recorded leftovers and continuing`);
+    await down();
+  }
+  pidfile.write({ config: options.config });
   const emitter = new EventEmitter();
 
   let stopping = false;
   let signalCode;
   let fatal = false;
+  emitter.on('service:starting', payload => {
+    try { pidfile.addService(payload); } catch (error) { onFatal(error); }
+  });
   for (const event of EVENTS) emitter.on(event, payload => {
     // Cancellation during a signal shutdown is expected, not a startup failure.
     if (event === 'run:failed' && signalCode !== undefined) return;
@@ -49,10 +65,17 @@ async function runUp(plan, options) {
     stopping = true;
     try {
       await engine.stopAll({});
+      pidfile.remove({ cliPid: process.pid });
       finishShutdown(fatal ? 3 : signalCode ?? code);
     } catch (error) {
       console.error(`error: ${error.message}`);
       processes.killAllSync();
+      try {
+        const record = pidfile.read();
+        if (record?.cliPid === process.pid && record.services.every(service => !processes.isGroupAlive(service.pid))) {
+          pidfile.remove({ cliPid: process.pid });
+        }
+      } catch (fileError) { console.error(`error: ${fileError.message}`); }
       finishShutdown(3);
     }
     // An uncaught error can leave unrelated handles alive. After best-effort
@@ -65,6 +88,7 @@ async function runUp(plan, options) {
       // A second interrupt skips asynchronous grace periods. Kill every owned
       // process tree synchronously before exiting with the first signal's code.
       processes.killAllSync();
+      try { pidfile.remove({ cliPid: process.pid }); } catch (error) { console.error(`error: ${error.message}`); }
       process.exit(signalCode);
       return;
     }
@@ -100,6 +124,7 @@ async function runUp(plan, options) {
     if (outcome.code !== undefined) return outcome.code;
     if (stopping) return await shutdown;
     if (outcome.error) {
+      if (!outcome.error.cleanupError) pidfile.remove({ cliPid: process.pid });
       console.error(`error: ${outcome.error.message}`);
       return 3;
     }
@@ -137,11 +162,11 @@ async function main(argv) {
       return 0;
     }
     command = parsed.positionals[0];
-    if (parsed.positionals.length !== 1 || !['plan', 'up'].includes(command)) {
-      throw new Error('Expected exactly one command: plan or up');
+    if (parsed.positionals.length !== 1 || !['plan', 'up', 'down'].includes(command)) {
+      throw new Error('Expected exactly one command: plan, up or down');
     }
     const allowed = command === 'plan' ? ['config', 'json']
-      : ['config', 'algorithm', 'max-parallel', 'exit-after-ready'];
+      : command === 'down' ? [] : ['config', 'algorithm', 'max-parallel', 'exit-after-ready'];
     for (const key of Object.keys(values)) {
       if (!allowed.includes(key)) throw new Error(`--${key} is not valid for ${command}`);
     }
@@ -163,6 +188,10 @@ async function main(argv) {
 
   const configPath = values.config === undefined ? './serviceboot.yml' : values.config;
   try {
+    if (command === 'down') {
+      console.log(await down() ? 'ServiceBoot stopped' : 'Nothing to stop');
+      return 0;
+    }
     const plan = loadPlan(configPath);
     if (command === 'plan') {
       if (values.json) {
@@ -179,7 +208,7 @@ async function main(argv) {
     }
     return await runUp(plan, {
       algorithm: values.algorithm === undefined ? 'adaptive' : values.algorithm,
-      maxParallel, exitAfterReady: Boolean(values['exit-after-ready'])
+      maxParallel, exitAfterReady: Boolean(values['exit-after-ready']), config: path.resolve(configPath)
     });
   } catch (error) {
     if (error instanceof ConfigError) {

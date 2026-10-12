@@ -1,0 +1,16 @@
+TAP version 13
+# Subtest: DOWN: CLI replaces the saved PID on recovery and down stops the latest process
+ok 1 - DOWN: CLI replaces the saved PID on recovery and down stops the latest process
+  ---
+  duration_ms: 9921.2741
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 10065.4186

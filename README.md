@@ -12,13 +12,14 @@ npm test
 npm run test:engine
 ```
 
-Phase 5 verification on Windows with Node 22.16.0: `npm test` has 167 tests, 163 passing and four platform skips. The full engine suite has 19 passing cases and one Windows SIGINT skip, including two new real-engine signal callback cases. One and two console Ctrl+C presses both left zero mock services. Completed automated checks used `NODE_OPTIONS=--unhandled-rejections=strict`, with no warnings or unhandled rejections. Real process tests ran with permitted socket and Windows `taskkill` access. See the [Phase 5 handover and actual output](handover/02-person2-phase5.md).
+Phase 6 verification on Windows with Node 22.16.0: `npm test` has 172 tests, 168 passing and four platform skips. The full engine suite has 32 tests, 31 passing and one Windows SIGINT skip. Final checks used `NODE_OPTIONS=--unhandled-rejections=strict`, with no warnings or unhandled rejections. No mock-service or ServiceBoot CLI processes remained. See the [Person 2 handover and actual output](handover/02-person2-to-person3.md). The [Phase 5 handover](handover/02-person2-phase5.md) also records native console checks with one and two Ctrl+C presses.
 
 ## Commands
 
 ```sh
 node bin/serviceboot.js plan --config samples/wide.yml
 node bin/serviceboot.js up --config samples/wide.yml --algorithm parallel
+node bin/serviceboot.js down
 ```
 
 `plan` works now; add `--json` for the complete plan. `up` boots services and leaves them running; use `--exit-after-ready` to stop and exit after successful startup. `--max-parallel N` limits simultaneous startups until readiness. Defaults are `./serviceboot.yml` and algorithm `adaptive`, which chooses parallel when graph width exceeds twice its depth and otherwise chooses sequential. Use `--help` for usage.
@@ -33,7 +34,7 @@ During `up`, the first Ctrl+C requests shutdown and exits 130 after cleanup. POS
 | `src/config/` | YAML parsing, validation, normalized Service objects |
 | `src/graph/`, `src/plan.js` | DAG, cycles, deterministic levels, adaptive analysis |
 | `src/engine/` | Sequential/parallel/adaptive execution, startup failure cleanup, process spawning, logs, tree termination, safe events, TCP/HTTP/HTTPS readiness |
-| `mock/`, `samples/` | Real TCP/HTTP mock and five example configurations |
+| `mock/`, `samples/` | Real TCP/HTTP mock and six example configurations |
 | `test/unit/` | Foundation, CLI, mock, and helper tests |
 | `test/engine/`, `test/helpers/` | Engine acceptance tests and process helpers |
 | `handover/` | Continuation guide and real verification output |
@@ -69,3 +70,11 @@ The first spawn, timeout or crash failure owns the failure events. It aborts pee
 `stopAll({graceMs = 3000})` returns one shared promise to concurrent callers. It publishes that promise before aborting startup, so a reentrant abort listener joins the same shutdown. It waits for startup workers to finish, snapshots all owned handles including not-ready services, groups them by descending level, and terminates peers concurrently with a barrier between levels. If an OS termination fails, it still drains peers and attempts remaining levels before rejecting. Normal shutdown emits exactly one service:exited event per spawned service.
 
 CLI signal handlers remain installed during shutdown so a second signal can call killAllSync and exit with the first signal's code. Expected signal cancellation prints no failure diagnostic. Graceful completion removes signal/fatal-event listeners and the CLI keep-alive timer. Fatal events are deduplicated when strict rejection mode reports the same error twice, and exit after best-effort cleanup even if unrelated handles remain alive.
+
+## Engine Phase 6
+
+`up` records its owner and service leaders atomically in `./.serviceboot/pids.json`, updates entries after replacements, and removes the file after clean shutdown. `down` uses that record from the same working directory, without needing a config. It stops a live CLI or recovers orphan service trees after a hard kill, deepest dependency levels first. An active owner blocks another `up`; a stale owner produces a warning and cleanup before startup continues. A recycled PID in a stale record could be killed by mistake.
+
+`restart: on-failure` uses `max_retries` as a lifetime replacement budget, shared by startup and later crashes. Each retry emits `service:restarting`, waits 500 ms times its attempt number, and checks readiness again. A clean code-zero exit is not restarted. Exhaustion before readiness fails and cleans the startup; exhaustion after readiness leaves that service down while siblings and dependents retain their processes. Shutdown interrupts backoff and prevents respawning. Try `samples/restart.yml` to see two replacements alongside a healthy sibling.
+
+The engine also exports `getTreePids(pid)` for CPU/memory collection. A service PID identifies its shell/group leader; inspect its full descendant tree for useful metrics. `result.pids` is a startup snapshot and can be stale after restarts; `getRunning()` supplies current leaders. See [CONTRACT section 9](CONTRACT.md#9-additions-by-person-2) and the [Person 2 → Person 3 handover](handover/02-person2-to-person3.md) for APIs, events, verification and remaining platform checks.

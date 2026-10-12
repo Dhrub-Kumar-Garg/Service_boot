@@ -1,0 +1,71 @@
+TAP version 13
+# Subtest: DOWN: hard-killed CLI leaves orphans that down removes with the PID file
+ok 1 - DOWN: hard-killed CLI leaves orphans that down removes with the PID file
+  ---
+  duration_ms: 8458.6803
+  type: 'test'
+  ...
+# Subtest: DOWN: active owner blocks duplicate up and down stops the live CLI
+ok 2 - DOWN: active owner blocks duplicate up and down stops the live CLI
+  ---
+  duration_ms: 7684.0155
+  type: 'test'
+  ...
+# Subtest: DOWN: stale up warns, cleans orphan services, and publishes its new owner
+ok 3 - DOWN: stale up warns, cleans orphan services, and publishes its new owner
+  ---
+  duration_ms: 9723.3692
+  type: 'test'
+  ...
+# Subtest: RESTART: sample retries twice, keeps its healthy sibling, then leaves only the failed service down
+ok 4 - RESTART: sample retries twice, keeps its healthy sibling, then leaves only the failed service down
+  ---
+  duration_ms: 10035.1447
+  type: 'test'
+  ...
+# Subtest: RESTART: early startup crashes use the retry budget before terminal failure blocks dependents
+ok 5 - RESTART: early startup crashes use the retry budget before terminal failure blocks dependents
+  ---
+  duration_ms: 5486.6819
+  type: 'test'
+  ...
+# Subtest: RESTART: a clean code-zero exit is not restarted
+ok 6 - RESTART: a clean code-zero exit is not restarted
+  ---
+  duration_ms: 2395.3848
+  type: 'test'
+  ...
+# Subtest: RESTART: stopAll interrupts backoff without a late respawn
+not ok 7 - RESTART: stopAll interrupts backoff without a late respawn
+  ---
+  duration_ms: 1599.8726
+  type: 'test'
+  location: 'C:\\Users\\Dhruv\\Desktop\\projects\\OS project\\Service_boot\\test\\engine\\restart.test.js:82:1'
+  failureType: 'testCodeFailure'
+  error: 'shutdown wakes the 500 ms backoff'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (C:\Users\Dhruv\Desktop\projects\OS project\Service_boot\test\engine\restart.test.js:91:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: TREE PIDS: discovers the shell, parent and grandchild for metrics and kills all descendants
+ok 8 - TREE PIDS: discovers the shell, parent and grandchild for metrics and kills all descendants
+  ---
+  duration_ms: 1507.672
+  type: 'test'
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 7
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 47307.5282

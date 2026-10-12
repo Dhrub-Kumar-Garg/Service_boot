@@ -1,4 +1,4 @@
-const { spawn, spawnSync } = require('node:child_process');
+const { spawn, spawnSync, execFile } = require('node:child_process');
 const { performance } = require('node:perf_hooks');
 const { EngineError } = require('./errors');
 
@@ -124,7 +124,9 @@ function spawnService(service, { level, emit }) {
         handle.hasExited = true;
         resolveExit({ code: child.exitCode, signal: child.signalCode });
       }
-      if (spawned && !isGroupAlive(handle.pid)) owned.delete(handle.pid);
+      // Windows retains a dead parent's PID in its children's ParentProcessId.
+      // Keep ownership until tree cleanup, even after the shell closes its pipes.
+      if (spawned && process.platform !== 'win32' && !isGroupAlive(handle.pid)) owned.delete(handle.pid);
       resolveClose();
     }
     child.on('error', onError);
@@ -138,6 +140,70 @@ function validPid(pid) {
   if (!Number.isSafeInteger(pid) || pid <= 0) {
     throw new TypeError('pid must be a positive safe integer');
   }
+}
+
+function isPidAlive(pid) {
+  validPid(pid);
+  try { process.kill(pid, 0); return true; } catch (error) {
+    if (error.code === 'ESRCH') return false;
+    if (error.code === 'EPERM') return true;
+    throw error;
+  }
+}
+
+async function requestCliStop(pid) {
+  validPid(pid);
+  if (process.platform === 'win32') {
+    // Windows cannot deliver SIGTERM to another Node console. Stop its entire
+    // process tree; down will remove the file after the CLI has died.
+    if (isPidAlive(pid)) await killWindowsTree(pid);
+  } else {
+    try { process.kill(pid, 'SIGTERM'); } catch (error) {
+      if (error.code !== 'ESRCH') throw error;
+    }
+  }
+}
+
+function processSnapshotCommand() {
+  const windows = process.platform === 'win32';
+  const command = windows ? 'powershell.exe' : 'ps';
+  const args = windows ? ['-NoProfile', '-NonInteractive', '-Command',
+    'Get-CimInstance Win32_Process | Select-Object ProcessId,ParentProcessId | ConvertTo-Csv -NoTypeInformation']
+    : ['-A', '-o', 'pid=,ppid='];
+  return { windows, command, args };
+}
+
+async function getTreePids(rootPid) {
+  validPid(rootPid);
+  const { windows, command, args } = processSnapshotCommand();
+  const output = await new Promise((resolve, reject) => {
+    execFile(command, args, { encoding: 'utf8', windowsHide: true, timeout: 5000,
+      maxBuffer: 16 * 1024 * 1024 }, (error, stdout) => error ? reject(error) : resolve(stdout));
+  });
+  return treeFromSnapshot(rootPid, output, windows);
+}
+
+function treeFromSnapshot(rootPid, output, windows) {
+  const children = new Map();
+  for (const line of output.split(/\r?\n/)) {
+    const match = windows ? /^\s*"?(\d+)"?\s*,\s*"?(\d+)"?\s*$/.exec(line)
+      : /^\s*(\d+)\s+(\d+)\s*$/.exec(line);
+    if (!match) continue;
+    const pid = Number(match[1]);
+    const parent = Number(match[2]);
+    if (!children.has(parent)) children.set(parent, []);
+    children.get(parent).push(pid);
+  }
+  // Parent PIDs identify a tree at one instant. Walking all generations includes
+  // the actual Node service and grandchildren beneath its shell wrapper.
+  const result = [rootPid];
+  const seen = new Set(result);
+  for (let index = 0; index < result.length; index++) {
+    for (const pid of children.get(result[index]) || []) {
+      if (pid > 0 && !seen.has(pid)) { seen.add(pid); result.push(pid); }
+    }
+  }
+  return result;
 }
 
 function isGroupAlive(pid) {
@@ -193,13 +259,11 @@ function killWindowsTree(pid) {
   // Windows has no POSIX process-group signals or graceful SIGTERM. taskkill
   // /T follows the parent/child tree and /F forcibly stops every member.
   return new Promise((resolve, reject) => {
-    const killer = spawn('taskkill', ['/PID', String(pid), '/T', '/F'], {
-      stdio: 'ignore', windowsHide: true
-    });
-    killer.once('error', reject);
-    killer.once('close', code => {
-      if (code === 0 || !isGroupAlive(pid)) resolve();
-      else reject(new EngineError(`taskkill failed for process ${pid} (exit ${code})`, {
+    execFile('taskkill', ['/PID', String(pid), '/T', '/F'], {
+      windowsHide: true, timeout: 10000
+    }, error => {
+      if (!error || (typeof error.code === 'number' && !isGroupAlive(pid))) resolve();
+      else reject(new EngineError(`taskkill failed for process ${pid}: ${error.message}`, {
         reason: 'crash', serviceName: owned.get(pid)?.name
       }));
     });
@@ -209,6 +273,15 @@ function killWindowsTree(pid) {
 async function terminateTree(pid, handle, graceMs) {
   if (process.platform === 'win32') {
     if (isGroupAlive(pid)) await killWindowsTree(pid);
+    else {
+      // taskkill cannot follow a dead shell. CIM still records the parent PID,
+      // so discover its surviving descendants and kill deepest children first.
+      const descendants = (await getTreePids(pid)).slice(1).reverse();
+      for (const descendant of descendants) {
+        if (isPidAlive(descendant)) await killWindowsTree(descendant);
+      }
+      for (const descendant of descendants) await waitGone(descendant, 2000, handle?.name);
+    }
   } else {
     // SIGTERM requests orderly cleanup. SIGKILL cannot be caught or ignored.
     signalGroup(pid, 'SIGTERM');
@@ -254,19 +327,45 @@ function terminate(handle, options) {
 }
 
 function killAllSync() {
+  for (const handle of owned.values()) handle.stopping = true;
+  if (process.platform === 'win32') {
+    try {
+      const roots = [...owned.keys()];
+      let snapshot;
+      function inspectDeadShells() {
+        if (snapshot !== undefined) return snapshot;
+        // The exit hook cannot await CIM. Take one bounded synchronous
+        // snapshot for all dead shells and recover their surviving children.
+        const { command, args } = processSnapshotCommand();
+        const result = spawnSync(command, args, { windowsHide: true,
+          encoding: 'utf8', timeout: 5000, maxBuffer: 16 * 1024 * 1024 });
+        if (result.error) throw result.error;
+        if (result.status !== 0) throw new Error('Cannot inspect remaining Windows service trees');
+        snapshot = result.stdout;
+        return snapshot;
+      }
+      const targets = [...new Set(roots.flatMap(pid => isPidAlive(pid) ? [pid]
+        : treeFromSnapshot(pid, inspectDeadShells(), true).slice(1)))].filter(isPidAlive);
+      if (targets.length) {
+        // taskkill accepts several /PID arguments. One invocation avoids
+        // paying process startup and tree enumeration costs for every service.
+        const result = spawnSync('taskkill', [...targets.flatMap(pid => ['/PID', String(pid)]), '/T', '/F'], {
+          stdio: 'ignore', windowsHide: true
+        });
+        if (result.error) throw result.error;
+        if (result.status !== 0 && targets.some(isPidAlive)) throw new Error(`taskkill exited ${result.status}`);
+      }
+      // Forced exit invokes this hook again; never revisit completed trees.
+      for (const pid of roots) owned.delete(pid);
+    } catch (error) { console.error('ServiceBoot exit cleanup failed:', error); }
+    return;
+  }
   for (const pid of owned.keys()) {
     try {
-      if (process.platform === 'win32') {
-        if (isGroupAlive(pid)) {
-          const result = spawnSync('taskkill', ['/PID', String(pid), '/T', '/F'], {
-            stdio: 'ignore', windowsHide: true
-          });
-          if (result.error) throw result.error;
-          if (result.status !== 0 && isGroupAlive(pid)) {
-            throw new Error(`taskkill exited ${result.status}`);
-          }
-        }
-      } else signalGroup(pid, 'SIGKILL');
+      signalGroup(pid, 'SIGKILL');
+      // A forced exit also invokes Node's exit hook. Do not inspect or kill
+      // this completed tree twice, or target a PID reused after the first kill.
+      owned.delete(pid);
     } catch (error) {
       console.error(`ServiceBoot exit cleanup failed (${pid}):`, error);
     }
@@ -277,12 +376,12 @@ function getRunning() {
   return [...running.values()].map(({ name, pid, level }) => ({ name, pid, level }));
 }
 
-// Internal shutdown snapshot includes owned POSIX groups whose shell exited.
+// Internal shutdown snapshot includes owned trees whose shell already exited.
 function getManagedHandles() {
   return [...owned.values()];
 }
 
 module.exports = {
   spawnService, createLineSplitter, isGroupAlive, terminate, terminatePid,
-  killAllSync, getRunning, getManagedHandles
+  killAllSync, getRunning, getManagedHandles, isPidAlive, requestCliStop, getTreePids
 };

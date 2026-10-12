@@ -8,6 +8,7 @@ const { runSequential, runParallel } = require('./runners');
 const { analyze } = require('../graph/adaptive');
 
 let activeContext = null;
+let liveContext = null;
 let shutdownOperation = null;
 
 function validate(services, groups, algorithm, maxParallel, emitter) {
@@ -43,7 +44,7 @@ async function runEngine({ services, groups, algorithm, maxParallel = Infinity,
   // Validate the complete plan before spawning anything, including names in
   // later levels. A rejected caller must not disturb an existing running plan.
   validate(services, groups, algorithm, maxParallel, emitter);
-  if (activeContext || shutdownOperation || getRunning().length > 0) {
+  if (activeContext || liveContext || shutdownOperation || getRunning().length > 0) {
     throw new Error('Engine already running; call stopAll() first');
   }
 
@@ -51,6 +52,7 @@ async function runEngine({ services, groups, algorithm, maxParallel = Infinity,
   const ctx = {
     aborted: false, failure: null, abortController: new AbortController(),
     emit: createEmit(emitter),
+    states: new Map(), recoveries: new Set(), supervised: false,
     // Null-prototype maps safely support service names such as __proto__.
     readyMs: Object.create(null), pids: Object.create(null),
     levels: new Map(groups.flatMap((group, level) => group.map(name => [name, level]))),
@@ -87,8 +89,11 @@ async function runEngine({ services, groups, algorithm, maxParallel = Infinity,
     }
     const result = {
       algorithm, effectiveAlgorithm,
-      totalMs: performance.now() - started, readyMs: ctx.readyMs, pids: ctx.pids
+      totalMs: performance.now() - started,
+      readyMs: Object.assign(Object.create(null), ctx.readyMs),
+      pids: Object.assign(Object.create(null), ctx.pids)
     };
+    if (ctx.supervised) liveContext = ctx;
     ctx.emit('run:done', {
       algorithm, effectiveAlgorithm: result.effectiveAlgorithm, totalMs: result.totalMs
     });
@@ -114,12 +119,15 @@ function stopAll({ graceMs = 3000 } = {}) {
     return Promise.reject(new TypeError('graceMs must be a finite non-negative timer duration'));
   }
   if (shutdownOperation) return shutdownOperation;
-  const ctx = activeContext;
+  const ctx = activeContext || liveContext;
 
   // Publish the shared promise before abort listeners can call stopAll again.
   // An async function wrapper would return a different promise to each caller.
   shutdownOperation = Promise.resolve().then(async () => {
     if (ctx) await ctx.startingDone;
+    // Retry waits and replacement readiness must finish reacting to abort
+    // before the snapshot, otherwise a late replacement could escape cleanup.
+    if (ctx) while (ctx.recoveries.size) await Promise.allSettled([...ctx.recoveries]);
     // Include spawned services still checking readiness and owned groups whose
     // shell already exited. The startup barrier prevents a late spawn escaping.
     const byLevel = new Map();
@@ -143,10 +151,11 @@ function stopAll({ graceMs = 3000 } = {}) {
       }));
     }
     if (activeContext === ctx) activeContext = null;
+    if (liveContext === ctx) liveContext = null;
     if (failure) throw failure;
   }).finally(() => { shutdownOperation = null; });
   if (ctx) ctx.abort(new EngineError('startup aborted', { reason: 'aborted' }));
   return shutdownOperation;
 }
 
-module.exports = { runEngine, stopAll, getRunning };
+module.exports = { runEngine, stopAll, getRunning, getTreePids: processes.getTreePids };

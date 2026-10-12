@@ -1,0 +1,76 @@
+TAP version 13
+# Subtest: DOWN: hard-killed CLI leaves orphans that down removes with the PID file
+ok 1 - DOWN: hard-killed CLI leaves orphans that down removes with the PID file
+  ---
+  duration_ms: 6542.363
+  type: 'test'
+  ...
+# Subtest: DOWN: active owner blocks duplicate up and down stops the live CLI
+ok 2 - DOWN: active owner blocks duplicate up and down stops the live CLI
+  ---
+  duration_ms: 5875.8957
+  type: 'test'
+  ...
+# Subtest: DOWN: stale up warns, cleans orphan services, and publishes its new owner
+ok 3 - DOWN: stale up warns, cleans orphan services, and publishes its new owner
+  ---
+  duration_ms: 7520.3938
+  type: 'test'
+  ...
+# Subtest: RESTART: sample retries twice, keeps its healthy sibling, then leaves only the failed service down
+ok 4 - RESTART: sample retries twice, keeps its healthy sibling, then leaves only the failed service down
+  ---
+  duration_ms: 9895.6683
+  type: 'test'
+  ...
+# Subtest: RESTART: early startup crashes use the retry budget before terminal failure blocks dependents
+ok 5 - RESTART: early startup crashes use the retry budget before terminal failure blocks dependents
+  ---
+  duration_ms: 5284.6145
+  type: 'test'
+  ...
+# Subtest: RESTART: startup succeeds after two crashes and then starts its dependent
+ok 6 - RESTART: startup succeeds after two crashes and then starts its dependent
+  ---
+  duration_ms: 5291.4607
+  type: 'test'
+  ...
+# Subtest: RESTART: unexpected signal restarts once without preflight and exhaustion leaves dependents running
+ok 7 - RESTART: unexpected signal restarts once without preflight and exhaustion leaves dependents running
+  ---
+  duration_ms: 6249.1005
+  type: 'test'
+  ...
+# Subtest: RESTART: maxRetries zero leaves a post-ready crash down without replacements
+ok 8 - RESTART: maxRetries zero leaves a post-ready crash down without replacements
+  ---
+  duration_ms: 1650.9591
+  type: 'test'
+  ...
+# Subtest: RESTART: a clean code-zero exit is not restarted
+ok 9 - RESTART: a clean code-zero exit is not restarted
+  ---
+  duration_ms: 2275.1224
+  type: 'test'
+  ...
+# Subtest: RESTART: stopAll interrupts backoff without a late respawn
+ok 10 - RESTART: stopAll interrupts backoff without a late respawn
+  ---
+  duration_ms: 2325.9017
+  type: 'test'
+  ...
+# Subtest: TREE PIDS: discovers the shell, parent and grandchild for metrics and kills all descendants
+ok 11 - TREE PIDS: discovers the shell, parent and grandchild for metrics and kills all descendants
+  ---
+  duration_ms: 1470.0587
+  type: 'test'
+  ...
+1..11
+# tests 11
+# suites 0
+# pass 11
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 54835.092

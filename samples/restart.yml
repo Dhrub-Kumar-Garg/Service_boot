@@ -1,0 +1,12 @@
+version: 1
+services:
+  crashing:
+    command: node ../mock/mock-service.js --port 4131 --name crashing --delay 100 --exit-after 1500 --exit-code 1
+    ready_check: port 4131
+    ready_interval_ms: 100
+    restart: on-failure
+    max_retries: 2
+  healthy:
+    command: node ../mock/mock-service.js --port 4132 --name healthy --delay 100
+    ready_check: port 4132
+    ready_interval_ms: 100

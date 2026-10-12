@@ -1,6 +1,5 @@
 const { flatten } = require('../graph/topo');
-const processes = require('./process-manager');
-const readiness = require('./readiness');
+const { launch } = require('./recovery');
 const { EngineError } = require('./errors');
 
 function checkAborted(ctx, serviceName) {
@@ -12,21 +11,7 @@ function checkAborted(ctx, serviceName) {
 async function startOne(service, ctx) {
   try {
     checkAborted(ctx, service.name);
-    await readiness.preflightPort(service);
-    // Another worker can fail while this port check is awaiting the OS.
-    checkAborted(ctx, service.name);
-    const handle = await processes.spawnService(service, {
-      level: ctx.levels.get(service.name), emit: ctx.emit
-    });
-    const ms = await readiness.waitForReady(service, {
-      handle, signal: ctx.abortController.signal
-    });
-    // none readiness returns immediately even for an aborted signal. Do not
-    // announce readiness or start more work after shutdown has begun.
-    checkAborted(ctx, service.name);
-    ctx.emit('service:ready', { name: service.name, pid: handle.pid, ms });
-    ctx.readyMs[service.name] = ms;
-    ctx.pids[service.name] = handle.pid;
+    await launch(service, ctx);
   } catch (error) {
     if (error.reason === 'aborted') throw error;
     // Several processes can fail in the same level. Claim the first failure

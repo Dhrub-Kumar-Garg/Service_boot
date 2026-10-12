@@ -9,3 +9,6 @@ require('./engine-readiness.test');
 require('./engine-runners.test');
 require('./engine-shutdown.test');
 require('./engine-signals.test');
+require('./engine-pidfile.test');
+require('./engine-tree-pids.test');
+require('./engine-down.test');

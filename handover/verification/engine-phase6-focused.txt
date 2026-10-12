@@ -1,0 +1,94 @@
+TAP version 13
+# Subtest: DOWN: hard-killed CLI leaves orphans that down removes with the PID file
+not ok 1 - DOWN: hard-killed CLI leaves orphans that down removes with the PID file
+  ---
+  duration_ms: 662.5105
+  type: 'test'
+  location: 'C:\\Users\\Dhruv\\Desktop\\projects\\OS project\\Service_boot\\test\\engine\\down.test.js:57:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The expression evaluated to a falsy value:
+    
+      assert.ok(f.saved.services.every(service => isAlive(service.pid)))
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (C:\Users\Dhruv\Desktop\projects\OS project\Service_boot\test\engine\down.test.js:65:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: DOWN: active owner blocks duplicate up and down stops the live CLI
+ok 2 - DOWN: active owner blocks duplicate up and down stops the live CLI
+  ---
+  duration_ms: 1490.4328
+  type: 'test'
+  ...
+# Subtest: DOWN: stale up warns, cleans orphan services, and publishes its new owner
+not ok 3 - DOWN: stale up warns, cleans orphan services, and publishes its new owner
+  ---
+  duration_ms: 900.3238
+  type: 'test'
+  location: 'C:\\Users\\Dhruv\\Desktop\\projects\\OS project\\Service_boot\\test\\engine\\down.test.js:90:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    warning: stale ServiceBoot pid file (pid 19068); cleaning recorded leftovers and continuing
+    error: Port 57659 is already in use (is a previous run still alive? try "serviceboot down")
+    
+    
+    3 !== 0
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 0
+  actual: 3
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (C:\Users\Dhruv\Desktop\projects\OS project\Service_boot\test\engine\down.test.js:95:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: RESTART: sample retries twice, keeps its healthy sibling, then leaves only the failed service down
+ok 4 - RESTART: sample retries twice, keeps its healthy sibling, then leaves only the failed service down
+  ---
+  duration_ms: 6961.3005
+  type: 'test'
+  ...
+# Subtest: RESTART: early startup crashes use the retry budget before terminal failure blocks dependents
+ok 5 - RESTART: early startup crashes use the retry budget before terminal failure blocks dependents
+  ---
+  duration_ms: 2488.296
+  type: 'test'
+  ...
+# Subtest: RESTART: a clean code-zero exit is not restarted
+ok 6 - RESTART: a clean code-zero exit is not restarted
+  ---
+  duration_ms: 1308.7397
+  type: 'test'
+  ...
+# Subtest: RESTART: stopAll interrupts backoff without a late respawn
+ok 7 - RESTART: stopAll interrupts backoff without a late respawn
+  ---
+  duration_ms: 1469.9062
+  type: 'test'
+  ...
+# Subtest: TREE PIDS: discovers the shell, parent and grandchild for metrics and kills all descendants
+ok 8 - TREE PIDS: discovers the shell, parent and grandchild for metrics and kills all descendants
+  ---
+  duration_ms: 2289.5595
+  type: 'test'
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 6
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 12442.624

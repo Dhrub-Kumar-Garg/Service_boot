@@ -1,0 +1,3 @@
+Leftover mock-service processes: 0
+Leftover ServiceBoot CLI processes: 0
+Root PID file present: False
