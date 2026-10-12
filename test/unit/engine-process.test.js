@@ -296,7 +296,7 @@ test('terminatePid stops an unregistered process group created by another engine
   assert.equal(errors, '');
 });
 
-test('stopAll stops peers concurrently and tolerates repeated shutdown', options, async t => {
+test('stopAll stops all levels and tolerates repeated shutdown', options, async t => {
   const peers = [];
   for (let level = 0; level < 3; level++) {
     const { handle } = await start(t, service(`peer${level}`, 'setInterval(() => {}, 1000);'), level);

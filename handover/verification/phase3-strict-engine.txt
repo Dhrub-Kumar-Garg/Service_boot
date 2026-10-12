@@ -1,0 +1,88 @@
+TAP version 13
+# Subtest: ORDERING: sequential on diamond waits for every dependency
+ok 1 - ORDERING: sequential on diamond waits for every dependency
+  ---
+  duration_ms: 1739.6906
+  type: 'test'
+  ...
+# Subtest: ORDERING: sequential on wide waits for every dependency
+ok 2 - ORDERING: sequential on wide waits for every dependency
+  ---
+  duration_ms: 2942.9203
+  type: 'test'
+  ...
+# Subtest: ORDERING: parallel on diamond waits for every dependency
+ok 3 - ORDERING: parallel on diamond waits for every dependency
+  ---
+  duration_ms: 1400.9635
+  type: 'test'
+  ...
+# Subtest: ORDERING: parallel on wide waits for every dependency
+ok 4 - ORDERING: parallel on wide waits for every dependency
+  ---
+  duration_ms: 1139.0174
+  type: 'test'
+  ...
+# Subtest: SEQUENTIAL NO OVERLAP: five independent services have at most one in flight
+ok 5 - SEQUENTIAL NO OVERLAP: five independent services have at most one in flight
+  ---
+  duration_ms: 1533.4699
+  type: 'test'
+  ...
+# Subtest: PARALLEL IS CONCURRENT AND FASTER: six delayed roots beat sequential
+ok 6 - PARALLEL IS CONCURRENT AND FASTER: six delayed roots beat sequential
+  ---
+  duration_ms: 4640.1277
+  type: 'test'
+  ...
+# Subtest: MAX-PARALLEL: cap two allows all six services to become ready
+ok 7 - MAX-PARALLEL: cap two allows all six services to become ready
+  ---
+  duration_ms: 1054.7147
+  type: 'test'
+  ...
+# Subtest: CRASH DURING STARTUP: bad service emits crash and all started PIDs die
+ok 8 - CRASH DURING STARTUP: bad service emits crash and all started PIDs die
+  ---
+  duration_ms: 441.4333
+  type: 'test'
+  ...
+# Subtest: READY TIMEOUT: never-ready rejects within four seconds and cleans up
+ok 9 - READY TIMEOUT: never-ready rejects within four seconds and cleans up
+  ---
+  duration_ms: 1267.0583
+  type: 'test'
+  ...
+# Subtest: DEPENDENT NOT STARTED: failing X prevents Y from spawning
+ok 10 - DEPENDENT NOT STARTED: failing X prevents Y from spawning
+  ---
+  duration_ms: 185.1727
+  type: 'test'
+  ...
+# Subtest: STOPALL: wide graph exits once per service with dependents before dependencies
+ok 11 - STOPALL: wide graph exits once per service with dependents before dependencies
+  ---
+  duration_ms: 1291.0239
+  type: 'test'
+  ...
+# Subtest: SIGKILL ESCALATION: ignore-sigterm is dead within two seconds
+ok 12 - SIGKILL ESCALATION: ignore-sigterm is dead within two seconds
+  ---
+  duration_ms: 361.302
+  type: 'test'
+  ...
+# Subtest: NO DOUBLE-SPAWN: each service starts exactly once in a normal run
+ok 13 - NO DOUBLE-SPAWN: each service starts exactly once in a normal run
+  ---
+  duration_ms: 1177.3765
+  type: 'test'
+  ...
+1..13
+# tests 13
+# suites 0
+# pass 13
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 19263.642

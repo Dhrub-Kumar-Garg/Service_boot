@@ -6,3 +6,4 @@ require('./mock.test');
 require('./engine-helpers.test');
 require('./engine-process.test');
 require('./engine-readiness.test');
+require('./engine-runners.test');

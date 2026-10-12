@@ -1,0 +1,90 @@
+TAP version 13
+# Subtest: ORDERING: sequential on diamond waits for every dependency
+ok 1 - ORDERING: sequential on diamond waits for every dependency
+  ---
+  duration_ms: 1700.9034
+  type: 'test'
+  ...
+# Subtest: ORDERING: sequential on wide waits for every dependency
+ok 2 - ORDERING: sequential on wide waits for every dependency
+  ---
+  duration_ms: 2955.7041
+  type: 'test'
+  ...
+# Subtest: ORDERING: parallel on diamond waits for every dependency
+ok 3 - ORDERING: parallel on diamond waits for every dependency
+  ---
+  duration_ms: 1499.9425
+  type: 'test'
+  ...
+# Subtest: ORDERING: parallel on wide waits for every dependency
+ok 4 - ORDERING: parallel on wide waits for every dependency
+  ---
+  duration_ms: 1188.3862
+  type: 'test'
+  ...
+# Subtest: ORDERING: adaptive on diamond waits for every dependency
+not ok 5 - ORDERING: adaptive on diamond waits for every dependency
+  ---
+  duration_ms: 3.7496
+  type: 'test'
+  location: 'C:\\Users\\Dhruv\\Desktop\\projects\\OS project\\Service_boot\\test\\engine\\engine.contract.test.js:132:5'
+  failureType: 'testCodeFailure'
+  error: 'NOT IMPLEMENTED: Person 2 implements this (see CONTRACT.md section 5)'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    runEngine (C:\Users\Dhruv\Desktop\projects\OS project\Service_boot\src\engine\index.js:73:43)
+    TestContext.<anonymous> (C:\Users\Dhruv\Desktop\projects\OS project\Service_boot\test\engine\engine.contract.test.js:135:28)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: ORDERING: adaptive on wide waits for every dependency
+not ok 6 - ORDERING: adaptive on wide waits for every dependency
+  ---
+  duration_ms: 8.0433
+  type: 'test'
+  location: 'C:\\Users\\Dhruv\\Desktop\\projects\\OS project\\Service_boot\\test\\engine\\engine.contract.test.js:132:5'
+  failureType: 'testCodeFailure'
+  error: 'NOT IMPLEMENTED: Person 2 implements this (see CONTRACT.md section 5)'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    runEngine (C:\Users\Dhruv\Desktop\projects\OS project\Service_boot\src\engine\index.js:73:43)
+    TestContext.<anonymous> (C:\Users\Dhruv\Desktop\projects\OS project\Service_boot\test\engine\engine.contract.test.js:135:28)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: SEQUENTIAL NO OVERLAP: five independent services have at most one in flight
+ok 7 - SEQUENTIAL NO OVERLAP: five independent services have at most one in flight
+  ---
+  duration_ms: 1481.9135
+  type: 'test'
+  ...
+# Subtest: PARALLEL IS CONCURRENT AND FASTER: six delayed roots beat sequential
+ok 8 - PARALLEL IS CONCURRENT AND FASTER: six delayed roots beat sequential
+  ---
+  duration_ms: 4630.4336
+  type: 'test'
+  ...
+# Subtest: MAX-PARALLEL: cap two allows all six services to become ready
+ok 9 - MAX-PARALLEL: cap two allows all six services to become ready
+  ---
+  duration_ms: 1061.848
+  type: 'test'
+  ...
+# Subtest: NO DOUBLE-SPAWN: each service starts exactly once in a normal run
+ok 10 - NO DOUBLE-SPAWN: each service starts exactly once in a normal run
+  ---
+  duration_ms: 1152.6472
+  type: 'test'
+  ...
+1..10
+# tests 10
+# suites 0
+# pass 8
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 15770.0068

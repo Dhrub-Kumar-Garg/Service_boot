@@ -105,15 +105,18 @@ test('CLI --help and -h print usage and exit 0', () => {
   }
 });
 
-test('CLI up with the engine stub exits 3 with its exact message', () => {
+test('CLI default adaptive up remains pending Phase 4 and exits 3 with its exact message', () => {
   const result = runCli(['up', '--config', 'samples/small.yml']);
   assert.equal(result.status, 3);
   assert.equal(result.stderr.trim(), `error: ${stubMessage}`);
-  assert.equal(result.stdout, '');
+  assert.match(result.stdout, /^run:start algorithm=adaptive total=3 ts=/);
+  assert.match(result.stdout, /run:failed error=NOT IMPLEMENTED:/);
 });
 
-test('runEngine remains a stub and stopAll safely handles an empty registry', async () => {
-  await assert.rejects(engine.runEngine(), { message: stubMessage });
+test('runEngine validates missing options and stopAll safely handles an empty registry', async () => {
+  await assert.rejects(engine.runEngine(), {
+    name: 'TypeError', message: 'algorithm must be sequential, parallel, or adaptive'
+  });
   await engine.stopAll();
   assert.deepEqual(engine.getRunning(), []);
 });
@@ -130,8 +133,17 @@ test('CLI accepts all three algorithms and positive max-parallel values', () => 
   for (const algorithm of ['sequential', 'parallel', 'adaptive']) {
     const result = runCli(['up', '--config', 'samples/small.yml', '--algorithm', algorithm,
       '--max-parallel', '2', '--exit-after-ready']);
-    assert.equal(result.status, 3);
-    assert.equal(result.stderr.trim(), `error: ${stubMessage}`);
+    if (algorithm === 'adaptive') {
+      assert.equal(result.status, 3);
+      assert.equal(result.stderr.trim(), `error: ${stubMessage}`);
+    } else {
+      assert.equal(result.status, 0, result.stderr);
+      assert.equal(result.stderr, '');
+      assert.match(result.stdout, new RegExp(`Ready: 3 services .*algorithm=${algorithm}`));
+      assert.equal((result.stdout.match(/^service:starting /gm) || []).length, 3);
+      assert.equal((result.stdout.match(/^service:ready /gm) || []).length, 3);
+      assert.equal((result.stdout.match(/^service:exited /gm) || []).length, 3);
+    }
   }
 });
 
