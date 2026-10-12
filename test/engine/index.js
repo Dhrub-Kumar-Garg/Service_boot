@@ -1,2 +1,2 @@
-// Person 2 can add engine tests here, or require other test files.
-module.exports = {};
+// The package script targets this directory, so load the acceptance suite here.
+require('./engine.contract.test');

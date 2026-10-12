@@ -3,3 +3,4 @@ require('./config.test');
 require('./graph.test');
 require('./cli.test');
 require('./mock.test');
+require('./engine-helpers.test');
