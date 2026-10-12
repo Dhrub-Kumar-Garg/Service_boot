@@ -1,2 +1,2 @@
-// Add unit tests here, or require other test files from this entry point.
-module.exports = {};
+// The package script targets this directory, so load each unit suite here.
+require('./config.test');
