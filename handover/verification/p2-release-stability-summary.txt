@@ -1,0 +1,11 @@
+OS=Windows; Node=v22.16.0; npm=10.9.2; NODE_OPTIONS=--unhandled-rejections=strict; ENGINE_PATH=
+ROUND 1 / unit: exit=0 wallMs=38202 remainingTestOrMockProcesses=0 pidFilePresent=False
+ROUND 1 / engine: exit=0 wallMs=122777 remainingTestOrMockProcesses=0 pidFilePresent=False
+ROUND 2 / unit: exit=0 wallMs=39243 remainingTestOrMockProcesses=0 pidFilePresent=False
+ROUND 2 / engine: exit=0 wallMs=116931 remainingTestOrMockProcesses=0 pidFilePresent=False
+ROUND 3 / unit: exit=0 wallMs=41844 remainingTestOrMockProcesses=0 pidFilePresent=False
+ROUND 3 / engine: exit=0 wallMs=120513 remainingTestOrMockProcesses=0 pidFilePresent=False
+ROUND 4 / unit: exit=0 wallMs=38404 remainingTestOrMockProcesses=0 pidFilePresent=False
+ROUND 4 / engine: exit=0 wallMs=117970 remainingTestOrMockProcesses=0 pidFilePresent=False
+ROUND 5 / unit: exit=0 wallMs=42458 remainingTestOrMockProcesses=0 pidFilePresent=False
+ROUND 5 / engine: exit=0 wallMs=121056 remainingTestOrMockProcesses=0 pidFilePresent=False

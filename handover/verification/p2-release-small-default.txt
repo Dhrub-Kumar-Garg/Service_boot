@@ -1,0 +1,19 @@
+run:start algorithm=adaptive total=3 ts=110.9975
+adaptive:decision width=2 depth=2 chosen=sequential reason=Width (W) <= Depth (D) x 2. Graph is small or mostly linear. Auto-selecting SEQUENTIAL execution to save concurrency overhead. ts=113.1957
+service:starting postgres pid=8596 level=0 ts=143.9543
+service:log postgres stream=stdout line=[postgres] starting ts=263.895
+service:log postgres stream=stdout line=[postgres] listening on 127.0.0.1:4101 ts=608.5709
+service:ready postgres pid=8596 ms=507.08060000000006 ts=657.9163
+service:starting redis pid=37288 level=0 ts=687.86
+service:log redis stream=stdout line=[redis] starting ts=837.4044
+service:log redis stream=stdout line=[redis] listening on 127.0.0.1:4102 ts=1181.1183
+service:ready redis pid=37288 ms=505.53100000000006 ts=1201.7953
+service:starting api pid=28748 level=1 ts=1228.6327
+service:log api stream=stdout line=[api] starting ts=1342.6663
+service:log api stream=stdout line=[api] listening on 127.0.0.1:4103 ts=1368.9597
+service:ready api pid=28748 ms=523.0056000000002 ts=1756.6153
+run:done algorithm=adaptive effectiveAlgorithm=sequential totalMs=1643.615 ts=1756.8313
+Ready: 3 services (algorithm=adaptive, effectiveAlgorithm=sequential, totalMs=1643.615)
+service:exited api code=1 signal=null ts=2316.5536
+service:exited postgres code=1 signal=null ts=2886.9885
+service:exited redis code=1 signal=null ts=2912.85

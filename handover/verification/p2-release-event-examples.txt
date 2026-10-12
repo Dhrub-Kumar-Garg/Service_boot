@@ -1,0 +1,10 @@
+wide-adaptive: run:start algorithm=adaptive total=10 ts=135.1708
+wide-adaptive: adaptive:decision width=8 depth=2 chosen=parallel reason=Width (W) > Depth (D) x 2. High independent concurrency detected. Auto-selecting PARALLEL execution. ts=137.4064
+wide-adaptive: service:starting w1 pid=3116 level=0 ts=185.065
+wide-adaptive: service:log w1 stream=stdout line=[w1] starting ts=510.0425
+wide-adaptive: service:ready w1 pid=3116 ms=831.1 ts=1026.9537
+startup-crash: service:failed crash reason=crash error=exited with code 1 before becoming ready\n[crash] starting ts=328.12
+wide-adaptive: service:exited api1 code=1 signal=null ts=2636.4347
+wide-adaptive: run:done algorithm=adaptive effectiveAlgorithm=parallel totalMs=2037.7591000000002 ts=2175.2179
+startup-crash: run:failed error=exited with code 1 before becoming ready\n[crash] starting ts=1230.0023
+restart-events: service:restarting crashing attempt=1 maxRetries=2 code=1 signal=null ts=2747.6204

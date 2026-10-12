@@ -1,0 +1,14 @@
+CONFIG [startup-kill]: {"version":1,"services":{"startup-a":{"command":"\"C:\\Program Files\\nodejs\\node.exe\" \"C:\\Users\\Dhruv\\Desktop\\projects\\OS project\\Service_boot\\mock\\mock-service.js\" --port 60830 --name startup-a --delay 10000","ready_check":"port 60830"},"startup-b":{"command":"\"C:\\Program Files\\nodejs\\node.exe\" \"C:\\Users\\Dhruv\\Desktop\\projects\\OS project\\Service_boot\\mock\\mock-service.js\" --port 60831 --name startup-b --delay 10000","ready_check":"port 60831"}}}
+COMMAND [startup up]: "C:\Program Files\nodejs\node.exe" "C:\Users\Dhruv\Desktop\projects\OS project\Service_boot\bin\serviceboot.js" up --config C:\Users\Dhruv\AppData\Local\Temp\serviceboot-release-drill-yFYdGD\serviceboot.yml --algorithm parallel
+run:start algorithm=parallel total=2 ts=89.5073
+service:starting startup-a pid=20588 level=0 ts=119.6891
+service:starting startup-b pid=35756 level=0 ts=147.2131
+service:log startup-a stream=stdout line=[startup-a] starting ts=219.8628
+service:log startup-b stream=stdout line=[startup-b] starting ts=245.9627
+ACTION: child.kill('SIGKILL') on CLI pid=28044; readyEvents=0
+EXIT [startup up]: code=null signal=SIGKILL
+PID FILE AFTER HARD KILL: {"cliPid":28044,"startedAt":"2026-10-12T16:41:42.233Z","config":"C:\\Users\\Dhruv\\AppData\\Local\\Temp\\serviceboot-release-drill-yFYdGD\\serviceboot.yml","services":[{"name":"startup-a","pid":20588,"level":0},{"name":"startup-b","pid":35756,"level":0}]}
+COMMAND [down after hard kill]: "C:\Program Files\nodejs\node.exe" "C:\Users\Dhruv\Desktop\projects\OS project\Service_boot\bin\serviceboot.js" down
+ServiceBoot stopped
+EXIT [down after hard kill]: code=0 signal=null
+CHECK [startup-kill]: observedPids=[20588,35756,32724,37676,28712,3984] alive=0 pidFilePresent=false

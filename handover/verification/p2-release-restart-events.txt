@@ -1,0 +1,32 @@
+COMMAND [real restarting up]: "C:\Program Files\nodejs\node.exe" "C:\Users\Dhruv\Desktop\projects\OS project\Service_boot\bin\serviceboot.js" up --config samples/restart.yml --algorithm parallel
+run:start algorithm=parallel total=2 ts=96.4936
+service:starting crashing pid=37428 level=0 ts=139.8419
+service:starting healthy pid=18396 level=0 ts=174.3131
+service:log crashing stream=stdout line=[crashing] starting ts=259.7193
+service:log healthy stream=stdout line=[healthy] starting ts=283.8828
+service:log crashing stream=stdout line=[crashing] listening on 127.0.0.1:4131 ts=397.4208
+service:log healthy stream=stdout line=[healthy] listening on 127.0.0.1:4132 ts=411.6655
+service:ready crashing pid=37428 ms=358.3545 ts=503.8628
+service:ready healthy pid=18396 ms=326.1935 ts=504.5809
+run:done algorithm=parallel effectiveAlgorithm=parallel totalMs=406.81579999999997 ts=505.344
+Ready: 2 services (algorithm=parallel, effectiveAlgorithm=parallel, totalMs=406.81579999999997)
+service:exited crashing code=1 signal=null ts=1792.1109
+service:restarting crashing attempt=1 maxRetries=2 code=1 signal=null ts=2747.6204
+service:starting crashing pid=37104 level=0 ts=3256.2699
+service:log crashing stream=stdout line=[crashing] starting ts=3382.4533
+service:log crashing stream=stdout line=[crashing] listening on 127.0.0.1:4131 ts=3512.3346
+service:ready crashing pid=37104 ms=336.9928 ts=3597.9176
+service:exited crashing code=1 signal=null ts=4913.3098
+service:restarting crashing attempt=2 maxRetries=2 code=1 signal=null ts=5889.0847
+service:starting crashing pid=21400 level=0 ts=6899.3082
+service:log crashing stream=stdout line=[crashing] starting ts=7057.9501
+service:log crashing stream=stdout line=[crashing] listening on 127.0.0.1:4131 ts=7198.9612
+service:ready crashing pid=21400 ms=330.35090000000037 ts=7240.0555
+service:exited crashing code=1 signal=null ts=8593.6075
+service:failed crashing reason=crash error=exited with code 1 after becoming ready\n[crashing] starting\n[crashing] listening on 127.0.0.1:4131 ts=9557.7282
+CHECK: healthy sibling pid=18396 remains alive after crash exhaustion
+COMMAND [down after restart capture]: "C:\Program Files\nodejs\node.exe" "C:\Users\Dhruv\Desktop\projects\OS project\Service_boot\bin\serviceboot.js" down
+EXIT [real restarting up]: code=1 signal=null
+ServiceBoot stopped
+EXIT [down after restart capture]: code=0 signal=null
+CHECK [restart-events]: observedPids=[37428,18396,37104,21400,26024,11568] alive=0 pidFilePresent=false

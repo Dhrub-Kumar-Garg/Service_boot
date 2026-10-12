@@ -1,0 +1,206 @@
+
+> serviceboot@0.1.0 test:engine
+> node --test test/engine/
+
+TAP version 13
+# Subtest: ORDERING: sequential on diamond waits for every dependency
+ok 1 - ORDERING: sequential on diamond waits for every dependency
+  ---
+  duration_ms: 2710.4341
+  type: 'test'
+  ...
+# Subtest: ORDERING: sequential on wide waits for every dependency
+ok 2 - ORDERING: sequential on wide waits for every dependency
+  ---
+  duration_ms: 4662.6317
+  type: 'test'
+  ...
+# Subtest: ORDERING: parallel on diamond waits for every dependency
+ok 3 - ORDERING: parallel on diamond waits for every dependency
+  ---
+  duration_ms: 2306.7787
+  type: 'test'
+  ...
+# Subtest: ORDERING: parallel on wide waits for every dependency
+ok 4 - ORDERING: parallel on wide waits for every dependency
+  ---
+  duration_ms: 2370.2469
+  type: 'test'
+  ...
+# Subtest: ORDERING: adaptive on diamond waits for every dependency
+ok 5 - ORDERING: adaptive on diamond waits for every dependency
+  ---
+  duration_ms: 3029.4989
+  type: 'test'
+  ...
+# Subtest: ORDERING: adaptive on wide waits for every dependency
+ok 6 - ORDERING: adaptive on wide waits for every dependency
+  ---
+  duration_ms: 2346.793
+  type: 'test'
+  ...
+# Subtest: SEQUENTIAL NO OVERLAP: five independent services have at most one in flight
+ok 7 - SEQUENTIAL NO OVERLAP: five independent services have at most one in flight
+  ---
+  duration_ms: 2624.448
+  type: 'test'
+  ...
+# Subtest: PARALLEL IS CONCURRENT AND FASTER: six delayed roots beat sequential
+ok 8 - PARALLEL IS CONCURRENT AND FASTER: six delayed roots beat sequential
+  ---
+  duration_ms: 6509.7288
+  type: 'test'
+  ...
+# Subtest: MAX-PARALLEL: cap two allows all six services to become ready
+ok 9 - MAX-PARALLEL: cap two allows all six services to become ready
+  ---
+  duration_ms: 2035.9478
+  type: 'test'
+  ...
+# Subtest: ADAPTIVE: wide selects parallel and emits the exact reason
+ok 10 - ADAPTIVE: wide selects parallel and emits the exact reason
+  ---
+  duration_ms: 2468.0733
+  type: 'test'
+  ...
+# Subtest: ADAPTIVE: linear selects sequential and emits the exact reason
+ok 11 - ADAPTIVE: linear selects sequential and emits the exact reason
+  ---
+  duration_ms: 4345.156
+  type: 'test'
+  ...
+# Subtest: CRASH DURING STARTUP: bad service emits crash and all started PIDs die
+ok 12 - CRASH DURING STARTUP: bad service emits crash and all started PIDs die
+  ---
+  duration_ms: 1369.2614
+  type: 'test'
+  ...
+# Subtest: READY TIMEOUT: never-ready rejects within four seconds and cleans up
+ok 13 - READY TIMEOUT: never-ready rejects within four seconds and cleans up
+  ---
+  duration_ms: 1619.0443
+  type: 'test'
+  ...
+# Subtest: DEPENDENT NOT STARTED: failing X prevents Y from spawning
+ok 14 - DEPENDENT NOT STARTED: failing X prevents Y from spawning
+  ---
+  duration_ms: 1258.4972
+  type: 'test'
+  ...
+# Subtest: STOPALL: wide graph exits once per service with dependents before dependencies
+ok 15 - STOPALL: wide graph exits once per service with dependents before dependencies
+  ---
+  duration_ms: 2607.0593
+  type: 'test'
+  ...
+# Subtest: SIGKILL ESCALATION: ignore-sigterm is dead within two seconds
+ok 16 - SIGKILL ESCALATION: ignore-sigterm is dead within two seconds
+  ---
+  duration_ms: 898.5587
+  type: 'test'
+  ...
+# Subtest: CLI SIGINT: real CLI stops all children and exits within five seconds
+ok 17 - CLI SIGINT: real CLI stops all children and exits within five seconds # SKIP
+  ---
+  duration_ms: 0.4112
+  type: 'test'
+  ...
+# Subtest: NO DOUBLE-SPAWN: each service starts exactly once in a normal run
+ok 18 - NO DOUBLE-SPAWN: each service starts exactly once in a normal run
+  ---
+  duration_ms: 3098.5287
+  type: 'test'
+  ...
+# Subtest: CLI SIGINT callbacks: real graceful cleanup exits 130 and kills the wide service tree
+ok 19 - CLI SIGINT callbacks: real graceful cleanup exits 130 and kills the wide service tree
+  ---
+  duration_ms: 3911.0206
+  type: 'test'
+  ...
+# Subtest: CLI SIGINT callbacks: real forced cleanup exits 130 and kills the wide service tree
+ok 20 - CLI SIGINT callbacks: real forced cleanup exits 130 and kills the wide service tree
+  ---
+  duration_ms: 2807.5286
+  type: 'test'
+  ...
+# Subtest: DOWN: hard-killed CLI leaves orphans that down removes with the PID file
+ok 21 - DOWN: hard-killed CLI leaves orphans that down removes with the PID file
+  ---
+  duration_ms: 7055.7016
+  type: 'test'
+  ...
+# Subtest: DOWN: active owner blocks duplicate up and down stops the live CLI
+ok 22 - DOWN: active owner blocks duplicate up and down stops the live CLI
+  ---
+  duration_ms: 4410.9651
+  type: 'test'
+  ...
+# Subtest: DOWN: stale up warns, cleans orphan services, and publishes its new owner
+ok 23 - DOWN: stale up warns, cleans orphan services, and publishes its new owner
+  ---
+  duration_ms: 7678.0303
+  type: 'test'
+  ...
+# Subtest: DOWN: CLI replaces the saved PID on recovery and down stops the latest process
+ok 24 - DOWN: CLI replaces the saved PID on recovery and down stops the latest process
+  ---
+  duration_ms: 9040.0073
+  type: 'test'
+  ...
+# Subtest: RESTART: sample retries twice, keeps its healthy sibling, then leaves only the failed service down
+ok 25 - RESTART: sample retries twice, keeps its healthy sibling, then leaves only the failed service down
+  ---
+  duration_ms: 9988.8746
+  type: 'test'
+  ...
+# Subtest: RESTART: early startup crashes use the retry budget before terminal failure blocks dependents
+ok 26 - RESTART: early startup crashes use the retry budget before terminal failure blocks dependents
+  ---
+  duration_ms: 5538.3234
+  type: 'test'
+  ...
+# Subtest: RESTART: startup succeeds after two crashes and then starts its dependent
+ok 27 - RESTART: startup succeeds after two crashes and then starts its dependent
+  ---
+  duration_ms: 5287.9162
+  type: 'test'
+  ...
+# Subtest: RESTART: unexpected signal restarts once without preflight and exhaustion leaves dependents running
+ok 28 - RESTART: unexpected signal restarts once without preflight and exhaustion leaves dependents running
+  ---
+  duration_ms: 6324.9673
+  type: 'test'
+  ...
+# Subtest: RESTART: maxRetries zero leaves a post-ready crash down without replacements
+ok 29 - RESTART: maxRetries zero leaves a post-ready crash down without replacements
+  ---
+  duration_ms: 1642.6234
+  type: 'test'
+  ...
+# Subtest: RESTART: a clean code-zero exit is not restarted
+ok 30 - RESTART: a clean code-zero exit is not restarted
+  ---
+  duration_ms: 2192.6311
+  type: 'test'
+  ...
+# Subtest: RESTART: stopAll interrupts backoff without a late respawn
+ok 31 - RESTART: stopAll interrupts backoff without a late respawn
+  ---
+  duration_ms: 2346.3661
+  type: 'test'
+  ...
+# Subtest: TREE PIDS: discovers the shell, parent and grandchild for metrics and kills all descendants
+ok 32 - TREE PIDS: discovers the shell, parent and grandchild for metrics and kills all descendants
+  ---
+  duration_ms: 1577.8442
+  type: 'test'
+  ...
+1..32
+# tests 32
+# suites 0
+# pass 31
+# fail 0
+# cancelled 0
+# skipped 1
+# todo 0
+# duration_ms 116249.3533

@@ -1,0 +1,12 @@
+CONFIG [startup-crash]: {"version":1,"services":{"crash":{"command":"\"C:\\Program Files\\nodejs\\node.exe\" \"C:\\Users\\Dhruv\\Desktop\\projects\\OS project\\Service_boot\\mock\\mock-service.js\" --port 60842 --name crash --delay 5000 --exit-after 100 --exit-code 1","ready_check":"port 60842"},"dependent":{"command":"\"C:\\Program Files\\nodejs\\node.exe\" \"C:\\Users\\Dhruv\\Desktop\\projects\\OS project\\Service_boot\\mock\\mock-service.js\" --port 60843 --name dependent ","depends_on":["crash"],"ready_check":"port 60843"}}}
+COMMAND [startup crash up]: "C:\Program Files\nodejs\node.exe" "C:\Users\Dhruv\Desktop\projects\OS project\Service_boot\bin\serviceboot.js" up --config C:\Users\Dhruv\AppData\Local\Temp\serviceboot-release-drill-1xJ2x1\serviceboot.yml --algorithm parallel
+run:start algorithm=parallel total=2 ts=89.2741
+service:starting crash pid=36964 level=0 ts=124.028
+service:log crash stream=stdout line=[crash] starting ts=215.9997
+service:exited crash code=1 signal=null ts=327.0044
+service:failed crash reason=crash error=exited with code 1 before becoming ready\n[crash] starting ts=328.12
+run:failed error=exited with code 1 before becoming ready\n[crash] starting ts=1230.0023
+error: exited with code 1 before becoming ready
+[crash] starting
+EXIT [startup crash up]: code=3 signal=null
+CHECK [startup-crash]: observedPids=[36964] alive=0 pidFilePresent=false

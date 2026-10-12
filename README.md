@@ -12,7 +12,7 @@ npm test
 npm run test:engine
 ```
 
-Phase 6 verification on Windows with Node 22.16.0: `npm test` has 172 tests, 168 passing and four platform skips. The full engine suite has 32 tests, 31 passing and one Windows SIGINT skip. Final checks used `NODE_OPTIONS=--unhandled-rejections=strict`, with no warnings or unhandled rejections. No mock-service or ServiceBoot CLI processes remained. See the [Person 2 handover and actual output](handover/02-person2-to-person3.md). The [Phase 5 handover](handover/02-person2-phase5.md) also records native console checks with one and two Ctrl+C presses.
+Person 2 release verification on Windows with Node 22.16.0: five consecutive `npm test`/`npm run test:engine` pairs passed under `NODE_OPTIONS=--unhandled-rejections=strict`. Each pair had 168 unit passes/four POSIX skips and 31 engine passes/one POSIX SIGINT skip, with no warnings, hangs or remaining test/mock processes. Real sample runs and hard-kill/crash/busy-port drills also cleaned their processes. See the [Person 2 handover and actual outputs](handover/02-person2-to-person3.md). The [Phase 5 handover](handover/02-person2-phase5.md) records earlier native Windows console Ctrl+C checks. Linux/macOS verification remains a manual follow-up.
 
 ## Commands
 
@@ -25,6 +25,29 @@ node bin/serviceboot.js down
 `plan` works now; add `--json` for the complete plan. `up` boots services and leaves them running; use `--exit-after-ready` to stop and exit after successful startup. `--max-parallel N` limits simultaneous startups until readiness. Defaults are `./serviceboot.yml` and algorithm `adaptive`, which chooses parallel when graph width exceeds twice its depth and otherwise chooses sequential. Use `--help` for usage.
 
 During `up`, the first Ctrl+C requests shutdown and exits 130 after cleanup. POSIX SIGTERM requests shutdown and exit 143; Windows does not deliver SIGTERM as a console signal. A second interrupt forces synchronous process-tree cleanup and immediate CLI exit. An uncaught exception or unhandled rejection prints an error, attempts cleanup, and exits 3.
+
+## Engine
+
+Sequential starts one service at a time, waiting for readiness. Parallel starts
+services together within each dependency level, with `--max-parallel` limiting
+startups until ready; the entire level finishes before the next. Adaptive chooses
+parallel when width > 2 × depth, otherwise sequential. `--exit-after-ready`
+measures startup, then stops the services and exits.
+
+`up` records process leaders in `.serviceboot/pids.json`; run `down` from the same
+working directory to stop a live CLI or recover a hard-killed run. Shutdown stops
+dependents before dependencies and cancels readiness/retry waits. Windows uses
+forced process-tree termination because it cannot deliver graceful SIGTERM.
+
+`restart: on-failure` retries nonzero exits/unexpected signals up to `max_retries`,
+with backoff of 500 ms × attempt. The budget is shared across startup and later
+recovery. After-ready exhaustion leaves that service down; siblings continue and
+dependents are not restarted. A clean code-zero exit does not restart.
+
+Exit codes: 0 success, 1 config/cycle error, 2 usage error, 3 runtime/engine error;
+SIGINT shutdown exits 130 and POSIX SIGTERM shutdown exits 143. All current APIs,
+events and limitations are in [the contract](CONTRACT.md) and
+[Person 3's handover](handover/02-person2-to-person3.md).
 
 ## Folder map
 

@@ -1,0 +1,5 @@
+Real CLI failure/restart drills; strict rejection mode
+drill=startup-kill exit=0 remainingMockOrCliProcesses=0 pidFilePresent=False
+drill=startup-crash exit=0 remainingMockOrCliProcesses=0 pidFilePresent=False
+drill=busy-port exit=0 remainingMockOrCliProcesses=0 pidFilePresent=False
+drill=restart-events exit=0 remainingMockOrCliProcesses=0 pidFilePresent=False

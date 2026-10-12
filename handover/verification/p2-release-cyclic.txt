@@ -1,0 +1,1 @@
+error: Circular dependency detected: a -> b -> c -> a

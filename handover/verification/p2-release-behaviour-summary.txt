@@ -1,0 +1,17 @@
+Real behaviour commands; strict rejection mode; timings from Ready totalMs (startup only)
+node bin/serviceboot.js up --config samples/wide.yml --algorithm sequential --exit-after-ready
+Ready: 10 services (algorithm=sequential, effectiveAlgorithm=sequential, totalMs=9668.395499999999)
+exit=0 remainingMockOrCliProcesses=0 pidFilePresent=False
+node bin/serviceboot.js up --config samples/wide.yml --algorithm parallel --exit-after-ready
+Ready: 10 services (algorithm=parallel, effectiveAlgorithm=parallel, totalMs=2040.5816)
+exit=0 remainingMockOrCliProcesses=0 pidFilePresent=False
+node bin/serviceboot.js up --config samples/wide.yml --algorithm adaptive --exit-after-ready
+Ready: 10 services (algorithm=adaptive, effectiveAlgorithm=parallel, totalMs=2037.7591000000002)
+exit=0 remainingMockOrCliProcesses=0 pidFilePresent=False
+node bin/serviceboot.js up --config samples/linear.yml --algorithm adaptive --exit-after-ready
+Ready: 5 services (algorithm=adaptive, effectiveAlgorithm=sequential, totalMs=2739.2062)
+exit=0 remainingMockOrCliProcesses=0 pidFilePresent=False
+node bin/serviceboot.js up --config samples/small.yml --algorithm adaptive --exit-after-ready
+Ready: 3 services (algorithm=adaptive, effectiveAlgorithm=sequential, totalMs=1694.297)
+exit=0 remainingMockOrCliProcesses=0 pidFilePresent=False
+cyclic exit=1

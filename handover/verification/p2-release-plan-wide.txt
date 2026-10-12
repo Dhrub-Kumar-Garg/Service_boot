@@ -1,0 +1,7 @@
+Config: samples/wide.yml  (10 services)
+Start order (levels):
+  Level 0: w1, w2, w3, w4, w5, w6, w7, w8
+  Level 1: api1, api2
+Graph analysis: depth=2 width=8
+Adaptive decision: PARALLEL
+Width (W) > Depth (D) x 2. High independent concurrency detected. Auto-selecting PARALLEL execution.

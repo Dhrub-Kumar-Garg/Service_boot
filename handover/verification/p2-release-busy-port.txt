@@ -1,0 +1,14 @@
+COMMAND [manually started busy mock]: "C:\Program Files\nodejs\node.exe" "C:\Users\Dhruv\Desktop\projects\OS project\Service_boot\mock\mock-service.js" --port 53268 --name busy-drill --delay 0
+[busy-drill] starting
+[busy-drill] listening on 127.0.0.1:53268
+CONFIG [busy-port]: {"version":1,"services":{"busy":{"command":"\"C:\\Program Files\\nodejs\\node.exe\" \"C:\\Users\\Dhruv\\Desktop\\projects\\OS project\\Service_boot\\mock\\mock-service.js\" --port 53268 --name second-process ","ready_check":"port 53268"}}}
+COMMAND [busy port up]: "C:\Program Files\nodejs\node.exe" "C:\Users\Dhruv\Desktop\projects\OS project\Service_boot\bin\serviceboot.js" up --config C:\Users\Dhruv\AppData\Local\Temp\serviceboot-release-drill-P1j5xH\serviceboot.yml
+run:start algorithm=adaptive total=1 ts=84.2345
+adaptive:decision width=1 depth=1 chosen=sequential reason=Width (W) <= Depth (D) x 2. Graph is small or mostly linear. Auto-selecting SEQUENTIAL execution to save concurrency overhead. ts=86.4783
+service:failed busy reason=spawn error=Port 53268 is already in use (is a previous run still alive? try "serviceboot down") ts=91.9366
+run:failed error=Port 53268 is already in use (is a previous run still alive? try "serviceboot down") ts=92.7312
+error: Port 53268 is already in use (is a previous run still alive? try "serviceboot down")
+EXIT [busy port up]: code=3 signal=null
+ACTION: stop the manually started mock pid=33188
+EXIT [manually started busy mock]: code=null signal=SIGKILL
+CHECK [busy-port]: observedPids=[33188] alive=0 pidFilePresent=false

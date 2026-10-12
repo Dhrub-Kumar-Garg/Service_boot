@@ -1,0 +1,29 @@
+run:start algorithm=adaptive total=5 ts=102.4689
+adaptive:decision width=1 depth=5 chosen=sequential reason=Width (W) <= Depth (D) x 2. Graph is small or mostly linear. Auto-selecting SEQUENTIAL execution to save concurrency overhead. ts=104.5768
+service:starting a pid=29596 level=0 ts=145.7111
+service:log a stream=stdout line=[a] starting ts=298.0509
+service:log a stream=stdout line=[a] listening on 127.0.0.1:4104 ts=619.643
+service:ready a pid=29596 ms=506.6738 ts=662.2566
+service:starting b pid=26464 level=1 ts=680.0181
+service:log b stream=stdout line=[b] starting ts=804.5751
+service:log b stream=stdout line=[b] listening on 127.0.0.1:4105 ts=1150.1491
+service:ready b pid=26464 ms=510.03319999999997 ts=1197.6381
+service:starting c pid=29172 level=2 ts=1232.0887
+service:log c stream=stdout line=[c] starting ts=1363.1269
+service:log c stream=stdout line=[c] listening on 127.0.0.1:4106 ts=1702.9867
+service:ready c pid=29172 ms=508.7053999999998 ts=1749.9016
+service:starting d pid=12812 level=3 ts=1788.8346
+service:log d stream=stdout line=[d] starting ts=1941.6256
+service:log d stream=stdout line=[d] listening on 127.0.0.1:4107 ts=2285.1443
+service:ready d pid=12812 ms=505.4976999999999 ts=2302.3133
+service:starting e pid=18052 level=4 ts=2326.1734
+service:log e stream=stdout line=[e] starting ts=2461.2388
+service:log e stream=stdout line=[e] listening on 127.0.0.1:4108 ts=2796.8731
+service:ready e pid=18052 ms=511.3348000000001 ts=2843.5121
+run:done algorithm=adaptive effectiveAlgorithm=sequential totalMs=2739.2062 ts=2843.8484
+Ready: 5 services (algorithm=adaptive, effectiveAlgorithm=sequential, totalMs=2739.2062)
+service:exited e code=1 signal=null ts=3403.1068
+service:exited d code=1 signal=null ts=3980.7858
+service:exited c code=1 signal=null ts=4633.1816
+service:exited b code=1 signal=null ts=5213.5458
+service:exited a code=1 signal=null ts=5739.4069

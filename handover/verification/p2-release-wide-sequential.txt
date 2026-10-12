@@ -1,0 +1,53 @@
+run:start algorithm=sequential total=10 ts=116.4574
+service:starting w1 pid=19820 level=0 ts=154.8975
+service:log w1 stream=stdout line=[w1] starting ts=285.5636
+service:log w1 stream=stdout line=[w1] listening on 127.0.0.1:4111 ts=835.6699
+service:ready w1 pid=19820 ms=1014.8379000000001 ts=1178.7102
+service:starting w2 pid=30952 level=0 ts=1213.9683
+service:log w2 stream=stdout line=[w2] starting ts=1346.7544
+service:log w2 stream=stdout line=[w2] listening on 127.0.0.1:4112 ts=1894.4955
+service:ready w2 pid=30952 ms=1021.4136999999998 ts=2241.4849
+service:starting w3 pid=36044 level=0 ts=2273.7267
+service:log w3 stream=stdout line=[w3] starting ts=2401.7023
+service:log w3 stream=stdout line=[w3] listening on 127.0.0.1:4113 ts=2945.2297
+service:ready w3 pid=36044 ms=1015.6145999999999 ts=3295.7989
+service:starting w4 pid=24652 level=0 ts=3333.3221
+service:log w4 stream=stdout line=[w4] starting ts=3474.6877
+service:log w4 stream=stdout line=[w4] listening on 127.0.0.1:4114 ts=4024.0121
+service:ready w4 pid=24652 ms=1018.8841000000002 ts=4363.28
+service:starting w5 pid=23868 level=0 ts=4395.716
+service:log w5 stream=stdout line=[w5] starting ts=4534.6335
+service:log w5 stream=stdout line=[w5] listening on 127.0.0.1:4115 ts=5080.551
+service:ready w5 pid=23868 ms=1020.0328 ts=5426.1886
+service:starting w6 pid=26088 level=0 ts=5456.5374
+service:log w6 stream=stdout line=[w6] starting ts=5606.6551
+service:log w6 stream=stdout line=[w6] listening on 127.0.0.1:4116 ts=6161.2269
+service:ready w6 pid=26088 ms=1026.2633999999998 ts=6493.1941
+service:starting w7 pid=9884 level=0 ts=6529.8626
+service:log w7 stream=stdout line=[w7] starting ts=6687.3871
+service:log w7 stream=stdout line=[w7] listening on 127.0.0.1:4117 ts=7229.71
+service:ready w7 pid=9884 ms=1022.531 ts=7561.3823
+service:starting w8 pid=9912 level=0 ts=7594.442
+service:log w8 stream=stdout line=[w8] starting ts=7743.4084
+service:log w8 stream=stdout line=[w8] listening on 127.0.0.1:4118 ts=8285.7823
+service:ready w8 pid=9912 ms=1025.7761999999993 ts=8631.4025
+service:starting api1 pid=21296 level=1 ts=8663.9978
+service:log api1 stream=stdout line=[api1] starting ts=8792.4456
+service:log api1 stream=stdout line=[api1] listening on 127.0.0.1:4121 ts=8826.8622
+service:ready api1 pid=21296 ms=535.1544000000013 ts=9206.9442
+service:starting api2 pid=37180 level=1 ts=9240.0429
+service:log api2 stream=stdout line=[api2] starting ts=9383.233
+service:log api2 stream=stdout line=[api2] listening on 127.0.0.1:4122 ts=9421.2718
+service:ready api2 pid=37180 ms=535.5290999999997 ts=9786.6082
+run:done algorithm=sequential effectiveAlgorithm=sequential totalMs=9668.395499999999 ts=9787.1258
+Ready: 10 services (algorithm=sequential, effectiveAlgorithm=sequential, totalMs=9668.395499999999)
+service:exited api2 code=1 signal=null ts=10296.6591
+service:exited api1 code=1 signal=null ts=10304.9475
+service:exited w1 code=1 signal=null ts=10870.9271
+service:exited w2 code=1 signal=null ts=10939.1672
+service:exited w3 code=1 signal=null ts=10967.7109
+service:exited w4 code=1 signal=null ts=10986.7373
+service:exited w5 code=1 signal=null ts=11035.4946
+service:exited w6 code=1 signal=null ts=11139.1622
+service:exited w7 code=1 signal=null ts=11169.8747
+service:exited w8 code=1 signal=null ts=11203.0456

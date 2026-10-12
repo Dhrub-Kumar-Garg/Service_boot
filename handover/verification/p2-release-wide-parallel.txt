@@ -1,0 +1,53 @@
+run:start algorithm=parallel total=10 ts=133.3939
+service:starting w1 pid=29776 level=0 ts=179.6979
+service:starting w2 pid=5484 level=0 ts=219.6534
+service:starting w3 pid=37128 level=0 ts=266.5785
+service:starting w4 pid=288 level=0 ts=318.9179
+service:starting w5 pid=27660 level=0 ts=350.8883
+service:starting w6 pid=16248 level=0 ts=405.1129
+service:starting w7 pid=6804 level=0 ts=456.3439
+service:starting w8 pid=24920 level=0 ts=482.454
+service:log w1 stream=stdout line=[w1] starting ts=489.2763
+service:log w2 stream=stdout line=[w2] starting ts=489.8226
+service:log w3 stream=stdout line=[w3] starting ts=490.0499
+service:log w4 stream=stdout line=[w4] starting ts=504.3499
+service:log w5 stream=stdout line=[w5] starting ts=538.4394
+service:log w6 stream=stdout line=[w6] starting ts=579.4299
+service:log w7 stream=stdout line=[w7] starting ts=597.9793
+service:log w8 stream=stdout line=[w8] starting ts=610.0409
+service:log w1 stream=stdout line=[w1] listening on 127.0.0.1:4111 ts=941.297
+service:log w2 stream=stdout line=[w2] listening on 127.0.0.1:4112 ts=1000.5261
+service:ready w1 pid=29776 ms=822.6467 ts=1010.0998
+service:ready w2 pid=5484 ms=782.7868 ts=1011.7404
+service:log w3 stream=stdout line=[w3] listening on 127.0.0.1:4113 ts=1034.7918
+service:log w4 stream=stdout line=[w4] listening on 127.0.0.1:4114 ts=1081.282
+service:log w5 stream=stdout line=[w5] listening on 127.0.0.1:4115 ts=1102.5297
+service:log w6 stream=stdout line=[w6] listening on 127.0.0.1:4116 ts=1134.9674
+service:log w8 stream=stdout line=[w8] listening on 127.0.0.1:4118 ts=1162.6446
+service:log w7 stream=stdout line=[w7] listening on 127.0.0.1:4117 ts=1164.1997
+service:ready w3 pid=37128 ms=1251.3763 ts=1529.3264
+service:ready w4 pid=288 ms=1204.0433 ts=1530.322
+service:ready w5 pid=27660 ms=1165.8084000000001 ts=1531.1984
+service:ready w6 pid=16248 ms=1115.3099000000002 ts=1532.3755
+service:ready w7 pid=6804 ms=1070.6173 ts=1533.3688
+service:ready w8 pid=24920 ms=1047.6342 ts=1534.3675
+service:starting api1 pid=31036 level=1 ts=1609.1266
+service:starting api2 pid=34172 level=1 ts=1619.1145
+service:log api1 stream=stdout line=[api1] starting ts=1805.9475
+service:log api2 stream=stdout line=[api2] starting ts=1845.5034
+service:log api1 stream=stdout line=[api1] listening on 127.0.0.1:4121 ts=1848.6777
+service:log api2 stream=stdout line=[api2] listening on 127.0.0.1:4122 ts=1913.3543
+service:ready api1 pid=31036 ms=545.0057999999999 ts=2173.291
+service:ready api2 pid=34172 ms=547.6199000000001 ts=2175.9103
+run:done algorithm=parallel effectiveAlgorithm=parallel totalMs=2040.5816 ts=2176.4167
+Ready: 10 services (algorithm=parallel, effectiveAlgorithm=parallel, totalMs=2040.5816)
+service:exited api1 code=1 signal=null ts=2897.4619
+service:exited api2 code=1 signal=null ts=2943.8745
+service:exited w1 code=1 signal=null ts=3779.002
+service:exited w2 code=1 signal=null ts=3797.5613
+service:exited w3 code=1 signal=null ts=3828.5799
+service:exited w4 code=1 signal=null ts=3878.4376
+service:exited w5 code=1 signal=null ts=3885.2866
+service:exited w6 code=1 signal=null ts=3886.355
+service:exited w7 code=1 signal=null ts=3909.0042
+service:exited w8 code=1 signal=null ts=3945.7402

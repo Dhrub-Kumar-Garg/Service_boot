@@ -1,0 +1,54 @@
+run:start algorithm=adaptive total=10 ts=135.1708
+adaptive:decision width=8 depth=2 chosen=parallel reason=Width (W) > Depth (D) x 2. High independent concurrency detected. Auto-selecting PARALLEL execution. ts=137.4064
+service:starting w1 pid=3116 level=0 ts=185.065
+service:starting w2 pid=34660 level=0 ts=232.1564
+service:starting w3 pid=31888 level=0 ts=280.7005
+service:starting w4 pid=24364 level=0 ts=333.559
+service:starting w5 pid=33100 level=0 ts=381.814
+service:starting w6 pid=15804 level=0 ts=427.9989
+service:starting w7 pid=12892 level=0 ts=471.008
+service:starting w8 pid=16388 level=0 ts=501.0905
+service:log w1 stream=stdout line=[w1] starting ts=510.0425
+service:log w2 stream=stdout line=[w2] starting ts=511.2093
+service:log w3 stream=stdout line=[w3] starting ts=511.374
+service:log w4 stream=stdout line=[w4] starting ts=519.8819
+service:log w5 stream=stdout line=[w5] starting ts=555.2457
+service:log w6 stream=stdout line=[w6] starting ts=584.1668
+service:log w7 stream=stdout line=[w7] starting ts=602.5776
+service:log w8 stream=stdout line=[w8] starting ts=620.9541
+service:log w1 stream=stdout line=[w1] listening on 127.0.0.1:4111 ts=981.6601
+service:ready w1 pid=3116 ms=831.1 ts=1026.9537
+service:log w2 stream=stdout line=[w2] listening on 127.0.0.1:4112 ts=1029.5469
+service:log w3 stream=stdout line=[w3] listening on 127.0.0.1:4113 ts=1044.8695
+service:log w4 stream=stdout line=[w4] listening on 127.0.0.1:4114 ts=1062.129
+service:log w5 stream=stdout line=[w5] listening on 127.0.0.1:4115 ts=1091.672
+service:log w6 stream=stdout line=[w6] listening on 127.0.0.1:4116 ts=1122.8768
+service:log w7 stream=stdout line=[w7] listening on 127.0.0.1:4117 ts=1132.2281
+service:log w8 stream=stdout line=[w8] listening on 127.0.0.1:4118 ts=1146.0837
+service:ready w2 pid=34660 ms=1301.6163 ts=1542.4746
+service:ready w3 pid=31888 ms=1251.4195 ts=1543.2072
+service:ready w4 pid=24364 ms=1199.9376 ts=1543.9084
+service:ready w5 pid=33100 ms=1151.4509 ts=1544.623
+service:ready w6 pid=15804 ms=1106.8551000000002 ts=1545.2127
+service:ready w7 pid=12892 ms=1069.193 ts=1546.0545
+service:ready w8 pid=16388 ms=1041.6651 ts=1546.8686
+service:starting api1 pid=29108 level=1 ts=1620.3859
+service:starting api2 pid=13972 level=1 ts=1628.516
+service:log api1 stream=stdout line=[api1] starting ts=1734.2272
+service:log api2 stream=stdout line=[api2] starting ts=1754.7483
+service:log api1 stream=stdout line=[api1] listening on 127.0.0.1:4121 ts=1762.9991
+service:log api2 stream=stdout line=[api2] listening on 127.0.0.1:4122 ts=1794.1656
+service:ready api1 pid=29108 ms=535.2141000000001 ts=2172.921
+service:ready api2 pid=13972 ms=537.3852999999999 ts=2174.9453
+run:done algorithm=adaptive effectiveAlgorithm=parallel totalMs=2037.7591000000002 ts=2175.2179
+Ready: 10 services (algorithm=adaptive, effectiveAlgorithm=parallel, totalMs=2037.7591000000002)
+service:exited api1 code=1 signal=null ts=2636.4347
+service:exited api2 code=1 signal=null ts=2642.1789
+service:exited w1 code=1 signal=null ts=3321.4669
+service:exited w2 code=1 signal=null ts=3340.7416
+service:exited w3 code=1 signal=null ts=3352.5898
+service:exited w4 code=1 signal=null ts=3396.4828
+service:exited w5 code=1 signal=null ts=3408.2947
+service:exited w6 code=1 signal=null ts=3417.1573
+service:exited w7 code=1 signal=null ts=3454.6856
+service:exited w8 code=1 signal=null ts=3487.3693
