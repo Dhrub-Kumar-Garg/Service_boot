@@ -1,0 +1,12 @@
+version: 1
+services:
+  postgres:
+    command: node ../mock/mock-service.js --port 4101 --name postgres --delay 300
+    ready_check: port 4101
+  redis:
+    command: node ../mock/mock-service.js --port 4102 --name redis --delay 300
+    ready_check: port 4102
+  api:
+    command: node ../mock/mock-service.js --port 4103 --name api --http
+    depends_on: [postgres, redis]
+    ready_check: http http://127.0.0.1:4103/health

@@ -1,0 +1,14 @@
+version: 1
+services:
+  a:
+    command: node ../mock/mock-service.js --port 4131 --name a
+    depends_on: [b]
+    ready_check: port 4131
+  b:
+    command: node ../mock/mock-service.js --port 4132 --name b
+    depends_on: [c]
+    ready_check: port 4132
+  c:
+    command: node ../mock/mock-service.js --port 4133 --name c
+    depends_on: [a]
+    ready_check: port 4133

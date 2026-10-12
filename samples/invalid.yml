@@ -1,0 +1,12 @@
+version: 1
+services:
+  api:
+    command: node ../mock/mock-service.js --port 4141 --name api
+    depends_on: [missing]
+    ready_check: port 4141
+  worker:
+    command: node ../mock/mock-service.js --port 4142 --name worker
+    ready_check: port 4141
+  broken:
+    command: node ../mock/mock-service.js --port 4143 --name broken
+    ready_check: tcp 4143

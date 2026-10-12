@@ -1,0 +1,21 @@
+version: 1
+services:
+  a:
+    command: node ../mock/mock-service.js --port 4104 --name a --delay 300
+    ready_check: port 4104
+  b:
+    command: node ../mock/mock-service.js --port 4105 --name b --delay 300
+    depends_on: [a]
+    ready_check: port 4105
+  c:
+    command: node ../mock/mock-service.js --port 4106 --name c --delay 300
+    depends_on: [b]
+    ready_check: port 4106
+  d:
+    command: node ../mock/mock-service.js --port 4107 --name d --delay 300
+    depends_on: [c]
+    ready_check: port 4107
+  e:
+    command: node ../mock/mock-service.js --port 4108 --name e --delay 300
+    depends_on: [d]
+    ready_check: port 4108

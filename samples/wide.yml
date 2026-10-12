@@ -1,0 +1,34 @@
+version: 1
+services:
+  w1:
+    command: node ../mock/mock-service.js --port 4111 --name w1 --delay 500
+    ready_check: port 4111
+  w2:
+    command: node ../mock/mock-service.js --port 4112 --name w2 --delay 500
+    ready_check: port 4112
+  w3:
+    command: node ../mock/mock-service.js --port 4113 --name w3 --delay 500
+    ready_check: port 4113
+  w4:
+    command: node ../mock/mock-service.js --port 4114 --name w4 --delay 500
+    ready_check: port 4114
+  w5:
+    command: node ../mock/mock-service.js --port 4115 --name w5 --delay 500
+    ready_check: port 4115
+  w6:
+    command: node ../mock/mock-service.js --port 4116 --name w6 --delay 500
+    ready_check: port 4116
+  w7:
+    command: node ../mock/mock-service.js --port 4117 --name w7 --delay 500
+    ready_check: port 4117
+  w8:
+    command: node ../mock/mock-service.js --port 4118 --name w8 --delay 500
+    ready_check: port 4118
+  api1:
+    command: node ../mock/mock-service.js --port 4121 --name api1 --http
+    depends_on: [w1, w2, w3]
+    ready_check: http http://127.0.0.1:4121/health
+  api2:
+    command: node ../mock/mock-service.js --port 4122 --name api2 --http
+    depends_on: [w4, w5, w6, w7, w8]
+    ready_check: http http://127.0.0.1:4122/health
