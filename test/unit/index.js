@@ -15,3 +15,4 @@ require('./engine-down.test');
 require('./ui.test');
 require('./metrics.test');
 require('./benchmark.test');
+require('./pidfile-retry.test');

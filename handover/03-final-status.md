@@ -96,6 +96,18 @@ key=value` output are unchanged, so Person 1/2 tests pass untouched.
      saw them as alive (2 failures in 5 rounds, also in the p2-done baseline).
      Now the event loop gets ≤ 300 ms to reap them. Verified 0/5 + 8/8 isolated.
 
+### Found on Rachel's Windows laptop before pushing
+
+4. `src/engine/pidfile.js`: replacing `pids.json` while another process was
+   reading it failed with `EPERM` (Windows locks open files). The CLI treated
+   that as fatal and shut the run down. `write()`/`read()` now retry transient
+   `EPERM`/`EACCES`/`EBUSY` for up to ~1.5 s. Failed `DOWN: CLI replaces the
+   saved PID on recovery` on Windows; new unit test `PIDFILE: transient ...`.
+5. `test/engine/metrics-benchmark.test.js`: the busy-tree service was an inline
+   `node -e "..."` command; cmd.exe treated `<` inside it as a redirection, and
+   the test's assertions in `finally` hid that error. The scripts are now files
+   and assertions run after cleanup.
+
 ## 5. Known issues / not done (honest list)
 
 - **Container without init (zombie reaping).** In this VM, PID 1 never reaps

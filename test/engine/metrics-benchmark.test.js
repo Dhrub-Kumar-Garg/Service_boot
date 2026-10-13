@@ -14,39 +14,51 @@ const supported = ['linux', 'darwin', 'win32'].includes(process.platform);
 
 // A real "service" whose CPU work happens in a GRANDCHILD: shell -> node parent
 // -> node busy child. Measuring only the leader would report almost nothing.
-function busyTreeService(name, port) {
-  const child = `const s=Date.now();while(Date.now()-s<4000){}`;
-  const parent = `const {spawn}=require('child_process');` +
-    `spawn(process.execPath,['-e',${JSON.stringify(child)}],{stdio:'ignore'});` +
-    `require('net').createServer().listen(${port},'127.0.0.1');setInterval(()=>{},1000);`;
+// The scripts are files, not `node -e "..."`: cmd.exe has no backslash quote
+// escaping, so characters such as < inside an inline script become redirections.
+function busyTreeService(name, port, dir) {
+  const child = path.join(dir, 'busy-child.js');
+  const parent = path.join(dir, 'busy-parent.js');
+  fs.writeFileSync(child, 'const s = Date.now(); while (Date.now() - s < 4000) {}\n');
+  fs.writeFileSync(parent, [
+    "const { spawn } = require('child_process');",
+    `spawn(process.execPath, [${JSON.stringify(child)}], { stdio: 'ignore' });`,
+    `require('net').createServer().listen(${port}, '127.0.0.1');`,
+    'setInterval(() => {}, 1000);'
+  ].join('\n'));
   return {
-    name, command: `"${process.execPath}" -e "${parent.replace(/"/g, '\\"')}"`,
-    cwd: root, env: {}, dependsOn: [], readyCheck: { type: 'port', port },
+    name, command: `"${process.execPath}" "${parent}"`,
+    cwd: dir, env: {}, dependsOn: [], readyCheck: { type: 'port', port },
     timeoutMs: 10000, intervalMs: 100, restart: 'never', maxRetries: 3
   };
 }
 
-test('METRICS (real): busy grandchild CPU is attributed to its service tree; stop leaves no timers', { skip: !supported, timeout: 30000 }, async () => {
-  const service = busyTreeService('busy', 44731);
+test('METRICS (real): busy grandchild CPU is attributed to its service tree; stop leaves no timers', { skip: !supported, timeout: 30000 }, async t => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'serviceboot-busy-'));
+  t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
+  const service = busyTreeService('busy', 44731, dir);
   const collector = createCollector({ intervalMs: 300 });
   let pids = [];
+  let summary;
   try {
     await engine.runEngine({ services: { busy: service }, groups: [['busy']], algorithm: 'sequential', emitter: new EventEmitter() });
     collector.start();
     await new Promise(resolve => setTimeout(resolve, 1500));
     pids = await engine.getTreePids(engine.getRunning()[0].pid);
   } finally {
-    const summary = await collector.stop();
+    // Cleanup only here; assertions come after, so they can never hide the
+    // original error of a failed startup.
+    summary = await collector.stop();
     await engine.stopAll();
-    assert.ok(pids.length >= 2, `tree ${pids}`);
-    assert.ok(summary.sampleCount >= 3, JSON.stringify(summary));
-    assert.equal(summary.errors, 0, summary.lastError);
-    // One core spinning in the grandchild: well above idle.
-    assert.ok(summary.cpu.peakPercent > 40, `peak CPU ${summary.cpu.peakPercent}`);
-    assert.ok(summary.memory.peakRssBytes > 10 * 1024 * 1024);
-    assert.ok(Math.max(...summary.samples.map(sample => sample.perService[0]?.treePids || 0)) >= 2);
-    if (process.platform === 'linux') assert.equal(summary.contextSwitches.available, true);
   }
+  assert.ok(pids.length >= 2, `tree ${pids}`);
+  assert.ok(summary.sampleCount >= 3, JSON.stringify(summary));
+  assert.equal(summary.errors, 0, summary.lastError);
+  // One core spinning in the grandchild: well above idle.
+  assert.ok(summary.cpu.peakPercent > 40, `peak CPU ${summary.cpu.peakPercent}`);
+  assert.ok(summary.memory.peakRssBytes > 10 * 1024 * 1024);
+  assert.ok(Math.max(...summary.samples.map(sample => sample.perService[0]?.treePids || 0)) >= 2);
+  if (process.platform === 'linux') assert.equal(summary.contextSwitches.available, true);
   await new Promise(resolve => setTimeout(resolve, 300));
   for (const pid of pids) assert.equal(isAlive(pid), false, `pid ${pid} survived`);
 });
