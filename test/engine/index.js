@@ -4,3 +4,4 @@ require('./engine-signals.test');
 require('./down.test');
 require('./restart.test');
 require('./tree-pids.test');
+require('./metrics-benchmark.test');

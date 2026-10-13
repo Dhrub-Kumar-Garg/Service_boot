@@ -12,5 +12,6 @@ require('./engine-signals.test');
 require('./engine-pidfile.test');
 require('./engine-tree-pids.test');
 require('./engine-down.test');
+require('./ui.test');
 require('./metrics.test');
 require('./benchmark.test');
