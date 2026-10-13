@@ -1,0 +1,108 @@
+Benchmark: 3 config(s) × 3 algorithm(s) × 5 run(s) = 45 serial runs
+Metrics: sampling every 500 ms; max-parallel: unlimited
+[ 1/45] round 1 small    sequential
+  startup 1545.7 ms, shutdown 44.1 ms, peak RSS 145.3 MB
+[ 2/45] round 1 small    parallel  
+  startup 1023.5 ms, shutdown 43.4 ms, peak RSS 145.2 MB
+[ 3/45] round 1 small    adaptive  
+  startup 1529.7 ms (→ sequential), shutdown 41.2 ms, peak RSS 145.2 MB
+[ 4/45] round 1 linear   sequential
+  startup 2549.8 ms, shutdown 68.6 ms, peak RSS 240.5 MB
+[ 5/45] round 1 linear   parallel  
+  startup 2543.2 ms, shutdown 85.5 ms, peak RSS 240.5 MB
+[ 6/45] round 1 linear   adaptive  
+  startup 2542.0 ms (→ sequential), shutdown 85.1 ms, peak RSS 240.5 MB
+[ 7/45] round 1 wide     sequential
+  startup 9098.6 ms, shutdown 54.0 ms, peak RSS 483.1 MB
+[ 8/45] round 1 wide     parallel  
+  startup 1591.8 ms, shutdown 52.2 ms, peak RSS 482.9 MB
+[ 9/45] round 1 wide     adaptive  
+  startup 1575.7 ms (→ parallel), shutdown 55.8 ms, peak RSS 483.0 MB
+[10/45] round 2 small    sequential
+  startup 1531.0 ms, shutdown 42.9 ms, peak RSS 145.3 MB
+[11/45] round 2 small    parallel  
+  startup 1022.5 ms, shutdown 45.4 ms, peak RSS 145.3 MB
+[12/45] round 2 small    adaptive  
+  startup 1529.9 ms (→ sequential), shutdown 43.5 ms, peak RSS 145.3 MB
+[13/45] round 2 linear   sequential
+  startup 2543.9 ms, shutdown 106.1 ms, peak RSS 240.6 MB
+[14/45] round 2 linear   parallel  
+  startup 2546.1 ms, shutdown 86.1 ms, peak RSS 240.6 MB
+[15/45] round 2 linear   adaptive  
+  startup 2546.5 ms (→ sequential), shutdown 109.2 ms, peak RSS 240.6 MB
+[16/45] round 2 wide     sequential
+  startup 9082.6 ms, shutdown 51.6 ms, peak RSS 483.1 MB
+[17/45] round 2 wide     parallel  
+  startup 1598.1 ms, shutdown 49.3 ms, peak RSS 482.9 MB
+[18/45] round 2 wide     adaptive  
+  startup 1599.9 ms (→ parallel), shutdown 45.6 ms, peak RSS 482.9 MB
+[19/45] round 3 small    sequential
+  startup 1527.7 ms, shutdown 23.5 ms, peak RSS 145.3 MB
+[20/45] round 3 small    parallel  
+  startup 1020.1 ms, shutdown 23.0 ms, peak RSS 145.3 MB
+[21/45] round 3 small    adaptive  
+  startup 1527.2 ms (→ sequential), shutdown 43.0 ms, peak RSS 145.3 MB
+[22/45] round 3 linear   sequential
+  startup 2543.8 ms, shutdown 103.4 ms, peak RSS 240.6 MB
+[23/45] round 3 linear   parallel  
+  startup 2535.6 ms, shutdown 83.3 ms, peak RSS 240.5 MB
+[24/45] round 3 linear   adaptive  
+  startup 2533.5 ms (→ sequential), shutdown 50.9 ms, peak RSS 240.5 MB
+[25/45] round 3 wide     sequential
+  startup 9079.1 ms, shutdown 46.8 ms, peak RSS 483.1 MB
+[26/45] round 3 wide     parallel  
+  startup 1567.7 ms, shutdown 55.1 ms, peak RSS 483.0 MB
+[27/45] round 3 wide     adaptive  
+  startup 1586.1 ms (→ parallel), shutdown 50.9 ms, peak RSS 482.9 MB
+[28/45] round 4 small    sequential
+  startup 1529.4 ms, shutdown 43.0 ms, peak RSS 145.3 MB
+[29/45] round 4 small    parallel  
+  startup 1021.7 ms, shutdown 43.7 ms, peak RSS 145.3 MB
+[30/45] round 4 small    adaptive  
+  startup 1532.3 ms (→ sequential), shutdown 42.3 ms, peak RSS 145.2 MB
+[31/45] round 4 linear   sequential
+  startup 2536.2 ms, shutdown 84.2 ms, peak RSS 240.6 MB
+[32/45] round 4 linear   parallel  
+  startup 2540.9 ms, shutdown 102.3 ms, peak RSS 240.5 MB
+[33/45] round 4 linear   adaptive  
+  startup 2553.6 ms (→ sequential), shutdown 106.2 ms, peak RSS 240.5 MB
+[34/45] round 4 wide     sequential
+  startup 9101.2 ms, shutdown 47.0 ms, peak RSS 483.1 MB
+[35/45] round 4 wide     parallel  
+  startup 1598.7 ms, shutdown 47.3 ms, peak RSS 483.0 MB
+[36/45] round 4 wide     adaptive  
+  startup 1595.5 ms (→ parallel), shutdown 50.6 ms, peak RSS 482.9 MB
+[37/45] round 5 small    sequential
+  startup 1836.9 ms, shutdown 43.2 ms, peak RSS 145.2 MB
+[38/45] round 5 small    parallel  
+  startup 1025.0 ms, shutdown 43.1 ms, peak RSS 145.2 MB
+[39/45] round 5 small    adaptive  
+  startup 1531.1 ms (→ sequential), shutdown 44.9 ms, peak RSS 145.3 MB
+[40/45] round 5 linear   sequential
+  startup 2547.5 ms, shutdown 105.0 ms, peak RSS 240.5 MB
+[41/45] round 5 linear   parallel  
+  startup 2541.2 ms, shutdown 103.5 ms, peak RSS 240.5 MB
+[42/45] round 5 linear   adaptive  
+  startup 2545.0 ms (→ sequential), shutdown 85.2 ms, peak RSS 240.5 MB
+[43/45] round 5 wide     sequential
+  startup 9084.1 ms, shutdown 30.9 ms, peak RSS 483.1 MB
+[44/45] round 5 wide     parallel  
+  startup 1603.9 ms, shutdown 49.1 ms, peak RSS 482.9 MB
+[45/45] round 5 wide     adaptive  
+  startup 1594.7 ms (→ parallel), shutdown 49.9 ms, peak RSS 483.0 MB
+
+Startup time (ms) over successful runs — mean ± sample stdev [min … max]
+  small    sequential                 1594.1 ±  135.9  [1527.7 … 1836.9]  n=5  peakRSS=145.3 MB
+  small    parallel                   1022.6 ±    1.8  [1020.1 … 1025.0]  n=5  peakRSS=145.2 MB
+  small    adaptive → sequential      1530.0 ±    1.9  [1527.2 … 1532.3]  n=5  peakRSS=145.3 MB
+  linear   sequential                 2544.2 ±    5.2  [2536.2 … 2549.8]  n=5  peakRSS=240.6 MB
+  linear   parallel                   2541.4 ±    3.8  [2535.6 … 2546.1]  n=5  peakRSS=240.5 MB
+  linear   adaptive → sequential      2544.1 ±    7.3  [2533.5 … 2553.6]  n=5  peakRSS=240.5 MB
+  wide     sequential                 9089.1 ±   10.1  [9079.1 … 9101.2]  n=5  peakRSS=483.1 MB
+  wide     parallel                   1592.1 ±   14.3  [1567.7 … 1603.9]  n=5  peakRSS=483.0 MB
+  wide     adaptive → parallel        1590.4 ±    9.6  [1575.7 … 1599.9]  n=5  peakRSS=483.0 MB
+  small: parallel vs sequential mean startup = 1.56× (35.9% less time)
+  linear: parallel vs sequential mean startup = 1.00× (0.1% less time)
+  wide: parallel vs sequential mean startup = 5.71× (82.5% less time)
+Wrote report/results.json
+EXIT=0
