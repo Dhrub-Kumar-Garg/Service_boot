@@ -381,7 +381,155 @@ function getManagedHandles() {
   return [...owned.values()];
 }
 
+// ---------------------------------------------------------------------------
+// Person 3: OS process sampling for the metrics collector.
+// All platform branches for metrics live here, as AGENT_RULES require.
+// ---------------------------------------------------------------------------
+
+function runCommand(command, args, timeout = 5000) {
+  return new Promise((resolve, reject) => {
+    execFile(command, args, { encoding: 'utf8', windowsHide: true, timeout,
+      maxBuffer: 16 * 1024 * 1024 }, (error, stdout) => error ? reject(error) : resolve(stdout));
+  });
+}
+
+// Several roots from ONE process-table snapshot. getTreePids(pid) per service
+// would spawn one `ps`/PowerShell per service per sample, which disturbs the
+// very startup timings the benchmark measures.
+async function getForestPids(rootPids) {
+  rootPids.forEach(validPid);
+  const forest = new Map();
+  if (rootPids.length === 0) return forest;
+  const { windows, command, args } = processSnapshotCommand();
+  const output = await runCommand(command, args);
+  for (const root of rootPids) forest.set(root, treeFromSnapshot(root, output, windows));
+  return forest;
+}
+
+let clockTicks;
+function linuxClockTicks() {
+  // /proc reports CPU time in clock ticks. CLK_TCK is almost always 100 on
+  // Linux; ask getconf once to be sure.
+  if (clockTicks === undefined) {
+    try {
+      clockTicks = Number(spawnSync('getconf', ['CLK_TCK'], { encoding: 'utf8', timeout: 2000 }).stdout.trim()) || 100;
+    } catch { clockTicks = 100; }
+  }
+  return clockTicks;
+}
+
+function sampleLinux(pids) {
+  const fs = require('node:fs');
+  const ticks = linuxClockTicks();
+  const processes = [];
+  for (const pid of pids) {
+    try {
+      // /proc/<pid>/stat: the command name is in parentheses and can contain
+      // spaces, so parse the fields that follow the LAST ')'.
+      const stat = fs.readFileSync(`/proc/${pid}/stat`, 'utf8');
+      const fields = stat.slice(stat.lastIndexOf(')') + 2).split(' ');
+      const state = fields[0];
+      // A zombie has finished running; it holds no memory and uses no more CPU.
+      if (state === 'Z' || state === 'X') continue;
+      const utime = Number(fields[11]);
+      const stime = Number(fields[12]);
+      const status = fs.readFileSync(`/proc/${pid}/status`, 'utf8');
+      const field = name => {
+        const match = new RegExp(`^${name}:\\s+(\\d+)`, 'm').exec(status);
+        return match ? Number(match[1]) : null;
+      };
+      const rssKb = field('VmRSS');
+      processes.push({
+        pid,
+        // User + kernel CPU time this process has consumed since it started.
+        cpuMs: ((utime + stime) / ticks) * 1000,
+        // Resident set size: physical RAM pages currently mapped by the process.
+        rssBytes: rssKb === null ? null : rssKb * 1024,
+        // Voluntary = the process blocked (I/O, sleep) and gave up the CPU;
+        // involuntary = the scheduler preempted it when its time slice ended.
+        voluntaryCtx: field('voluntary_ctxt_switches'),
+        involuntaryCtx: field('nonvoluntary_ctxt_switches')
+      });
+    } catch (error) {
+      // The process exited between the tree snapshot and this read.
+      if (error.code !== 'ENOENT' && error.code !== 'ESRCH') throw error;
+    }
+  }
+  return processes;
+}
+
+function parsePsTime(text) {
+  // ps TIME formats: "mm:ss.cc", "hh:mm:ss" or "dd-hh:mm:ss".
+  let days = 0;
+  let rest = text.trim();
+  if (rest.includes('-')) [days, rest] = [Number(rest.split('-')[0]), rest.split('-')[1]];
+  let seconds = 0;
+  for (const part of rest.split(':').map(Number)) seconds = seconds * 60 + part;
+  return (days * 86400 + seconds) * 1000;
+}
+
+async function sampleDarwin(pids) {
+  let output;
+  try {
+    output = await runCommand('ps', ['-o', 'pid=,rss=,time=', '-p', pids.join(',')]);
+  } catch (error) {
+    // ps exits 1 when none of the PIDs exist any more.
+    if (error.code === 1) return [];
+    throw error;
+  }
+  return output.split(/\r?\n/).map(line => /^\s*(\d+)\s+(\d+)\s+(\S+)\s*$/.exec(line)).filter(Boolean)
+    .map(match => ({ pid: Number(match[1]), cpuMs: parsePsTime(match[3]),
+      rssBytes: Number(match[2]) * 1024, voluntaryCtx: null, involuntaryCtx: null }));
+}
+
+async function sampleWindows(pids) {
+  const processes = [];
+  // Keep each CIM filter reasonably short.
+  for (let index = 0; index < pids.length; index += 40) {
+    const filter = pids.slice(index, index + 40).map(pid => `ProcessId=${pid}`).join(' OR ');
+    const output = await runCommand('powershell.exe', ['-NoProfile', '-NonInteractive', '-Command',
+      `Get-CimInstance Win32_Process -Filter "${filter}" | Select-Object ProcessId,WorkingSetSize,KernelModeTime,UserModeTime | ConvertTo-Csv -NoTypeInformation`], 10000);
+    for (const line of output.split(/\r?\n/)) {
+      const match = /^"?(\d+)"?,"?(\d+)"?,"?(\d+)"?,"?(\d+)"?$/.exec(line.trim());
+      if (!match) continue;
+      processes.push({
+        pid: Number(match[1]),
+        // Working set is the Windows counterpart of resident memory.
+        rssBytes: Number(match[2]),
+        // Kernel + user time are reported in 100-nanosecond units.
+        cpuMs: (Number(match[3]) + Number(match[4])) / 10000,
+        voluntaryCtx: null, involuntaryCtx: null
+      });
+    }
+  }
+  return processes;
+}
+
+const SAMPLER_SUPPORT = {
+  linux: { cpu: true, memory: true, contextSwitches: true, source: '/proc/<pid>/stat and /proc/<pid>/status' },
+  darwin: { cpu: true, memory: true, contextSwitches: false, source: 'ps -o rss=,time=' },
+  win32: { cpu: true, memory: true, contextSwitches: false, source: 'CIM Win32_Process' }
+};
+
+function samplerSupport() {
+  const support = SAMPLER_SUPPORT[process.platform];
+  if (support) return { platform: process.platform, ...support };
+  return { platform: process.platform, cpu: false, memory: false, contextSwitches: false, source: null };
+}
+
+// One entry per still-existing PID: {pid, cpuMs, rssBytes, voluntaryCtx,
+// involuntaryCtx}. Fields the OS does not expose are null, never 0.
+async function sampleProcesses(pids) {
+  pids.forEach(validPid);
+  if (pids.length === 0) return [];
+  if (process.platform === 'linux') return sampleLinux(pids);
+  if (process.platform === 'darwin') return sampleDarwin(pids);
+  if (process.platform === 'win32') return sampleWindows(pids);
+  return [];
+}
+
 module.exports = {
   spawnService, createLineSplitter, isGroupAlive, terminate, terminatePid,
-  killAllSync, getRunning, getManagedHandles, isPidAlive, requestCliStop, getTreePids
+  killAllSync, getRunning, getManagedHandles, isPidAlive, requestCliStop, getTreePids,
+  getForestPids, sampleProcesses, samplerSupport, parsePsTime
 };
