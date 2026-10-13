@@ -48,7 +48,6 @@ function main(argv) {
   }
 
   const name = values.name;
-  console.log(`[${name}] starting`);
   let server;
   let listenTimer;
   let stopping = false;
@@ -79,6 +78,9 @@ function main(argv) {
   }
   process.on('SIGTERM', () => stop('SIGTERM'));
   process.on('SIGINT', () => stop('SIGINT'));
+  // Announce startup only after the signal handlers exist: a supervisor that
+  // reacts to this line with SIGTERM must reach stop(), not the default action.
+  console.log(`[${name}] starting`);
 
   if (values['never-ready']) return;
   listenTimer = setTimeout(() => {

@@ -102,9 +102,17 @@ async function runUp(plan, options) {
     if (signalCode !== undefined) {
       // A second interrupt skips asynchronous grace periods. Kill every owned
       // process tree synchronously before exiting with the first signal's code.
+      const handles = processes.getManagedHandles();
       processes.killAllSync();
       try { pidfile.remove({ cliPid: process.pid }); } catch (error) { console.error(`error: ${error.message}`); }
-      process.exit(signalCode);
+      // Person 3 (Linux): SIGKILL has been sent, but the killed shells are our
+      // direct children and stay zombies (PID still in the process table)
+      // until we collect their exit status. Node reaps children only from the
+      // event loop, so give it at most 300 ms to do that before exiting.
+      // Everything is already dead; this only avoids leaving zombies to init.
+      const reaped = Promise.all(handles.map(handle => handle.exited));
+      const limit = new Promise(resolve => setTimeout(resolve, 300).unref());
+      void Promise.race([reaped, limit]).then(() => process.exit(signalCode));
       return;
     }
     signalCode = code;
