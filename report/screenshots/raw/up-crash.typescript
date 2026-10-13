@@ -1,0 +1,28 @@
+Script started on 2026-10-13 16:54:35+00:00 [COMMAND="stty cols 110 rows 40; python3 handover/verification/p3-subreaper.py bash -c "node bin/serviceboot.js up --config samples/crash.yml; echo exit code \$?"" <not executed on terminal>]
+[1mServiceBoot[0m [2m·[0m samples/crash.yml [2m·[0m 3 services [2m·[0m 2 levels
+[2m  L0: db, cache[0m
+[2m  L1: api[0m
+[1m▶ Starting[0m 3 services · algorithm [1madaptive[0m
+[?25l[2K[36m⠋ 0/3 ready · 0 starting · 0 ms[0m[2K[35m◆ Adaptive[0m width=2 depth=2 → [1mSEQUENTIAL[0m
+[2K[36m⠋ 0/3 ready · 0 starting · 1 ms[0m[2K[2m  Width (W) <= Depth (D) x 2. Graph is small or mostly linear. Auto-selecting SEQUENTIAL execution to save concurrency overhead.[0m
+[2K[36m⠋ 0/3 ready · 0 starting · 1 ms[0m[2K[90mL0[0m [34m▸[0m [36mdb   [0m starting   [2mpid 12862[0m
+[2K[36m⠋ 0/3 ready · 1 starting · 10 ms[0m[2K     [36mdb   [0m [90m│[0m [2m[db] starting[0m
+[2K[36m⠋ 0/3 ready · 1 starting · 58 ms[0m[2K[2K[36m⠙ 0/3 ready · 1 starting · 81 ms[0m[2K[2K[36m⠹ 0/3 ready · 1 starting · 161 ms[0m[2K[2K[36m⠸ 0/3 ready · 1 starting · 241 ms[0m[2K     [36mdb   [0m [90m│[0m [2m[db] listening on 127.0.0.1:4151[0m
+[2K[36m⠸ 0/3 ready · 1 starting · 268 ms[0m[2K[2K[36m⠼ 0/3 ready · 1 starting · 321 ms[0m[2K[2K[36m⠴ 0/3 ready · 1 starting · 401 ms[0m[2K[2K[36m⠦ 0/3 ready · 1 starting · 481 ms[0m[2K   [32m✔[0m [36mdb   [0m ready in [1m503 ms[0m
+[2K[36m⠦ 1/3 ready · 0 starting · 513 ms[0m[2K[90mL0[0m [34m▸[0m [35mcache[0m starting   [2mpid 12870[0m
+[2K[36m⠦ 1/3 ready · 1 starting · 517 ms[0m[2K     [35mcache[0m [90m│[0m [2m[cache] starting[0m
+[2K[36m⠦ 1/3 ready · 1 starting · 549 ms[0m[2K[2K[36m⠧ 1/3 ready · 1 starting · 561 ms[0m[2K[2K[36m⠇ 1/3 ready · 1 starting · 641 ms[0m[2K[2K[36m⠏ 1/3 ready · 1 starting · 722 ms[0m[2K     [35mcache[0m [90m│[0m [2m[cache] listening on 127.0.0.1:4152[0m
+[2K[36m⠏ 1/3 ready · 1 starting · 760 ms[0m[2K[2K[36m⠋ 1/3 ready · 1 starting · 802 ms[0m[2K[2K[36m⠙ 1/3 ready · 1 starting · 884 ms[0m[2K[2K[36m⠹ 1/3 ready · 1 starting · 964 ms[0m[2K   [32m✔[0m [35mcache[0m ready in [1m502 ms[0m
+[2K[36m⠹ 2/3 ready · 0 starting · 1.02 s[0m[2K[90mL1[0m [34m▸[0m [33mapi  [0m starting   [2mpid 12878[0m
+[2K[36m⠹ 2/3 ready · 1 starting · 1.03 s[0m[2K[2K[36m⠸ 2/3 ready · 1 starting · 1.04 s[0m[2K     [33mapi  [0m [90m│[0m [2m[api] starting[0m
+[2K[36m⠸ 2/3 ready · 1 starting · 1.06 s[0m[2K[2K[36m⠼ 2/3 ready · 1 starting · 1.12 s[0m[2K[2K[36m⠴ 2/3 ready · 1 starting · 1.21 s[0m[2K[2K[36m⠦ 2/3 ready · 1 starting · 1.29 s[0m[2K[2K[36m⠧ 2/3 ready · 1 starting · 1.37 s[0m[2K[2K[36m⠇ 2/3 ready · 1 starting · 1.45 s[0m[2K   [90m■[0m [33mapi  [0m exited [2m(code 1)[0m
+[2K[36m⠇ 2/3 ready · 0 starting · 1.47 s[0m[2K   [31m✖[0m [33mapi  [0m [31mfailed (crash)[0m: exited with code 1 before becoming ready ⏎ [api] starting
+[2K[36m⠇ 2/3 ready · 0 starting · 1.47 s[0m[2K   [90m■[0m [36mdb   [0m exited [2m(signal SIGTERM)[0m
+[2K[36m⠇ 1/3 ready · 0 starting · 1.47 s[0m[2K   [90m■[0m [35mcache[0m exited [2m(signal SIGTERM)[0m
+[2K[36m⠇ 0/3 ready · 0 starting · 1.47 s[0m[2K[?25h[31m✖ Startup failed:[0m exited with code 1 before becoming ready ⏎ [api] starting
+[2m  Everything that had started was stopped (dependents first).[0m
+[31merror: exited with code 1 before becoming ready
+[api] starting[0m
+[?25hexit code 3
+
+Script done on 2026-10-13 16:54:36+00:00 [COMMAND_EXIT_CODE="0"]

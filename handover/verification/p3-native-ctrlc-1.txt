@@ -1,0 +1,54 @@
+ServiceBoot · samples/wide.yml · 10 services · 2 levels
+  L0: w1, w2, w3, w4, w5, w6, w7, w8
+  L1: api1, api2
+▶ Starting 10 services · algorithm adaptive
+◆ Adaptive width=8 depth=2 → PARALLEL
+  Width (W) > Depth (D) x 2. High independent concurrency detected. Auto-selecting PARALLEL execution.
+L0 ▸ w1   starting   pid 7324
+L0 ▸ w2   starting   pid 7326
+L0 ▸ w3   starting   pid 7338
+L0 ▸ w4   starting   pid 7342
+L0 ▸ w5   starting   pid 7349
+L0 ▸ w6   starting   pid 7357
+L0 ▸ w7   starting   pid 7359
+L0 ▸ w8   starting   pid 7366
+   ✔ w1   ready in 604 ms
+   ✔ w2   ready in 594 ms
+   ✔ w3   ready in 1.08 s
+   ✔ w4   ready in 1.07 s
+   ✔ w5   ready in 1.05 s
+   ✔ w6   ready in 1.05 s
+   ✔ w7   ready in 1.04 s
+   ✔ w8   ready in 1.01 s
+L1 ▸ api1 starting   pid 7388
+L1 ▸ api2 starting   pid 7390
+   ✔ api2 ready in 518 ms
+   ✔ api1 ready in 519 ms
+
+✔ All 10 services ready in 1.66 s (parallel, chosen by adaptive)
+  L0 w1   pid 7324    █████████████ 604 ms
+  L0 w2   pid 7326    █████████████ 594 ms
+  L0 w3   pid 7338    ████████████████████████ 1.08 s
+  L0 w4   pid 7342    ████████████████████████ 1.07 s
+  L0 w5   pid 7349    ███████████████████████ 1.05 s
+  L0 w6   pid 7357    ███████████████████████ 1.05 s
+  L0 w7   pid 7359    ███████████████████████ 1.04 s
+  L0 w8   pid 7366    ██████████████████████ 1.01 s
+  L1 api1 pid 7388    ████████████ 519 ms
+  L1 api2 pid 7390    ████████████ 518 ms
+  Running. Press Ctrl+C to stop (twice to force), or run "serviceboot down" in this folder.
+^C■ Stopping services (dependents before dependencies)…
+   ■ api1 exited (signal SIGTERM)
+   ■ api2 exited (signal SIGTERM)
+   ■ w1   exited (signal SIGTERM)
+   ■ w2   exited (signal SIGTERM)
+   ■ w4   exited (signal SIGTERM)
+   ■ w5   exited (signal SIGTERM)
+   ■ w3   exited (signal SIGTERM)
+   ■ w6   exited (signal SIGTERM)
+   ■ w7   exited (signal SIGTERM)
+   ■ w8   exited (signal SIGTERM)
+
+presses=1 exit_code=130 ms_from_first_ctrl_c=63
+remaining mock processes: none
+pid file: absent

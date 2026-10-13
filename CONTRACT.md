@@ -161,3 +161,93 @@ readyMs and pids returned by runEngine are startup snapshots.
 The process manager additionally exports internal `isPidAlive(pid)` (single-PID
 existence probe) and `requestCliStop(pid)` (platform-specific CLI stop request),
 used by PID ownership/down. Platform branches remain inside the process manager.
+
+## 10. Additions by Person 3
+
+Sections 1–9 are unchanged. Everything below is additive.
+
+### CLI
+
+```
+serviceboot up        ... [--plain] [--quiet] [--no-color]
+serviceboot benchmark [--config FILE]... [--runs N] [--algorithms LIST]
+                      [--max-parallel N] [--out FILE] [--sample-ms N] [--no-metrics]
+```
+
+- Output mode: when stdout is NOT a TTY (pipes, files, CI, tests) or `--plain`
+  is given, `up` prints exactly the section 6 `event key=value` lines plus the
+  `Ready: ...` line, unchanged from Person 2. On a TTY it prints the
+  human-readable UI from `src/cli/ui.js`. `NO_COLOR` (any value), `TERM=dumb`
+  or `--no-color` remove ANSI colours and the spinner. `--quiet` hides
+  service stdout/stderr lines in the TTY UI only.
+- `--config` may be repeated for `benchmark` only; `plan`/`up` reject a second
+  one with exit 2. Default benchmark configs: samples/small.yml, linear.yml,
+  wide.yml. `--runs` default 3; `--algorithms` comma list, default all three;
+  `--sample-ms` integer >= 100, default 500; `--out` default
+  `results/results.json` (results/ is git-ignored; committed evidence lives in
+  report/).
+- benchmark exit codes: 0 all runs succeeded; 1 config error (nothing started,
+  nothing written); 2 usage; 3 at least one run failed (file still written);
+  130/143 cancelled by SIGINT/SIGTERM (partial file written with
+  `complete: false`). A second signal kills synchronously like `up`.
+- benchmark refuses to start while a live `up` owns `.serviceboot/pids.json`,
+  and records its own services there so `down` can recover a hard-killed run.
+
+### Process-manager additions (platform branches stay in this file)
+
+- `getForestPids(rootPids) -> Promise<Map<root, pid[]>>`: several trees from ONE
+  process-table snapshot.
+- `sampleProcesses(pids) -> Promise<[{pid, cpuMs, rssBytes, voluntaryCtx, involuntaryCtx}]>`:
+  Linux `/proc/<pid>/stat` + `/status`; macOS `ps -o pid=,rss=,time=`;
+  Windows CIM `Win32_Process`. Vanished PIDs and zombies are omitted. Fields the
+  OS does not expose are `null`, never `0`.
+- `samplerSupport() -> {platform, cpu, memory, contextSwitches, source}`.
+- `parsePsTime(text)` (internal helper, exported for tests).
+
+### Metrics collector: `src/metrics/collector.js`
+
+`createCollector({intervalMs = 500}) -> {start(), stop({finalSample}) -> Promise<summary>, sampleOnce(), summary()}`
+
+Each sample: live leaders from `getRunning()` (so restarts are followed), one
+forest snapshot, one sampler call. Snapshots never overlap (setTimeout chain);
+`stop()` clears the timer and awaits an in-flight query. A failed OS query is
+counted in `errors`/`lastError` and never thrown into the measured run.
+
+Definitions:
+- `cpuPercent` = Σ per-process CPU-time delta ÷ wall-time delta × 100, summed
+  over all service trees. 100 = one fully busy core. A PID first seen in a
+  sample contributes all CPU time since its birth. First sample: `null`.
+- `rssBytes` = Σ resident set size over all processes of all service trees.
+  Shared pages are counted once per process, so this is an upper bound.
+- context switches (Linux only): Σ of the last observed counters per process.
+  Processes that exit between samples are counted up to their last sample.
+- `orchestrator`: the ServiceBoot Node process itself (`process.memoryUsage`,
+  `process.cpuUsage`), reported separately.
+
+### Results JSON (schemaVersion 1)
+
+```
+{ schemaVersion: 1, tool: {name, version}, startedAt, finishedAt, command, complete,
+  environment: {platform, osRelease, arch, cpuModel, logicalCpus, totalMemoryBytes, node},
+  settings: {runsPerPair, algorithms, maxParallel (null = unlimited), metrics,
+             sampleIntervalMs, cooldownMs, order},
+  metricsSupport, units, configs: [{path, services, groups, analysis}],
+  runs: [{config, round, algorithm, effectiveAlgorithm, outcome: ok|failed|cancelled,
+          error, startupMs, readyMs: {name: ms}, shutdownMs, wallMs, restarts,
+          adaptiveDecision, eventCounts, metrics: <collector summary incl. samples>}],
+  summary: [{config, algorithm, effectiveAlgorithms, runs, successful, failed,
+             startupMs, shutdownMs, perServiceReadyMs: {name: stats}, peakRssBytes,
+             meanCpuPercent, peakCpuPercent, orchestratorPeakRssBytes,
+             voluntaryContextSwitches, involuntaryContextSwitches}] }
+stats = {n, mean, median, min, max, stdev (sample, n-1)} or null when unavailable.
+```
+
+`startupMs` is the engine's `totalMs` (run:start → all ready). `shutdownMs` is
+`stopAll()` alone; `wallMs` covers the whole run including sampling and
+shutdown. Only successful runs are timing samples; failures are counted.
+
+### Engine fix by Person 3
+
+`src/engine/readiness.js` → `waitForReady`: a final probe started with less than
+5 ms of budget can only time out; its `timeout` result no longer overwrites the
+previous real diagnostic. Behaviour and deadlines are otherwise unchanged.

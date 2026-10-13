@@ -1,0 +1,6 @@
+round 1 remaining: 0 pidfile: absent
+round 2 remaining: 0 pidfile: absent
+round 3 remaining: 0 pidfile: absent
+round 4 remaining: 0 pidfile: absent
+round 5 remaining: 0 pidfile: absent
+ALLDONE

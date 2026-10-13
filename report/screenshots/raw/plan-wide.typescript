@@ -1,0 +1,20 @@
+Script started on 2026-10-13 16:54:24+00:00 [COMMAND="stty cols 110 rows 40; python3 handover/verification/p3-subreaper.py bash -c "node bin/serviceboot.js plan --config samples/wide.yml; node bin/serviceboot.js plan --config samples/linear.yml"" <not executed on terminal>]
+Config: samples/wide.yml  (10 services)
+Start order (levels):
+  Level 0: w1, w2, w3, w4, w5, w6, w7, w8
+  Level 1: api1, api2
+Graph analysis: depth=2 width=8
+Adaptive decision: PARALLEL
+Width (W) > Depth (D) x 2. High independent concurrency detected. Auto-selecting PARALLEL execution.
+Config: samples/linear.yml  (5 services)
+Start order (levels):
+  Level 0: a
+  Level 1: b
+  Level 2: c
+  Level 3: d
+  Level 4: e
+Graph analysis: depth=5 width=1
+Adaptive decision: SEQUENTIAL
+Width (W) <= Depth (D) x 2. Graph is small or mostly linear. Auto-selecting SEQUENTIAL execution to save concurrency overhead.
+
+Script done on 2026-10-13 16:54:24+00:00 [COMMAND_EXIT_CODE="0"]

@@ -1,0 +1,290 @@
+
+> serviceboot@0.1.0 test:engine
+> node --test test/engine/
+
+TAP version 13
+# Subtest: ORDERING: sequential on diamond waits for every dependency
+ok 1 - ORDERING: sequential on diamond waits for every dependency
+  ---
+  duration_ms: 6299.013545
+  type: 'test'
+  ...
+# Subtest: ORDERING: sequential on wide waits for every dependency
+ok 2 - ORDERING: sequential on wide waits for every dependency
+  ---
+  duration_ms: 6014.077377
+  type: 'test'
+  ...
+# Subtest: ORDERING: parallel on diamond waits for every dependency
+ok 3 - ORDERING: parallel on diamond waits for every dependency
+  ---
+  duration_ms: 6002.036914
+  type: 'test'
+  ...
+# Subtest: ORDERING: parallel on wide waits for every dependency
+ok 4 - ORDERING: parallel on wide waits for every dependency
+  ---
+  duration_ms: 4016.691734
+  type: 'test'
+  ...
+# Subtest: ORDERING: adaptive on diamond waits for every dependency
+ok 5 - ORDERING: adaptive on diamond waits for every dependency
+  ---
+  duration_ms: 6005.504871
+  type: 'test'
+  ...
+# Subtest: ORDERING: adaptive on wide waits for every dependency
+ok 6 - ORDERING: adaptive on wide waits for every dependency
+  ---
+  duration_ms: 4013.981889
+  type: 'test'
+  ...
+# Subtest: SEQUENTIAL NO OVERLAP: five independent services have at most one in flight
+ok 7 - SEQUENTIAL NO OVERLAP: five independent services have at most one in flight
+  ---
+  duration_ms: 3012.767845
+  type: 'test'
+  ...
+# Subtest: PARALLEL IS CONCURRENT AND FASTER: six delayed roots beat sequential
+ok 8 - PARALLEL IS CONCURRENT AND FASTER: six delayed roots beat sequential
+  ---
+  duration_ms: 7008.367424
+  type: 'test'
+  ...
+# Subtest: MAX-PARALLEL: cap two allows all six services to become ready
+ok 9 - MAX-PARALLEL: cap two allows all six services to become ready
+  ---
+  duration_ms: 2003.100612
+  type: 'test'
+  ...
+# Subtest: ADAPTIVE: wide selects parallel and emits the exact reason
+ok 10 - ADAPTIVE: wide selects parallel and emits the exact reason
+  ---
+  duration_ms: 4003.314027
+  type: 'test'
+  ...
+# Subtest: ADAPTIVE: linear selects sequential and emits the exact reason
+ok 11 - ADAPTIVE: linear selects sequential and emits the exact reason
+  ---
+  duration_ms: 11007.356109
+  type: 'test'
+  ...
+# Subtest: CRASH DURING STARTUP: bad service emits crash and all started PIDs die
+ok 12 - CRASH DURING STARTUP: bad service emits crash and all started PIDs die
+  ---
+  duration_ms: 2018.678345
+  type: 'test'
+  ...
+# Subtest: READY TIMEOUT: never-ready rejects within four seconds and cleans up
+ok 13 - READY TIMEOUT: never-ready rejects within four seconds and cleans up
+  ---
+  duration_ms: 2994.912207
+  type: 'test'
+  ...
+# Subtest: DEPENDENT NOT STARTED: failing X prevents Y from spawning
+ok 14 - DEPENDENT NOT STARTED: failing X prevents Y from spawning
+  ---
+  duration_ms: 144.955267
+  type: 'test'
+  ...
+# Subtest: STOPALL: wide graph exits once per service with dependents before dependencies
+not ok 15 - STOPALL: wide graph exits once per service with dependents before dependencies
+  ---
+  duration_ms: 3878.429744
+  type: 'test'
+  location: '/root/Service_boot/test/engine/engine.contract.test.js:235:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The expression evaluated to a falsy value:
+    
+      assert.ok(performance.now() - started < 3000)
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (/root/Service_boot/test/engine/engine.contract.test.js:243:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: SIGKILL ESCALATION: ignore-sigterm is dead within two seconds
+ok 16 - SIGKILL ESCALATION: ignore-sigterm is dead within two seconds
+  ---
+  duration_ms: 1997.851732
+  type: 'test'
+  ...
+# Subtest: CLI SIGINT: real CLI stops all children and exits within five seconds
+not ok 17 - CLI SIGINT: real CLI stops all children and exits within five seconds
+  ---
+  duration_ms: 5772.694129
+  type: 'test'
+  location: '/root/Service_boot/test/engine/engine.contract.test.js:274:1'
+  failureType: 'testCodeFailure'
+  error: 'Timed out: CLI SIGINT exit'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    waitUntil (/root/Service_boot/test/engine/engine.contract.test.js:269:46)
+    async TestContext.<anonymous> (/root/Service_boot/test/engine/engine.contract.test.js:328:3)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: NO DOUBLE-SPAWN: each service starts exactly once in a normal run
+ok 18 - NO DOUBLE-SPAWN: each service starts exactly once in a normal run
+  ---
+  duration_ms: 4246.509701
+  type: 'test'
+  ...
+# Subtest: CLI SIGINT callbacks: real graceful cleanup exits 130 and kills the wide service tree
+not ok 19 - CLI SIGINT callbacks: real graceful cleanup exits 130 and kills the wide service tree
+  ---
+  duration_ms: 5015.160744
+  type: 'test'
+  location: '/root/Service_boot/test/engine/engine-signals.test.js:14:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 'warning: stale ServiceBoot pid file (pid 1924); cleaning recorded leftovers and continuing\n'
+    - ''
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: ''
+  actual: |-
+    warning: stale ServiceBoot pid file (pid 1924); cleaning recorded leftovers and continuing
+    
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (/root/Service_boot/test/engine/engine-signals.test.js:52:12)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: CLI SIGINT callbacks: real forced cleanup exits 130 and kills the wide service tree
+not ok 20 - CLI SIGINT callbacks: real forced cleanup exits 130 and kills the wide service tree
+  ---
+  duration_ms: 2991.487226
+  type: 'test'
+  location: '/root/Service_boot/test/engine/engine-signals.test.js:14:3'
+  failureType: 'testCodeFailure'
+  error: 'cleanup finishes before CLI exit'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (/root/Service_boot/test/engine/engine-signals.test.js:54:12)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: DOWN: hard-killed CLI leaves orphans that down removes with the PID file
+ok 21 - DOWN: hard-killed CLI leaves orphans that down removes with the PID file
+  ---
+  duration_ms: 4084.930507
+  type: 'test'
+  ...
+# Subtest: DOWN: active owner blocks duplicate up and down stops the live CLI
+ok 22 - DOWN: active owner blocks duplicate up and down stops the live CLI
+  ---
+  duration_ms: 3950.825313
+  type: 'test'
+  ...
+# Subtest: DOWN: stale up warns, cleans orphan services, and publishes its new owner
+ok 23 - DOWN: stale up warns, cleans orphan services, and publishes its new owner
+  ---
+  duration_ms: 8004.684259
+  type: 'test'
+  ...
+# Subtest: DOWN: CLI replaces the saved PID on recovery and down stops the latest process
+not ok 24 - DOWN: CLI replaces the saved PID on recovery and down stops the latest process
+  ---
+  duration_ms: 12653.200774
+  type: 'test'
+  location: '/root/Service_boot/test/engine/down.test.js:112:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    error: ServiceBoot did not stop within 10 seconds
+    
+    
+    3 !== 0
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 0
+  actual: 3
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (/root/Service_boot/test/engine/down.test.js:133:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: RESTART: sample retries twice, keeps its healthy sibling, then leaves only the failed service down
+ok 25 - RESTART: sample retries twice, keeps its healthy sibling, then leaves only the failed service down
+  ---
+  duration_ms: 7379.547712
+  type: 'test'
+  ...
+# Subtest: RESTART: early startup crashes use the retry budget before terminal failure blocks dependents
+ok 26 - RESTART: early startup crashes use the retry budget before terminal failure blocks dependents
+  ---
+  duration_ms: 1957.662396
+  type: 'test'
+  ...
+# Subtest: RESTART: startup succeeds after two crashes and then starts its dependent
+ok 27 - RESTART: startup succeeds after two crashes and then starts its dependent
+  ---
+  duration_ms: 5048.45038
+  type: 'test'
+  ...
+# Subtest: RESTART: unexpected signal restarts once without preflight and exhaustion leaves dependents running
+ok 28 - RESTART: unexpected signal restarts once without preflight and exhaustion leaves dependents running
+  ---
+  duration_ms: 6019.554878
+  type: 'test'
+  ...
+# Subtest: RESTART: maxRetries zero leaves a post-ready crash down without replacements
+ok 29 - RESTART: maxRetries zero leaves a post-ready crash down without replacements
+  ---
+  duration_ms: 561.178512
+  type: 'test'
+  ...
+# Subtest: RESTART: a clean code-zero exit is not restarted
+ok 30 - RESTART: a clean code-zero exit is not restarted
+  ---
+  duration_ms: 1160.463498
+  type: 'test'
+  ...
+# Subtest: RESTART: stopAll interrupts backoff without a late respawn
+ok 31 - RESTART: stopAll interrupts backoff without a late respawn
+  ---
+  duration_ms: 1262.594993
+  type: 'test'
+  ...
+# Subtest: TREE PIDS: discovers the shell, parent and grandchild for metrics and kills all descendants
+ok 32 - TREE PIDS: discovers the shell, parent and grandchild for metrics and kills all descendants
+  ---
+  duration_ms: 2024.934252
+  type: 'test'
+  ...
+1..32
+# tests 32
+# suites 0
+# pass 27
+# fail 5
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 142684.301375
+EXIT=1

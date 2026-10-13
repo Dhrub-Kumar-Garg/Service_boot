@@ -1,0 +1,54 @@
+Script started on 2026-10-13 16:54:36+00:00 [COMMAND="stty cols 110 rows 40; python3 handover/verification/p3-subreaper.py bash -c "node bin/serviceboot.js up --config samples/wide.yml --quiet & p=\$!; sleep 3; kill -INT \$p; wait \$p; echo exit code \$?"" <not executed on terminal>]
+[1mServiceBoot[0m [2m·[0m samples/wide.yml [2m·[0m 10 services [2m·[0m 2 levels
+[2m  L0: w1, w2, w3, w4, w5, w6, w7, w8[0m
+[2m  L1: api1, api2[0m
+[1m▶ Starting[0m 10 services · algorithm [1madaptive[0m
+[?25l[2K[36m⠋ 0/10 ready · 0 starting · 0 ms[0m[2K[35m◆ Adaptive[0m width=8 depth=2 → [1mPARALLEL[0m
+[2K[36m⠋ 0/10 ready · 0 starting · 0 ms[0m[2K[2m  Width (W) > Depth (D) x 2. High independent concurrency detected. Auto-selecting PARALLEL execution.[0m
+[2K[36m⠋ 0/10 ready · 0 starting · 0 ms[0m[2K[90mL0[0m [34m▸[0m [36mw1  [0m starting   [2mpid 12898[0m
+[2K[36m⠋ 0/10 ready · 1 starting · 10 ms[0m[2K[90mL0[0m [34m▸[0m [35mw2  [0m starting   [2mpid 12900[0m
+[2K[36m⠋ 0/10 ready · 2 starting · 23 ms[0m[2K[90mL0[0m [34m▸[0m [33mw3  [0m starting   [2mpid 12912[0m
+[2K[36m⠋ 0/10 ready · 3 starting · 35 ms[0m[2K[90mL0[0m [34m▸[0m [34mw4  [0m starting   [2mpid 12915[0m
+[2K[36m⠋ 0/10 ready · 4 starting · 55 ms[0m[2K[90mL0[0m [34m▸[0m [32mw5  [0m starting   [2mpid 12928[0m
+[2K[36m⠋ 0/10 ready · 5 starting · 68 ms[0m[2K[90mL0[0m [34m▸[0m [96mw6  [0m starting   [2mpid 12930[0m
+[2K[36m⠋ 0/10 ready · 6 starting · 87 ms[0m[2K[90mL0[0m [34m▸[0m [95mw7  [0m starting   [2mpid 12939[0m
+[2K[36m⠋ 0/10 ready · 7 starting · 98 ms[0m[2K[90mL0[0m [34m▸[0m [93mw8  [0m starting   [2mpid 12941[0m
+[2K[36m⠋ 0/10 ready · 8 starting · 108 ms[0m[2K[2K[36m⠙ 0/10 ready · 8 starting · 108 ms[0m[2K[2K[36m⠹ 0/10 ready · 8 starting · 188 ms[0m[2K[2K[36m⠸ 0/10 ready · 8 starting · 269 ms[0m[2K[2K[36m⠼ 0/10 ready · 8 starting · 349 ms[0m[2K[2K[36m⠴ 0/10 ready · 8 starting · 430 ms[0m[2K[2K[36m⠦ 0/10 ready · 8 starting · 509 ms[0m[2K[2K[36m⠧ 0/10 ready · 8 starting · 589 ms[0m[2K   [32m✔[0m [35mw2  [0m ready in [1m588 ms[0m
+[2K[36m⠧ 1/10 ready · 7 starting · 611 ms[0m[2K[2K[36m⠇ 1/10 ready · 7 starting · 669 ms[0m[2K[2K[36m⠏ 1/10 ready · 7 starting · 750 ms[0m[2K[2K[36m⠋ 1/10 ready · 7 starting · 831 ms[0m[2K[2K[36m⠙ 1/10 ready · 7 starting · 911 ms[0m[2K[2K[36m⠹ 1/10 ready · 7 starting · 991 ms[0m[2K[2K[36m⠸ 1/10 ready · 7 starting · 1.07 s[0m[2K   [32m✔[0m [36mw1  [0m ready in [1m1.10 s[0m
+[2K[36m⠸ 2/10 ready · 6 starting · 1.11 s[0m[2K   [32m✔[0m [33mw3  [0m ready in [1m1.08 s[0m
+[2K[36m⠸ 3/10 ready · 5 starting · 1.12 s[0m[2K   [32m✔[0m [34mw4  [0m ready in [1m1.06 s[0m
+[2K[36m⠸ 4/10 ready · 4 starting · 1.12 s[0m[2K   [32m✔[0m [32mw5  [0m ready in [1m1.05 s[0m
+[2K[36m⠸ 5/10 ready · 3 starting · 1.12 s[0m[2K   [32m✔[0m [96mw6  [0m ready in [1m1.03 s[0m
+[2K[36m⠸ 6/10 ready · 2 starting · 1.12 s[0m[2K   [32m✔[0m [95mw7  [0m ready in [1m1.02 s[0m
+[2K[36m⠸ 7/10 ready · 1 starting · 1.12 s[0m[2K   [32m✔[0m [93mw8  [0m ready in [1m1.01 s[0m
+[2K[36m⠸ 8/10 ready · 0 starting · 1.12 s[0m[2K[90mL1[0m [34m▸[0m [94mapi1[0m starting   [2mpid 12963[0m
+[2K[36m⠸ 8/10 ready · 1 starting · 1.13 s[0m[2K[90mL1[0m [34m▸[0m [92mapi2[0m starting   [2mpid 12965[0m
+[2K[36m⠸ 8/10 ready · 2 starting · 1.13 s[0m[2K[2K[36m⠼ 8/10 ready · 2 starting · 1.15 s[0m[2K[2K[36m⠴ 8/10 ready · 2 starting · 1.23 s[0m[2K[2K[36m⠦ 8/10 ready · 2 starting · 1.31 s[0m[2K[2K[36m⠧ 8/10 ready · 2 starting · 1.39 s[0m[2K[2K[36m⠇ 8/10 ready · 2 starting · 1.47 s[0m[2K[2K[36m⠏ 8/10 ready · 2 starting · 1.55 s[0m[2K[2K[36m⠋ 8/10 ready · 2 starting · 1.63 s[0m[2K   [32m✔[0m [94mapi1[0m ready in [1m529 ms[0m
+[2K[36m⠋ 9/10 ready · 1 starting · 1.66 s[0m[2K   [32m✔[0m [92mapi2[0m ready in [1m530 ms[0m
+[2K[36m⠋ 10/10 ready · 0 starting · 1.66 s[0m[2K[?25h
+[32m✔ All[0m 10 services ready in [1m1.66 s[0m [2m(parallel, chosen by adaptive)[0m
+  [90mL0[0m [36mw1  [0m [2mpid 12898  [0m [36m████████████████████████[0m 1.10 s
+  [90mL0[0m [35mw2  [0m [2mpid 12900  [0m [35m█████████████[0m 588 ms
+  [90mL0[0m [33mw3  [0m [2mpid 12912  [0m [33m████████████████████████[0m 1.08 s
+  [90mL0[0m [34mw4  [0m [2mpid 12915  [0m [34m███████████████████████[0m 1.06 s
+  [90mL0[0m [32mw5  [0m [2mpid 12928  [0m [32m███████████████████████[0m 1.05 s
+  [90mL0[0m [96mw6  [0m [2mpid 12930  [0m [96m██████████████████████[0m 1.03 s
+  [90mL0[0m [95mw7  [0m [2mpid 12939  [0m [95m██████████████████████[0m 1.02 s
+  [90mL0[0m [93mw8  [0m [2mpid 12941  [0m [93m██████████████████████[0m 1.01 s
+  [90mL1[0m [94mapi1[0m [2mpid 12963  [0m [94m████████████[0m 529 ms
+  [90mL1[0m [92mapi2[0m [2mpid 12965  [0m [92m████████████[0m 530 ms
+[2m  Running. Press Ctrl+C to stop (twice to force), or run "serviceboot down" in this folder.[0m
+[33m■ Stopping services (dependents before dependencies)…[0m
+[?25l[2K[36m⠋ stopping services (dependents first)…[0m[2K   [90m■[0m [94mapi1[0m exited [2m(signal SIGTERM)[0m
+[2K[36m⠋ stopping services (dependents first)…[0m[2K   [90m■[0m [92mapi2[0m exited [2m(signal SIGTERM)[0m
+[2K[36m⠋ stopping services (dependents first)…[0m[2K   [90m■[0m [36mw1  [0m exited [2m(signal SIGTERM)[0m
+[2K[36m⠋ stopping services (dependents first)…[0m[2K   [90m■[0m [35mw2  [0m exited [2m(signal SIGTERM)[0m
+[2K[36m⠋ stopping services (dependents first)…[0m[2K   [90m■[0m [33mw3  [0m exited [2m(signal SIGTERM)[0m
+[2K[36m⠋ stopping services (dependents first)…[0m[2K   [90m■[0m [34mw4  [0m exited [2m(signal SIGTERM)[0m
+[2K[36m⠋ stopping services (dependents first)…[0m[2K   [90m■[0m [32mw5  [0m exited [2m(signal SIGTERM)[0m
+[2K[36m⠋ stopping services (dependents first)…[0m[2K   [90m■[0m [96mw6  [0m exited [2m(signal SIGTERM)[0m
+[2K[36m⠋ stopping services (dependents first)…[0m[2K   [90m■[0m [95mw7  [0m exited [2m(signal SIGTERM)[0m
+[2K[36m⠋ stopping services (dependents first)…[0m[2K   [90m■[0m [93mw8  [0m exited [2m(signal SIGTERM)[0m
+[2K[36m⠋ stopping services (dependents first)…[0m[2K[?25hexit code 130
+
+Script done on 2026-10-13 16:54:39+00:00 [COMMAND_EXIT_CODE="0"]

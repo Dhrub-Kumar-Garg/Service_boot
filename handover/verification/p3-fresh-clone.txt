@@ -1,0 +1,35 @@
+# fresh clone of 9898b50
+npm ci exit=0
+Config: samples/wide.yml  (10 services)
+Start order (levels):
+  Level 0: w1, w2, w3, w4, w5, w6, w7, w8
+  Level 1: api1, api2
+Graph analysis: depth=2 width=8
+Adaptive decision: PARALLEL
+Width (W) > Depth (D) x 2. High independent concurrency detected. Auto-selecting PARALLEL execution.
+plan exit=0
+Ready: 10 services (algorithm=sequential, effectiveAlgorithm=sequential, totalMs=9091.047927)
+up sequential exit=0
+Ready: 10 services (algorithm=parallel, effectiveAlgorithm=parallel, totalMs=1626.4301380000002)
+up parallel exit=0
+Ready: 10 services (algorithm=adaptive, effectiveAlgorithm=parallel, totalMs=1613.391363)
+up adaptive exit=0
+Nothing to stop
+down exit=0
+Startup time (ms) over successful runs — mean ± sample stdev [min … max]
+  small    sequential                 1536.0 ±    9.8  [1529.0 … 1542.9]  n=2  peakRSS=145.3 MB
+  small    parallel                   1023.1 ±    0.7  [1022.6 … 1023.6]  n=2  peakRSS=145.3 MB
+  small    adaptive → sequential      1533.7 ±    4.0  [1530.9 … 1536.5]  n=2  peakRSS=145.3 MB
+  small: parallel vs sequential mean startup = 1.50× (33.4% less time)
+Wrote results/results.json
+benchmark exit=0
+wrote charts/startup_time.png
+wrote charts/per_service_ready.png
+wrote charts/peak_memory.png
+wrote charts/cpu.png
+wrote charts/context_switches_voluntary.png
+wrote charts/context_switches_involuntary.png
+charts exit=0
+remaining: 3
+# recheck from a separate shell after completion (the count of 3 above matched this verification script's own bash command line, which contains the text bin/serviceboot.js):
+remaining mock/CLI node processes: 0
