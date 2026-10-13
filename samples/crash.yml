@@ -1,0 +1,15 @@
+version: 1
+# Person 3 demo: a dependent crashes before it becomes ready.
+# Expected: service:failed reason=crash, everything already started is stopped
+# (dependents first), exit code 3, and no process is left behind.
+services:
+  db:
+    command: node ../mock/mock-service.js --port 4151 --name db --delay 200
+    ready_check: port 4151
+  cache:
+    command: node ../mock/mock-service.js --port 4152 --name cache --delay 200
+    ready_check: port 4152
+  api:
+    command: node ../mock/mock-service.js --port 4153 --name api --delay 2000 --exit-after 400 --exit-code 1
+    depends_on: [db, cache]
+    ready_check: port 4153

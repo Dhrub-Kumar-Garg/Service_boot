@@ -1,0 +1,281 @@
+
+=== 1. Sequential vs Parallel on the wide graph (8 independent services + 2 dependents) ===
+# Run back-to-back, not at the same time: two runs would fight over the same ports and CPU.
+$ node bin/serviceboot.js plan --config samples/wide.yml
+Config: samples/wide.yml  (10 services)
+Start order (levels):
+  Level 0: w1, w2, w3, w4, w5, w6, w7, w8
+  Level 1: api1, api2
+Graph analysis: depth=2 width=8
+Adaptive decision: PARALLEL
+Width (W) > Depth (D) x 2. High independent concurrency detected. Auto-selecting PARALLEL execution.
+(exit code 0)
+sequential ██████████████████████████████████████████████████ 9098 ms
+parallel   █████████ 1609 ms
+parallel was 5.65x faster on this run (single run; use the benchmark for averages)
+orphan check: none (OK)
+PID file: absent (OK)
+
+=== 2. Adaptive decision: wide graph vs linear chain ===
+# Rule: PARALLEL if width > depth x 2, otherwise SEQUENTIAL.
+$ node bin/serviceboot.js plan --config samples/wide.yml
+Config: samples/wide.yml  (10 services)
+Start order (levels):
+  Level 0: w1, w2, w3, w4, w5, w6, w7, w8
+  Level 1: api1, api2
+Graph analysis: depth=2 width=8
+Adaptive decision: PARALLEL
+Width (W) > Depth (D) x 2. High independent concurrency detected. Auto-selecting PARALLEL execution.
+(exit code 0)
+$ node bin/serviceboot.js plan --config samples/linear.yml
+Config: samples/linear.yml  (5 services)
+Start order (levels):
+  Level 0: a
+  Level 1: b
+  Level 2: c
+  Level 3: d
+  Level 4: e
+Graph analysis: depth=5 width=1
+Adaptive decision: SEQUENTIAL
+Width (W) <= Depth (D) x 2. Graph is small or mostly linear. Auto-selecting SEQUENTIAL execution to save concurrency overhead.
+(exit code 0)
+$ node bin/serviceboot.js up --config samples/wide.yml --exit-after-ready --quiet
+run:start algorithm=adaptive total=10 ts=69.875031
+adaptive:decision width=8 depth=2 chosen=parallel reason=Width (W) > Depth (D) x 2. High independent concurrency detected. Auto-selecting PARALLEL execution. ts=70.731068
+service:starting w1 pid=13253 level=0 ts=79.506277
+service:starting w2 pid=13255 level=0 ts=83.740738
+service:starting w3 pid=13262 level=0 ts=98.228435
+service:starting w4 pid=13270 level=0 ts=102.281755
+service:starting w5 pid=13277 level=0 ts=114.409563
+service:starting w6 pid=13281 level=0 ts=145.102124
+service:starting w7 pid=13294 level=0 ts=151.730034
+service:starting w8 pid=13300 level=0 ts=165.399714
+service:log w4 stream=stdout line=[w4] starting ts=170.33428
+service:log w2 stream=stdout line=[w2] starting ts=176.830883
+service:log w5 stream=stdout line=[w5] starting ts=199.901178
+service:log w3 stream=stdout line=[w3] starting ts=211.116298
+service:log w7 stream=stdout line=[w7] starting ts=214.319946
+service:log w6 stream=stdout line=[w6] starting ts=214.444791
+service:log w1 stream=stdout line=[w1] starting ts=218.442151
+service:log w8 stream=stdout line=[w8] starting ts=226.653581
+service:log w2 stream=stdout line=[w2] listening on 127.0.0.1:4112 ts=684.037292
+service:log w4 stream=stdout line=[w4] listening on 127.0.0.1:4114 ts=687.406658
+service:log w5 stream=stdout line=[w5] listening on 127.0.0.1:4115 ts=728.811572
+service:log w7 stream=stdout line=[w7] listening on 127.0.0.1:4117 ts=728.941473
+service:log w8 stream=stdout line=[w8] listening on 127.0.0.1:4118 ts=736.446778
+service:log w3 stream=stdout line=[w3] listening on 127.0.0.1:4113 ts=736.893315
+service:log w6 stream=stdout line=[w6] listening on 127.0.0.1:4116 ts=743.924595
+service:log w1 stream=stdout line=[w1] listening on 127.0.0.1:4111 ts=745.248211
+service:ready w1 pid=13253 ms=1094.835757 ts=1175.69772
+service:ready w2 pid=13255 ms=1093.540141 ts=1178.272419
+service:ready w3 pid=13262 ms=1079.253766 ts=1178.460003
+service:ready w4 pid=13270 ms=1069.610151 ts=1178.647585
+service:ready w5 pid=13277 ms=1063.6185440000002 ts=1178.801353
+service:ready w6 pid=13281 ms=1031.176988 ts=1180.273762
+service:ready w7 pid=13294 ms=1027.831874 ts=1180.427763
+service:ready w8 pid=13300 ms=1011.4319129999999 ts=1180.497885
+service:starting api1 pid=13317 level=1 ts=1189.044268
+service:starting api2 pid=13318 level=1 ts=1191.483974
+service:log api1 stream=stdout line=[api1] starting ts=1224.832057
+service:log api2 stream=stdout line=[api2] starting ts=1225.088551
+service:log api2 stream=stdout line=[api2] listening on 127.0.0.1:4122 ts=1234.730884
+service:log api1 stream=stdout line=[api1] listening on 127.0.0.1:4121 ts=1235.797327
+service:ready api2 pid=13318 ms=510.598072 ts=1702.996177
+service:ready api1 pid=13317 ms=512.8334969999999 ts=1705.108552
+run:done algorithm=adaptive effectiveAlgorithm=parallel totalMs=1634.4915970000002 ts=1705.237055
+Ready: 10 services (algorithm=adaptive, effectiveAlgorithm=parallel, totalMs=1634.4915970000002)
+service:log api2 stream=stdout line=[api2] stopping ts=1706.461382
+service:log api1 stream=stdout line=[api1] stopping ts=1706.540748
+service:exited api1 code=null signal=SIGTERM ts=1706.665624
+service:exited api2 code=null signal=SIGTERM ts=1707.688135
+service:log w7 stream=stdout line=[w7] stopping ts=1731.484025
+service:log w6 stream=stdout line=[w6] stopping ts=1731.587529
+service:log w1 stream=stdout line=[w1] stopping ts=1731.619889
+service:log w3 stream=stdout line=[w3] stopping ts=1731.645029
+service:log w2 stream=stdout line=[w2] stopping ts=1731.667374
+service:exited w1 code=null signal=SIGTERM ts=1731.715399
+service:exited w2 code=null signal=SIGTERM ts=1731.863771
+service:exited w3 code=null signal=SIGTERM ts=1731.924061
+service:exited w6 code=null signal=SIGTERM ts=1736.996707
+service:exited w7 code=null signal=SIGTERM ts=1737.143397
+service:log w4 stream=stdout line=[w4] stopping ts=1737.409724
+service:log w5 stream=stdout line=[w5] stopping ts=1737.446465
+service:log w8 stream=stdout line=[w8] stopping ts=1737.468744
+service:exited w4 code=null signal=SIGTERM ts=1737.68875
+service:exited w5 code=null signal=SIGTERM ts=1737.747337
+service:exited w8 code=null signal=SIGTERM ts=1737.954555
+(exit code 0)
+orphan check: none (OK)
+PID file: absent (OK)
+
+=== 3. Resource limit: --max-parallel 2 on the wide graph ===
+# At most 2 services may be starting (spawned but not yet ready) at the same time.
+$ node bin/serviceboot.js up --config samples/wide.yml --algorithm parallel --max-parallel 2 --exit-after-ready --quiet
+run:start algorithm=parallel total=10 ts=68.904348
+service:starting w1 pid=13343 level=0 ts=76.512894
+service:starting w2 pid=13345 level=0 ts=79.945431
+service:log w1 stream=stdout line=[w1] starting ts=108.468015
+service:log w2 stream=stdout line=[w2] starting ts=129.454183
+service:log w1 stream=stdout line=[w1] listening on 127.0.0.1:4111 ts=619.342251
+service:log w2 stream=stdout line=[w2] listening on 127.0.0.1:4112 ts=640.975628
+service:ready w1 pid=13343 ms=1008.304278 ts=1086.125974
+service:ready w2 pid=13345 ms=1005.635368 ts=1087.161397
+service:starting w3 pid=13359 level=0 ts=1090.978966
+service:starting w4 pid=13361 level=0 ts=1095.158831
+service:log w3 stream=stdout line=[w3] starting ts=1124.692972
+service:log w4 stream=stdout line=[w4] starting ts=1145.10317
+service:log w3 stream=stdout line=[w3] listening on 127.0.0.1:4113 ts=1638.198289
+service:log w4 stream=stdout line=[w4] listening on 127.0.0.1:4114 ts=1657.546072
+service:ready w3 pid=13359 ms=1009.1074409999999 ts=2101.482958
+service:ready w4 pid=13361 ms=1002.8392589999999 ts=2101.824139
+service:starting w5 pid=13376 level=0 ts=2104.079938
+service:starting w6 pid=13378 level=0 ts=2110.13683
+service:log w6 stream=stdout line=[w6] starting ts=2152.41835
+service:log w5 stream=stdout line=[w5] starting ts=2154.548153
+service:log w6 stream=stdout line=[w6] listening on 127.0.0.1:4116 ts=2665.56475
+service:log w5 stream=stdout line=[w5] listening on 127.0.0.1:4115 ts=2667.33218
+service:ready w5 pid=13376 ms=1008.8965080000003 ts=3114.999055
+service:ready w6 pid=13378 ms=1004.1825410000001 ts=3115.277878
+service:starting w7 pid=13392 level=0 ts=3119.417101
+service:starting w8 pid=13394 level=0 ts=3125.090743
+service:log w8 stream=stdout line=[w8] starting ts=3159.309662
+service:log w7 stream=stdout line=[w7] starting ts=3159.543086
+service:log w8 stream=stdout line=[w8] listening on 127.0.0.1:4118 ts=3668.951085
+service:log w7 stream=stdout line=[w7] listening on 127.0.0.1:4117 ts=3674.16181
+service:ready w7 pid=13392 ms=1004.9564019999998 ts=4127.90378
+service:ready w8 pid=13394 ms=1002.1085109999999 ts=4128.092795
+service:starting api1 pid=13408 level=1 ts=4133.971455
+service:starting api2 pid=13410 level=1 ts=4137.49571
+service:log api1 stream=stdout line=[api1] starting ts=4168.699087
+service:log api2 stream=stdout line=[api2] starting ts=4174.664723
+service:log api1 stream=stdout line=[api1] listening on 127.0.0.1:4121 ts=4180.126021
+service:log api2 stream=stdout line=[api2] listening on 127.0.0.1:4122 ts=4182.116148
+service:ready api2 pid=13410 ms=515.5887270000003 ts=4654.277117
+service:ready api1 pid=13408 ms=518.3991759999999 ts=4656.91966
+run:done algorithm=parallel effectiveAlgorithm=parallel totalMs=4587.296037 ts=4657.075568
+Ready: 10 services (algorithm=parallel, effectiveAlgorithm=parallel, totalMs=4587.296037)
+service:log api2 stream=stdout line=[api2] stopping ts=4658.917638
+service:log api1 stream=stdout line=[api1] stopping ts=4659.031252
+service:exited api1 code=null signal=SIGTERM ts=4659.232424
+service:exited api2 code=null signal=SIGTERM ts=4659.590838
+service:log w2 stream=stdout line=[w2] stopping ts=4682.869495
+service:log w1 stream=stdout line=[w1] stopping ts=4683.117337
+service:exited w1 code=null signal=SIGTERM ts=4684.002219
+service:exited w2 code=null signal=SIGTERM ts=4684.62207
+service:exited w4 code=null signal=SIGTERM ts=4684.843426
+service:exited w7 code=null signal=SIGTERM ts=4685.01754
+service:exited w8 code=null signal=SIGTERM ts=4685.965385
+service:exited w3 code=null signal=SIGTERM ts=4686.063304
+service:exited w5 code=null signal=SIGTERM ts=4686.112469
+service:exited w6 code=null signal=SIGTERM ts=4686.218838
+service:log w4 stream=stdout line=[w4] stopping ts=4686.308346
+service:log w8 stream=stdout line=[w8] stopping ts=4686.343964
+(exit code 0)
+orphan check: none (OK)
+PID file: absent (OK)
+
+=== 4. Crash recovery: restart: on-failure, max_retries: 2 ===
+# 'crashing' exits with code 1 every 1.5 s; it is restarted twice, then left down. 'healthy' keeps running.
+service:starting crashing pid=13436 level=0 ts=81.943162
+service:ready crashing pid=13436 ms=202.785718 ts=285.951096
+service:starting healthy pid=13448 level=0 ts=289.004707
+service:ready healthy pid=13448 ms=202.85507 ts=493.100726
+Ready: 2 services (algorithm=adaptive, effectiveAlgorithm=sequential, totalMs=419.87152100000003)
+service:exited crashing code=1 signal=null ts=1624.86894
+service:restarting crashing attempt=1 maxRetries=2 code=1 signal=null ts=1625.67412
+service:starting crashing pid=13492 level=0 ts=2129.061449
+service:ready crashing pid=13492 ms=201.38703199999964 ts=2331.656134
+service:exited crashing code=1 signal=null ts=3668.325823
+service:restarting crashing attempt=2 maxRetries=2 code=1 signal=null ts=3668.674157
+service:starting crashing pid=13548 level=0 ts=4672.9128
+service:ready crashing pid=13548 ms=202.1984620000003 ts=4876.257989
+service:exited crashing code=1 signal=null ts=6208.849292
+service:failed crashing reason=crash error=exited with code 1 after becoming ready\n[crashing] starting\n[crashing] listening on 127.0.0.1:4131 ts=6209.30265
+# Stopping the run with SIGTERM (what 'serviceboot down' sends).
+(up exit code 143)
+orphan check: none (OK)
+PID file: absent (OK)
+
+=== 5. Startup crash: api dies before it becomes ready ===
+$ node bin/serviceboot.js up --config samples/crash.yml --exit-after-ready --plain
+run:start algorithm=adaptive total=3 ts=88.09886
+adaptive:decision width=2 depth=2 chosen=sequential reason=Width (W) <= Depth (D) x 2. Graph is small or mostly linear. Auto-selecting SEQUENTIAL execution to save concurrency overhead. ts=89.254176
+service:starting db pid=13598 level=0 ts=98.682197
+service:log db stream=stdout line=[db] starting ts=141.309145
+service:log db stream=stdout line=[db] listening on 127.0.0.1:4151 ts=351.228442
+service:ready db pid=13598 ms=502.388478 ts=602.710869
+service:starting cache pid=13606 level=0 ts=607.17101
+service:log cache stream=stdout line=[cache] starting ts=639.599123
+service:log cache stream=stdout line=[cache] listening on 127.0.0.1:4152 ts=849.86062
+service:ready cache pid=13606 ms=501.5930760000001 ts=1110.039139
+service:starting api pid=13614 level=1 ts=1112.432755
+service:log api stream=stdout line=[api] starting ts=1159.201681
+service:exited api code=1 signal=null ts=1564.72145
+service:failed api reason=crash error=exited with code 1 before becoming ready\n[api] starting ts=1565.541984
+service:exited cache code=null signal=SIGTERM ts=1566.477357
+service:log db stream=stdout line=[db] stopping ts=1568.706976
+service:exited db code=null signal=SIGTERM ts=1568.939412
+run:failed error=exited with code 1 before becoming ready\n[api] starting ts=1589.36556
+error: exited with code 1 before becoming ready
+[api] starting
+(exit code 3)
+# Expected: service:failed api reason=crash, db and cache stopped, exit code 3.
+orphan check: none (OK)
+PID file: absent (OK)
+
+=== 6. Busy port: something already listens on postgres's port 4101 ===
+$ node bin/serviceboot.js up --config samples/small.yml --exit-after-ready --plain
+run:start algorithm=adaptive total=3 ts=57.209859
+adaptive:decision width=2 depth=2 chosen=sequential reason=Width (W) <= Depth (D) x 2. Graph is small or mostly linear. Auto-selecting SEQUENTIAL execution to save concurrency overhead. ts=57.877596
+service:failed postgres reason=spawn error=Port 4101 is already in use (is a previous run still alive? try "serviceboot down") ts=61.098152
+run:failed error=Port 4101 is already in use (is a previous run still alive? try "serviceboot down") ts=61.401095
+error: Port 4101 is already in use (is a previous run still alive? try "serviceboot down")
+(exit code 3)
+# Expected: 'Port 4101 is already in use', exit code 3, nothing started.
+orphan check: none (OK)
+PID file: absent (OK)
+
+=== 7. Ctrl+C (SIGINT) during a live run ===
+# All 10 services ready. Sending SIGINT to the CLI (pid 13643), exactly like pressing Ctrl+C.
+(up exit code 130 - expected 130)
+service:exited events: 10
+orphan check: none (OK)
+PID file: absent (OK)
+
+=== 8. Hard-killed CLI (kill -9) then 'serviceboot down' recovers the orphans ===
+# SIGKILL cannot be caught: the CLI died without cleaning up. Its services are orphans now:
+13779 /bin/sh -c node ../mock/mock-service.js --port 4101 --name postgres --delay 300
+13780 node ../mock/mock-service.js --port 4101 --name postgres --delay 300
+13797 /bin/sh -c node ../mock/mock-service.js --port 4102 --name redis --delay 300
+13798 node ../mock/mock-service.js --port 4102 --name redis --delay 300
+13815 /bin/sh -c node ../mock/mock-service.js --port 4103 --name api --http
+13816 node ../mock/mock-service.js --port 4103 --name api --http
+$ cat .serviceboot/pids.json
+{
+  "cliPid": 13770,
+  "startedAt": "2026-10-13T16:57:53.291Z",
+  "config": "/root/Service_boot/samples/small.yml",
+  "services": [
+    {
+      "name": "postgres",
+      "pid": 13779,
+      "level": 0
+    },
+    {
+      "name": "redis",
+      "pid": 13797,
+      "level": 0
+    },
+    {
+      "name": "api",
+      "pid": 13815,
+      "level": 1
+    }
+  ]
+}
+(exit code 0)
+$ node bin/serviceboot.js down
+ServiceBoot stopped
+(exit code 0)
+orphan check: none (OK)
+PID file: absent (OK)
