@@ -517,6 +517,42 @@ function samplerSupport() {
   return { platform: process.platform, cpu: false, memory: false, contextSwitches: false, source: null };
 }
 
+// Windows: ONE CIM query returns both the parent links and the CPU/memory
+// counters of every process. Starting PowerShell costs ~1 s, so doing the tree
+// and the counters in two separate queries made each sample take ~2.5 s.
+async function sampleForestWindows(rootPids) {
+  const output = await runCommand('powershell.exe', ['-NoProfile', '-NonInteractive', '-Command',
+    'Get-CimInstance Win32_Process | Select-Object ProcessId,ParentProcessId,WorkingSetSize,KernelModeTime,UserModeTime | ConvertTo-Csv -NoTypeInformation'], 10000);
+  const links = [];
+  const byPid = new Map();
+  for (const line of output.split(/\r?\n/)) {
+    const match = /^"?(\d+)"?,"?(\d+)"?,"?(\d*)"?,"?(\d*)"?,"?(\d*)"?$/.exec(line.trim());
+    if (!match) continue;
+    const pid = Number(match[1]);
+    links.push(`${pid},${match[2]}`);
+    byPid.set(pid, {
+      pid,
+      rssBytes: match[3] === '' ? null : Number(match[3]),
+      cpuMs: match[4] === '' || match[5] === '' ? null : (Number(match[4]) + Number(match[5])) / 10000,
+      voluntaryCtx: null, involuntaryCtx: null
+    });
+  }
+  const snapshot = links.join('\n');
+  const forest = new Map(rootPids.map(root => [root, treeFromSnapshot(root, snapshot, true)]));
+  const pids = new Set([...forest.values()].flat());
+  return { forest, stats: [...pids].map(pid => byPid.get(pid)).filter(Boolean) };
+}
+
+// Trees for several service roots plus counters for every member, as one
+// consistent snapshot. Used by the metrics collector for each sample.
+async function sampleForest(rootPids) {
+  rootPids.forEach(validPid);
+  if (rootPids.length === 0) return { forest: new Map(), stats: [] };
+  if (process.platform === 'win32') return sampleForestWindows(rootPids);
+  const forest = await getForestPids(rootPids);
+  return { forest, stats: await sampleProcesses([...new Set([...forest.values()].flat())]) };
+}
+
 // One entry per still-existing PID: {pid, cpuMs, rssBytes, voluntaryCtx,
 // involuntaryCtx}. Fields the OS does not expose are null, never 0.
 async function sampleProcesses(pids) {
@@ -531,5 +567,5 @@ async function sampleProcesses(pids) {
 module.exports = {
   spawnService, createLineSplitter, isGroupAlive, terminate, terminatePid,
   killAllSync, getRunning, getManagedHandles, isPidAlive, requestCliStop, getTreePids,
-  getForestPids, sampleProcesses, samplerSupport, parsePsTime
+  getForestPids, sampleProcesses, sampleForest, samplerSupport, parsePsTime
 };

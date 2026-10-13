@@ -108,6 +108,13 @@ key=value` output are unchanged, so Person 1/2 tests pass untouched.
    the test's assertions in `finally` hid that error. The scripts are now files
    and assertions run after cleanup.
 
+6. Windows metrics sampling made two PowerShell/CIM queries per sample
+   (process tree, then counters), ~2.7 s per sample on the laptop. Now one
+   query (`sampleForest` in process-manager.js). Each Windows sample still
+   costs roughly one PowerShell start (~1 s), so on Windows the effective
+   sampling interval is ~1 s whatever `--sample-ms` says, and CPU figures for
+   startups shorter than ~2 s are coarse or N/A. Linux reads /proc in ms.
+
 ## 5. Known issues / not done (honest list)
 
 - **Container without init (zombie reaping).** In this VM, PID 1 never reaps

@@ -13,17 +13,29 @@
 // - Context-switch counters are monotonic per process; they are only read
 //   where the OS exposes them (Linux /proc). Elsewhere they are null with a
 //   reason, never invented zeroes.
+// - CPU time of a process that starts AND exits between two samples is not
+//   seen at all; very short-lived children are under-counted.
 const { performance } = require('node:perf_hooks');
 const processes = require('../engine/process-manager');
 
 function createCollector({
   intervalMs = 500,
   getRunning = processes.getRunning,
-  getForestPids = processes.getForestPids,
-  sampleProcesses = processes.sampleProcesses,
+  getForestPids,
+  sampleProcesses,
+  sampleForest,
   support = processes.samplerSupport(),
   keepSamples = true
 } = {}) {
+  // One call per sample returns {forest, stats}. Tests may inject the two
+  // halves separately; production uses the single combined OS snapshot.
+  const snapshot = sampleForest || (getForestPids || sampleProcesses
+    ? async roots => {
+      const forest = await (getForestPids || processes.getForestPids)(roots);
+      const pids = [...new Set([...forest.values()].flat())];
+      return { forest, stats: await (sampleProcesses || processes.sampleProcesses)(pids) };
+    }
+    : processes.sampleForest);
   if (!Number.isFinite(intervalMs) || intervalMs < 50) throw new TypeError('intervalMs must be >= 50');
 
   const samples = [];
@@ -50,9 +62,7 @@ function createCollector({
       try {
         // getRunning() is the live list of leaders; it reflects restarts.
         const leaders = getRunning();
-        const forest = await getForestPids(leaders.map(service => service.pid));
-        const pids = [...new Set([...forest.values()].flat())];
-        const stats = await sampleProcesses(pids);
+        const { forest, stats } = await snapshot(leaders.map(service => service.pid));
         const byPid = new Map(stats.map(stat => [stat.pid, stat]));
         let cpuDeltaMs = 0;
         let rssBytes = 0;

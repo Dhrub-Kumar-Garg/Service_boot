@@ -19,7 +19,7 @@ const supported = ['linux', 'darwin', 'win32'].includes(process.platform);
 function busyTreeService(name, port, dir) {
   const child = path.join(dir, 'busy-child.js');
   const parent = path.join(dir, 'busy-parent.js');
-  fs.writeFileSync(child, 'const s = Date.now(); while (Date.now() - s < 4000) {}\n');
+  fs.writeFileSync(child, 'const s = Date.now(); while (Date.now() - s < 20000) {}\n');
   fs.writeFileSync(parent, [
     "const { spawn } = require('child_process');",
     `spawn(process.execPath, [${JSON.stringify(child)}], { stdio: 'ignore' });`,
@@ -33,7 +33,7 @@ function busyTreeService(name, port, dir) {
   };
 }
 
-test('METRICS (real): busy grandchild CPU is attributed to its service tree; stop leaves no timers', { skip: !supported, timeout: 30000 }, async t => {
+test('METRICS (real): busy grandchild CPU is attributed to its service tree; stop leaves no timers', { skip: !supported, timeout: 45000 }, async t => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'serviceboot-busy-'));
   t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
   const service = busyTreeService('busy', 44731, dir);
@@ -43,7 +43,12 @@ test('METRICS (real): busy grandchild CPU is attributed to its service tree; sto
   try {
     await engine.runEngine({ services: { busy: service }, groups: [['busy']], algorithm: 'sequential', emitter: new EventEmitter() });
     collector.start();
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    // Wait for samples, not a fixed time: one Windows CIM snapshot takes
+    // about a second, Linux /proc reads a few milliseconds.
+    const until = Date.now() + 15000;
+    while (collector.summary().sampleCount < 4 && Date.now() < until) {
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
     pids = await engine.getTreePids(engine.getRunning()[0].pid);
   } finally {
     // Cleanup only here; assertions come after, so they can never hide the
