@@ -104,6 +104,9 @@ async function runUp(plan, options) {
       // process tree synchronously before exiting with the first signal's code.
       const handles = processes.getManagedHandles();
       processes.killAllSync();
+      // Erase the spinner line and restore the cursor: process.exit below
+      // skips the normal finally-block cleanup of the terminal UI.
+      ui.dispose();
       try { pidfile.remove({ cliPid: process.pid }); } catch (error) { console.error(`error: ${error.message}`); }
       // Person 3 (Linux): SIGKILL has been sent, but the killed shells are our
       // direct children and stay zombies (PID still in the process table)
