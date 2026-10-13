@@ -4,6 +4,9 @@ const https = require('node:https');
 const { performance } = require('node:perf_hooks');
 const { EngineError } = require('./errors');
 
+// A probe with less budget than this cannot complete a local TCP/HTTP round trip.
+const MIN_USEFUL_PROBE_MS = 5;
+
 function errorDetail(error) {
   if (error.code === 'ECONNREFUSED') return 'connection refused';
   if (error.code === 'ETIMEDOUT') return 'timeout';
@@ -189,7 +192,12 @@ async function waitForReady(service, { handle, signal }) {
       const result = check.type === 'port'
         ? await portProbe(check.port, '127.0.0.1', probeMs, controller.signal)
         : await httpProbe(check.url, probeMs, controller.signal);
-      detail = result.detail;
+      // Person 3 (Linux fix): Node timers can wake a fraction of a millisecond
+      // before performance.now() reaches the deadline, so the final probe may
+      // get a ~0 ms budget and always report "timeout". Such a starved probe
+      // says nothing about the service; keep the previous, real diagnostic.
+      const starved = result.detail === 'timeout' && probeMs < MIN_USEFUL_PROBE_MS && detail !== 'not checked';
+      if (!starved) detail = result.detail;
       // Check exit/abort again so a successful probe cannot win a shutdown race.
       checkStopped();
       const elapsed = performance.now() - started;
