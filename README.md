@@ -50,6 +50,8 @@ The commands in your config (`postgres`, `redis-server`, ...) must already be
 installed; ServiceBoot runs them, it does not install them. Every sample in
 `samples/` uses the bundled `mock/mock-service.js`, so the demos need only Node.
 
+**Presenting or running the demo?** Follow the step-by-step [Demo Guide](DEMO_GUIDE.md): setup, six demos with exact commands and real screenshots, viva answers and troubleshooting.
+
 ## Quick start
 
 Requires Node.js 18+ (verified on 22). Python 3 + matplotlib only for charts.
@@ -163,6 +165,7 @@ production supervisor or orchestrator.
 | `demos/` | `demo.sh` (Linux/macOS), `demo.ps1` (Windows), recorded transcripts |
 | `samples/`, `mock/` | Example configs and the mock service |
 | `report/` | Benchmark results JSON, charts, screenshots and their raw recordings |
+| `DEMO_GUIDE.md`, `demo-images/` | Step-by-step [demo guide](DEMO_GUIDE.md) with real screenshots |
 | `docs/` | [Report](docs/REPORT.md), [OS concepts → code](docs/OS_CONCEPTS.md), [engine notes](docs/ENGINE.md) |
 | `CONTRACT.md`, `handover/` | Shared interfaces and team handovers |
 
