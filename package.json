@@ -7,6 +7,7 @@
     "serviceboot": "bin/serviceboot.js"
   },
   "scripts": {
+    "ui": "node src/dashboard/server.js",
     "test": "node --test test/unit/",
     "test:engine": "node --test test/engine/"
   },

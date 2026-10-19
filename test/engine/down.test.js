@@ -12,7 +12,8 @@ const bin = path.resolve(__dirname, '../../bin/serviceboot.js');
 const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 async function fixture(t, { recovering = false } = {}) {
-  const cwd = fs.mkdtempSync(path.join(os.tmpdir(), 'serviceboot-down-'));
+  // macOS aliases /var to /private/var; spawned processes report canonical cwd.
+  const cwd = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), 'serviceboot-down-')));
   const plan = await makeServices([{ name: 'root', delay: 0 },
     { name: 'dependent', deps: ['root'], delay: 0 }]);
   const services = Object.fromEntries(Object.values(plan.services).map(service => [service.name, {

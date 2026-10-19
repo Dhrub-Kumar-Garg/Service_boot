@@ -5,3 +5,4 @@ require('./down.test');
 require('./restart.test');
 require('./tree-pids.test');
 require('./metrics-benchmark.test');
+require('./dashboard.test');

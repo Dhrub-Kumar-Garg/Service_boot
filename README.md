@@ -71,6 +71,29 @@ python3 scripts/charts.py results/results.json --out charts      # -> charts/*.p
 
 ## Commands
 
+### Browser dashboard
+
+```sh
+npm run ui
+```
+
+Open **http://127.0.0.1:4173** for a light-mode workspace: choose a configuration,
+inspect its dependency graph or YAML, select an algorithm and concurrency limit,
+start/stop services, and follow real status and logs. The Benchmarks view displays
+the saved measurements in `report/results.json`, labelled with their original
+machine and recording date. It does not display fabricated live metrics.
+
+The dashboard uses Node built-ins and the existing CLI; no frontend dependencies
+or build step. It lists `.yml` files in `samples/` and the repo root (filenames
+using letters, digits, underscores, or hyphens).
+Closing the browser tab leaves services running; use **Stop** or the existing
+`serviceboot down` command. Ctrl+C in the dashboard's terminal stops its owned
+services before closing the server. Existing CLI runs keep their ownership and
+must be stopped separately before starting a dashboard run. `PORT` overrides
+4173. The server listens only on `127.0.0.1`.
+
+### CLI
+
 | Command | What it does |
 |---|---|
 | `serviceboot plan [--config F] [--json]` | Validate, print dependency levels, graph width/depth and the adaptive decision. |
@@ -157,6 +180,7 @@ production supervisor or orchestrator.
 | Path | Contents |
 |---|---|
 | `bin/`, `src/cli/` | CLI entry, argument parsing, terminal UI (`ui.js`), signal handling |
+| `src/dashboard/` | Local browser dashboard, HTTP adapter to the CLI, static HTML/CSS/JS |
 | `src/config/`, `src/graph/`, `src/plan.js` | YAML parsing/validation, DAG, levels, adaptive analysis (Person 1) |
 | `src/engine/` | Process manager, readiness, runners, shutdown, restart, PID file, `down` (Person 2) |
 | `src/metrics/` | CPU/memory/context-switch collector (Person 3) |
